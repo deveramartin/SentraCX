@@ -8,12 +8,12 @@ This document outlines the high-level, end-to-end development roadmap for the Se
 **Goal:** Establish the core CRM backend, connect it to the Central Auth service, and build the foundational data models.
 
 **Tasks:**
-- [ ] Initialize the `.NET` CRM backend repository.
-- [ ] Configure PostgreSQL and run initial Entity Framework migrations for `User` and `CustomerProfile`.
-- [ ] Implement JWT validation to authenticate against the Central Auth Service (`internal-auth-service`).
-- [ ] Implement Just-In-Time (JIT) provisioning to mirror Auth details into the local CRM `User` table.
-- [ ] Build basic CRUD REST API endpoints for Customer Management.
-- [ ] Set up the webhook/event consumer to ingest eCommerce orders into `OrderHistory`.
+- [x] Initialize the `.NET` CRM backend repository.
+- [x] Configure PostgreSQL and run initial Entity Framework migrations for `User` and `CustomerProfile`.
+- [x] Implement JWT validation to authenticate against the Central Auth Service (`internal-auth-service`).
+- [x] Implement Just-In-Time (JIT) provisioning to mirror Auth details into the local CRM `User` table.
+- [x] Build basic CRUD REST API endpoints for Customer Management.
+- [x] Set up the webhook/event consumer to ingest eCommerce orders into `OrderHistory`.
 
 ---
 

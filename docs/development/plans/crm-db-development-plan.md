@@ -8,17 +8,17 @@ This document breaks down the development of the SentraCX CRM system and its dat
 **Goal:** Establish the database connection, handle Central Auth synchronization, and build the foundational user views.
 
 **Database / Schema Actions:**
-- [ ] Initialize PostgreSQL database and ORM/Migration tools.
-- [ ] Create `User` table.
-- [ ] Create `CustomerProfile` table with one-to-one FK to `User`.
+- [x] Initialize PostgreSQL database and ORM/Migration tools.
+- [x] Create `User` table.
+- [x] Create `CustomerProfile` table with one-to-one FK to `User`.
 
 **System / Backend Actions:**
-- [ ] Implement JWT validation middleware that parses claims from the `internal-auth-service`.
-- [ ] Implement the **JIT (Just-In-Time) Provisioning** logic: when a user logs in, ensure their `firstName`, `lastName`, and `employeeNumber` are synced to the local `User` table.
-- [ ] Build basic REST API endpoints:
-    - [ ] `GET /api/customers` (List customers)
-    - [ ] `GET /api/customers/{id}` (Customer details)
-    - [ ] `PUT /api/customers/{id}/status` (Update CRM status)
+- [x] Implement JWT validation middleware that parses claims from the `internal-auth-service`.
+- [x] Implement the **JIT (Just-In-Time) Provisioning** logic: when a user logs in, ensure their `firstName`, `lastName`, and `employeeNumber` are synced to the local `User` table.
+- [x] Build basic REST API endpoints:
+    - [x] `GET /api/customers` (List customers)
+    - [x] `GET /api/customers/{id}` (Customer details)
+    - [x] `PUT /api/customers/{id}/status` (Update CRM status)
 
 ---
 
@@ -26,13 +26,13 @@ This document breaks down the development of the SentraCX CRM system and its dat
 **Goal:** Enable the CRM to display external context (eCommerce orders) so staff have a complete view of the customer before ticketing begins.
 
 **Database / Schema Actions:**
-- [ ] Create `OrderHistory` table with FK to `User/CustomerProfile`.
+- [x] Create `OrderHistory` table with FK to `User/CustomerProfile`.
 
 **System / Backend Actions:**
-- [ ] Set up a Webhook endpoint or Message Queue (e.g., RabbitMQ) consumer to listen for eCommerce `OrderCreated` and `OrderUpdated` events.
-- [ ] Implement the ingestion logic to write these events into the `OrderHistory` table.
-- [ ] Build REST API endpoints:
-    - [ ] `GET /api/customers/{id}/orders` (View history)
+- [x] Set up a Webhook endpoint or Message Queue (e.g., RabbitMQ) consumer to listen for eCommerce `OrderCreated` and `OrderUpdated` events.
+- [x] Implement the ingestion logic to write these events into the `OrderHistory` table.
+- [x] Build REST API endpoints:
+    - [x] `GET /api/customers/{id}/orders` (View history)
 
 ---
 
