@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description: "Customer Relations",
 };
 
-const THIS_SYSTEM_CODE = "SentraCX";
+const THIS_SYSTEM_CODE = "CRMS";
 
 export default async function RootLayout({
   children,
@@ -52,7 +52,7 @@ export default async function RootLayout({
           <div style={{ padding: 40, fontFamily: "monospace" }}>
             <h1>Access Denied</h1>
             <p>
-              You are logged in as {session.user?.name}, but you don&apos;t have access to {THIS_SYSTEM_CODE}.
+              You are logged in as {session.user?.name}, but you don&apos;t have access to SentraCX (CRMS).
             </p>
           </div>
         )}

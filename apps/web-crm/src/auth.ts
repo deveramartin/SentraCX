@@ -7,8 +7,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       name: "Auth Service",
       type: "oidc",
       issuer: process.env.AUTH_ISSUER,
-      clientId: process.env.AUTH_HRMS_CLIENT_ID,
-      clientSecret: process.env.AUTH_HRMS_CLIENT_SECRET,
+      clientId: process.env.AUTH_CRMS_CLIENT_ID,
+      clientSecret: process.env.AUTH_CRMS_CLIENT_SECRET,
       authorization: {
         params: {
           scope: "openid profile email systems",
@@ -36,7 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isSignInPage = pathname === "/signin";
 
       if (auth?.user && (isAuthPath || isSignInPage)) {
-        return Response.redirect(new URL("https://localhost:3000/"));
+        return Response.redirect(new URL("https://localhost:3005/"));
       }
 
       if (!auth?.user && !isAuthPath && !isSignInPage) {
