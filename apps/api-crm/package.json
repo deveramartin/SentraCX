@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "dotnet watch run --urls https://localhost:5005",
+    "dev": "DOTNET_USE_POLLING_FILE_WATCHER=1 dotnet watch run --urls https://localhost:5005",
     "build": "dotnet build -c Release",
     "start": "dotnet run -c Release --urls https://localhost:5005",
     "test": "dotnet test"
