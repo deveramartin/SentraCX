@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "setup": "pnpm install && pnpm run setup:ai",
-    "setup:ai": "cd apps/api-ai-analytics && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt",
+    "setup:ai": "cd apps/api-ai-analytics && rm -rf .venv && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt",
     "dev": "pnpm run --parallel dev:web dev:api dev:ai",
     "dev:web": "pnpm --filter ./apps/web-crm dev",
     "dev:api": "pnpm --filter ./apps/api-crm dev",
