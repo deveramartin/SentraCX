@@ -131,7 +131,7 @@ instead of guessing.
   environment variables, not hardcoded values.
 - **Web (Next.js)**: run via `npm run dev` (or `pnpm dev`, confirm which package manager the
   lockfile indicates). TypeScript required, no `.js`/`.jsx` files in `app/` or `components/`.
-- Each service has its own `Dockerfile` — don't introduce cross-service build dependencies.
+- Build verification runs in CI via GitHub Actions (`.github/workflows/ci.yml`).
 - Environment variables: never commit `.env` files with real secrets. Use `.env.example` per
   service documenting required keys.
 

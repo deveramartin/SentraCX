@@ -128,7 +128,7 @@ SentraCX/
 │   ├── config/               # Shared configuration
 │   └── types/                # Shared TypeScript types
 ├── docs/                     # Documentation
-├── docker/                   # Docker compose files
+├── .github/workflows/        # CI build verification
 ├── pnpm-workspace.yaml       # Workspace configuration
 ├── turbo.json                # Turborepo pipeline config
 └── package.json              # Root scripts
