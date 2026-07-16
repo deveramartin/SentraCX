@@ -34,6 +34,16 @@ To run the application locally for testing or development, you will need the fol
 - [PostgreSQL](https://www.postgresql.org/) v15+ (for api-crm)
 - [MongoDB](https://www.mongodb.com/) 7+ (for api-ai-analytics)
 
+### Linux only: Fix inotify limits
+
+The default inotify instance limit (128) is too low for `dotnet watch` + IDE file watchers. Run once:
+
+```bash
+sudo ./scripts/fix-inotify.sh
+```
+
+This persists across reboots. Without it, `dotnet watch` will crash with `System.IO.IOException`.
+
 ## Installation & Setup
 
 Follow these steps to set up the repository for development or testing.
@@ -58,7 +68,21 @@ Follow these steps to set up the repository for development or testing.
    cp apps/api-crm/appsettings.Development.json apps/api-crm/appsettings.Local.json
    ```
 
-4. **Run all services**
+4. **Trust the HTTPS development certificate** (one-time)
+
+   The api-crm runs over HTTPS locally. Run this once to generate and permanently trust the dev certificate:
+
+   ```bash
+   # macOS / Linux (bash, zsh)
+   ./scripts/trust-dev-cert.sh
+
+   # Windows (PowerShell)
+   .\scripts\trust-dev-cert.ps1
+   ```
+
+   This persists across reboots — no need to repeat unless the certificate expires (1 year).
+
+5. **Run all services**
 
    Start the entire platform in development mode:
 
@@ -66,7 +90,7 @@ Follow these steps to set up the repository for development or testing.
    pnpm dev
    ```
 
-5. **Access the Application**
+6. **Access the Application**
 
    Once the services have successfully started, you can access the platform at:
    - **Web CRM Frontend**: [http://localhost:3005](http://localhost:3005)
@@ -113,7 +137,67 @@ All scripts are run from the monorepo root with `pnpm <script>`.
 | `pnpm test` | Run all test suites |
 | `pnpm test:api` | Run api-crm tests |
 | `pnpm test:ai` | Run api-ai-analytics tests |
+| `pnpm migrate` | Run database migrations (wraps `scripts/migrate-crm.sh`) |
 | `pnpm clean` | Remove all build artifacts & node_modules |
+
+### Setup Scripts
+
+One-time setup scripts located in `scripts/`. Run these once after cloning — they persist permanently.
+
+| Script | OS | Requires | Description |
+|--------|----|----------|-------------|
+| `./scripts/fix-inotify.sh` | Linux only | `sudo` | Increases inotify limits so `dotnet watch` and IDE file watchers don't crash |
+| `./scripts/trust-dev-cert.sh` | macOS / Linux | — | Generates and trusts the ASP.NET Core HTTPS dev certificate |
+| `.\scripts\trust-dev-cert.ps1` | Windows | — | Same as above, native PowerShell version |
+| `./scripts/migrate-crm.sh` | All | — | Manage EF Core database migrations for api-crm |
+
+#### `fix-inotify.sh` — Fix file watcher limits (Linux)
+
+The default inotify instance limit (128) is too low when running `dotnet watch` alongside VS Code or other IDEs. This script sets it to 1024 and persists the change across reboots via `/etc/sysctl.d/`.
+
+```bash
+sudo ./scripts/fix-inotify.sh
+```
+
+- Idempotent — skips if the limit is already sufficient.
+- Not needed on macOS or Windows (they use different file-watching APIs).
+- Without this, `dotnet watch` crashes with: `System.IO.IOException: The configured user limit (128) on the number of inotify instances has been reached`.
+
+#### `trust-dev-cert.sh` / `trust-dev-cert.ps1` — Trust HTTPS dev certificate
+
+The api-crm runs on `https://localhost:5005`. This script generates a dev certificate and trusts it permanently so browsers and other services don't reject HTTPS connections.
+
+```bash
+# macOS / Linux
+./scripts/trust-dev-cert.sh
+
+# Windows (PowerShell)
+.\scripts\trust-dev-cert.ps1
+```
+
+**How it persists per OS:**
+
+| OS | Mechanism | Survives reboots? |
+|----|-----------|-------------------|
+| macOS | Adds cert to login Keychain | ✓ |
+| Windows | Adds cert to CurrentUser certificate store | ✓ |
+| Linux | Appends `SSL_CERT_DIR` and `NODE_EXTRA_CA_CERTS` to shell profile (`~/.zshrc` or `~/.bashrc`) | ✓ |
+
+- Idempotent — running again won't duplicate shell profile entries.
+- Certificate valid for 1 year. Re-run if it expires.
+- On Linux, open a new terminal (or `source ~/.zshrc`) after first run to activate.
+
+#### `migrate-crm.sh` — Database migrations
+
+Manage EF Core migrations for the api-crm PostgreSQL database.
+
+```bash
+./scripts/migrate-crm.sh              # Apply pending migrations
+./scripts/migrate-crm.sh add <Name>   # Create a new migration
+./scripts/migrate-crm.sh remove       # Remove the last migration
+./scripts/migrate-crm.sh status       # Show migration status
+./scripts/migrate-crm.sh reset        # Drop and recreate the database (interactive)
+```
 
 ## Project Structure
 

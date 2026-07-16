@@ -22,6 +22,7 @@
     "test": "pnpm run \"/^test:/\"",
     "test:api": "pnpm --filter ./apps/api-crm test",
     "test:ai": "cd apps/api-ai-analytics && .venv/bin/pytest",
+    "migrate": "./scripts/migrate-crm.sh",
     "clean": "rm -rf node_modules apps/*/node_modules apps/*/.next apps/*/dist apps/*/build apps/api-ai-analytics/.venv"
   }
 }

@@ -1,8 +1,16 @@
+using Crm.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Crm.Api.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public DbSet<User> Users => Set<User>();
+    public DbSet<CustomerProfile> CustomerProfiles => Set<CustomerProfile>();
+    public DbSet<OrderHistory> OrderHistories => Set<OrderHistory>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+    }
 }
