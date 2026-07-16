@@ -1,5 +1,5 @@
 using Crm.Api.DTOs.Requests;
-using Crm.Api.Services;
+using Crm.Api.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crm.Api.Controllers;

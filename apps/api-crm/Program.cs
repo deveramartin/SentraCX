@@ -1,5 +1,7 @@
 using Crm.Api.Data;
 using Crm.Api.Middleware;
+using Crm.Api.Interfaces.Repositories;
+using Crm.Api.Interfaces.Services;
 using Crm.Api.Repositories;
 using Crm.Api.Services;
 using FluentValidation;

@@ -1,7 +1,7 @@
 using Crm.Api.DTOs.Requests;
 using Crm.Api.DTOs.Responses;
 
-namespace Crm.Api.Services;
+namespace Crm.Api.Interfaces.Services;
 
 public interface IOrderService
 {

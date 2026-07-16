@@ -1,6 +1,6 @@
 using Crm.Api.Models;
 
-namespace Crm.Api.Repositories;
+namespace Crm.Api.Interfaces.Repositories;
 
 public interface IOrderHistoryRepository
 {

@@ -1,4 +1,5 @@
 using Crm.Api.Data;
+using Crm.Api.Interfaces.Repositories;
 using Crm.Api.Models;
 using Microsoft.EntityFrameworkCore;
 

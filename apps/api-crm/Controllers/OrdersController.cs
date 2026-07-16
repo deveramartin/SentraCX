@@ -1,4 +1,4 @@
-using Crm.Api.Services;
+using Crm.Api.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

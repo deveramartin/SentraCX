@@ -1,8 +1,9 @@
 using Crm.Api.DTOs.Requests;
 using Crm.Api.DTOs.Responses;
+using Crm.Api.Interfaces.Repositories;
+using Crm.Api.Interfaces.Services;
 using Crm.Api.Mappers;
 using Crm.Api.Models;
-using Crm.Api.Repositories;
 
 namespace Crm.Api.Services;
 
