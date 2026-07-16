@@ -56,17 +56,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Controllers + API docs
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new()
-    {
-        Title = "SentraCX - CRM API",
-        Version = "v1",
-        Description = "Customer Experience & Relationship Management API.",
-        Contact = new() { Name = "SentraCX Team" }
-    });
-});
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
@@ -80,7 +70,7 @@ if (app.Environment.IsDevelopment())
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.MapOpenApi();
     app.MapScalarApiReference("/docs", options =>
     {
         options
