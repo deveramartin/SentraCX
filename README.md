@@ -25,6 +25,8 @@ SentraCX is a monorepo containing three core applications:
 
 ## Prerequisites
 
+To run the application locally for testing or development, you will need the following installed:
+- [Git](https://git-scm.com/)
 - [Node.js](https://nodejs.org/) v22+
 - [pnpm](https://pnpm.io/) v9+
 - [.NET SDK](https://dotnet.microsoft.com/) 10.0+
@@ -32,7 +34,9 @@ SentraCX is a monorepo containing three core applications:
 - [PostgreSQL](https://www.postgresql.org/) v15+ (for api-crm)
 - [MongoDB](https://www.mongodb.com/) 7+ (for api-ai-analytics)
 
-## Getting Started
+## Installation & Setup
+
+Follow these steps to set up the repository for development or testing.
 
 1. **Clone the repository**
 
@@ -54,11 +58,20 @@ SentraCX is a monorepo containing three core applications:
    cp apps/api-crm/appsettings.Development.json apps/api-crm/appsettings.Local.json
    ```
 
-4. **Run all services in development mode**
+4. **Run all services**
+
+   Start the entire platform in development mode:
 
    ```bash
    pnpm dev
    ```
+
+5. **Access the Application**
+
+   Once the services have successfully started, you can access the platform at:
+   - **Web CRM Frontend**: [http://localhost:3005](http://localhost:3005)
+   - **API CRM Backend**: [http://localhost:5005](http://localhost:5005)
+   - **AI Analytics Service**: [http://localhost:4005](http://localhost:4005)
 
 ## Scripts
 
@@ -121,13 +134,6 @@ SentraCX/
 └── package.json              # Root scripts
 ```
 
-## Docker
-
-Run all services with Docker Compose:
-
-```bash
-docker compose -f docker/docker-compose.ci.yml up --build
-```
 
 ## License
 
