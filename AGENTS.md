@@ -26,7 +26,7 @@ AI-Analytics code or vice versa. All cross-service communication happens over RE
 
 | Service | Stack | Primary datastore |
 |---|---|---|
-| CRM backend | .NET / C# (net10.0) | PostgreSQL (Npgsql + EF Core) |
+| CRM backend | .NET / C# (net10.0) | SQLite (will be PostgreSQL with Npgsql + EF Core later) |
 | AI-Analytics backend | Python / FastAPI | MongoDB + Redis + Vector store |
 | Frontend | Next.js (App Router) | — (calls both APIs) |
 
