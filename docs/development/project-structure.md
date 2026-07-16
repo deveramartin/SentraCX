@@ -15,7 +15,7 @@ SentraCX/
 │   │   ├── next.config.ts
 │   │   ├── tsconfig.json
 │   │   ├── package.json
-│   │   └── Dockerfile
+│   │   └── next.config.ts
 │   │
 │   ├── api-crm/                          # .NET 10 Web API — MVC style
 │   │   ├── Controllers/
@@ -76,7 +76,7 @@ SentraCX/
 │   │   ├── appsettings.Development.json
 │   │   ├── Program.cs
 │   │   ├── Crm.Api.csproj
-│   │   └── Dockerfile
+│   │   └── Program.cs
 │   │
 │   └── api-ai-analytics/                 # FastAPI + Pydantic + MongoDB
 │       ├── app/
@@ -95,8 +95,7 @@ SentraCX/
 │       │   └── exceptions/
 │       ├── tests/
 │       ├── pyproject.toml
-│       ├── requirements.txt
-│       └── Dockerfile
+│       └── requirements.txt
 │
 ├── packages/
 │   ├── ui/
@@ -114,11 +113,9 @@ SentraCX/
 ├── agents/
 │   └── skills/
 │
-├── docker/
-│   └── docker-compose.ci.yml
-│
 ├── .github/
 │   └── workflows/
+│       └── ci.yml
 │
 ├── .gitignore
 ├── AGENTS.md

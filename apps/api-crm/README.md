@@ -103,15 +103,7 @@ api-crm/
 ├── appsettings.json
 ├── appsettings.Development.json
 ├── Program.cs
-├── Crm.Api.csproj
-└── Dockerfile
-```
-
-## Docker
-
-```bash
-docker build -t sentracx-api-crm .
-docker run -p 5005:8080 sentracx-api-crm
+└── Crm.Api.csproj
 ```
 
 ## Port
@@ -119,4 +111,3 @@ docker run -p 5005:8080 sentracx-api-crm
 | Environment | URL |
 |-------------|-----|
 | Development | https://localhost:5005 |
-| Docker      | http://localhost:5005 (mapped from 8080) |

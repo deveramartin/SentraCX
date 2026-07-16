@@ -97,15 +97,7 @@ api-ai-analytics/
 │   └── exceptions/       # Custom exceptions
 ├── tests/                # pytest tests
 ├── pyproject.toml        # Project metadata & dependencies
-├── requirements.txt      # Pip requirements
-└── Dockerfile
-```
-
-## Docker
-
-```bash
-docker build -t sentracx-api-ai-analytics .
-docker run -p 4005:4005 sentracx-api-ai-analytics
+└── requirements.txt      # Pip requirements
 ```
 
 ## Port
@@ -113,7 +105,6 @@ docker run -p 4005:4005 sentracx-api-ai-analytics
 | Environment | URL |
 |-------------|-----|
 | Development | http://localhost:4005 |
-| Docker      | http://localhost:4005 |
 
 ## Adding Dependencies
 
