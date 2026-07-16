@@ -20,7 +20,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.MapScalarApiReference(options =>
+    app.MapScalarApiReference("/docs", options =>
     {
         options
             .WithTitle("SentraCX - CRM API")

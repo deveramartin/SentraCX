@@ -3,7 +3,7 @@ from fastapi.openapi.docs import get_swagger_ui_html
 from scalar_fastapi import get_scalar_api_reference
 
 app = FastAPI(
-    title="SentraCX AI Analytics API",
+    title="SentraCX - AI Analytics API",
     description="AI-powered analytics and insights service for SentraCX platform.",
     version="0.1.0",
     docs_url=None,  # Disable default Swagger UI
