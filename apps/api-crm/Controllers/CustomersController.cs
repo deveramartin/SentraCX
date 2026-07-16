@@ -7,7 +7,7 @@ namespace Crm.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/customers")]
-[Authorize]
+// [Authorize] // TODO: Re-enable authentication before production/merge to main
 public class CustomersController(ICustomerService customerService) : ControllerBase
 {
     [HttpGet]
