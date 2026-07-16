@@ -56,6 +56,14 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+// Auto-migrate database in development
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -75,3 +83,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Make Program accessible to test project
+public partial class Program { }

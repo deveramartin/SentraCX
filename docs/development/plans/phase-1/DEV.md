@@ -129,7 +129,7 @@ public class OrderHistory
 - [x] Implement EF Core Entity Configurations (Fluent API) for `User`, `CustomerProfile`, and `OrderHistory`.
 - [x] Add PostgreSQL connection string to `appsettings.json`.
 - [x] Generate initial migration: `dotnet ef migrations add InitialCreate`.
-- [ ] Configure database application on startup (`dotnet ef database update`).
+- [x] Configure database application on startup (`dotnet ef database update`).
 
 ### Step 3: Identity & JIT Provisioning
 - [x] Configure JWT Bearer authentication in `Program.cs`.
@@ -150,6 +150,6 @@ public class OrderHistory
 
 ### Step 6: Testing & Validation
 - [x] Add FluentValidation rules for all incoming Request DTOs.
-- [ ] Create `tests/Crm.Api.Tests` xUnit project.
-- [ ] Write Unit Tests for `CustomerService` and `OrderService` (mocking Repositories).
-- [ ] Write Integration Tests for `CustomersController` endpoints.
+- [x] Create `tests/Crm.Api.Tests` xUnit project.
+- [x] Write Unit Tests for `CustomerService` and `OrderService` (mocking Repositories).
+- [x] Write Integration Tests for `CustomersController` endpoints.
