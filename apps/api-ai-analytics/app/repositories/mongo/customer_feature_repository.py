@@ -1,0 +1,44 @@
+"""MongoDB repository for customer feature logs."""
+
+from datetime import datetime, timezone
+
+from motor.motor_asyncio import AsyncIOMotorDatabase
+
+_COLLECTION = "customer_feature_logs"
+
+
+class CustomerFeatureRepository:
+    """Repository for storing and retrieving customer feature snapshots."""
+
+    def __init__(self, database: AsyncIOMotorDatabase) -> None:
+        self._collection = database[_COLLECTION]
+
+    async def save_feature_log(
+        self, customer_id: str, features: dict
+    ) -> str:
+        """Save a feature snapshot for a customer.
+
+        Returns the inserted document ID as string.
+        """
+        document = {
+            "customer_id": customer_id,
+            "features": features,
+            "recorded_at": datetime.now(timezone.utc),
+        }
+        result = await self._collection.insert_one(document)
+        return str(result.inserted_id)
+
+    async def get_latest_features(
+        self, customer_id: str
+    ) -> dict | None:
+        """Get the most recent feature snapshot for a customer.
+
+        Returns None if no features have been recorded.
+        """
+        document = await self._collection.find_one(
+            {"customer_id": customer_id},
+            sort=[("recorded_at", -1)],
+        )
+        if document is None:
+            return None
+        return document.get("features")

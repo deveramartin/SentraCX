@@ -29,6 +29,7 @@ venv/
 *.pem
 .kiro/
 .agents/
+agents/
 .design-ref/
 
 # debug
