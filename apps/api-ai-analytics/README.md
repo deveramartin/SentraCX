@@ -69,11 +69,13 @@ Key variables:
 
 ## API Documentation
 
-When running, interactive docs are available at:
+When running, Scalar API reference is available at:
 
-- **Swagger UI**: http://localhost:4005/docs
+- **Scalar**: http://localhost:4005/docs
 - **ReDoc**: http://localhost:4005/redoc
 - **OpenAPI spec**: http://localhost:4005/openapi.json
+
+Full API documentation: [docs/api/api-ai-analytics.md](../../docs/api/api-ai-analytics.md)
 
 ## Project Structure
 

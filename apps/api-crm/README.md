@@ -66,10 +66,12 @@ Or configure via `appsettings.Development.json`:
 
 ## API Documentation
 
-When running in development, Swagger UI is available at:
+When running in development, Scalar API reference is available at:
 
-- **Swagger UI**: https://localhost:5005/swagger
+- **Scalar**: https://localhost:5005/scalar/v1
 - **OpenAPI spec**: https://localhost:5005/swagger/v1/swagger.json
+
+Full API documentation: [docs/api/api-crm.md](../../docs/api/api-crm.md)
 
 ## Project Structure
 
