@@ -1,26 +1,25 @@
 {
-  "name": "hrms",
+  "name": "sentracx",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "next": "16.2.10",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.10",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "dev": "pnpm run --parallel dev:web dev:api dev:ai",
+    "dev:web": "pnpm --filter ./apps/web-crm dev",
+    "dev:api": "pnpm --filter ./apps/api-crm dev",
+    "dev:ai": "pnpm --filter ./apps/api-ai-analytics dev",
+    "build": "pnpm run --parallel build:web build:api build:ai",
+    "build:web": "pnpm --filter ./apps/web-crm build",
+    "build:api": "pnpm --filter ./apps/api-crm build",
+    "build:ai": "pnpm --filter ./apps/api-ai-analytics build",
+    "start": "pnpm run --parallel start:web start:api start:ai",
+    "start:web": "pnpm --filter ./apps/web-crm start",
+    "start:api": "pnpm --filter ./apps/api-crm start",
+    "start:ai": "pnpm --filter ./apps/api-ai-analytics start",
+    "lint": "pnpm run --parallel lint:web",
+    "lint:web": "pnpm --filter ./apps/web-crm lint",
+    "test": "pnpm run --parallel test:api test:ai",
+    "test:api": "pnpm --filter ./apps/api-crm test",
+    "test:ai": "pnpm --filter ./apps/api-ai-analytics test",
+    "clean": "rm -rf node_modules apps/*/node_modules apps/*/.next apps/*/dist apps/*/build"
   }
 }
