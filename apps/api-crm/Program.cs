@@ -1,4 +1,5 @@
 using Crm.Api.Data;
+using Crm.Api.Helpers;
 using Crm.Api.Middleware;
 using Crm.Api.Interfaces.Repositories;
 using Crm.Api.Interfaces.Services;
@@ -10,18 +11,31 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
+// Load .env file (if present) into environment variables
+EnvLoader.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Database
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Database — build connection string from environment variables
+var dbHost = Environment.GetEnvironmentVariable("DATABASE_HOST") ?? "localhost";
+var dbPort = Environment.GetEnvironmentVariable("DATABASE_PORT") ?? "5432";
+var dbName = Environment.GetEnvironmentVariable("DATABASE_NAME") ?? "sentracx_crm";
+var dbUser = Environment.GetEnvironmentVariable("DATABASE_USER") ?? "postgres";
+var dbPassword = Environment.GetEnvironmentVariable("DATABASE_PASSWORD") ?? "postgres";
+var connectionString = $"Host={dbHost};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPassword}";
 
-// Authentication
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
+// Authentication — read from environment variables
+var jwtAuthority = Environment.GetEnvironmentVariable("JWT_AUTHORITY") ?? "https://localhost:5001";
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? "sentracx-crm-api";
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = builder.Configuration["Jwt:Authority"];
-        options.Audience = builder.Configuration["Jwt:Audience"];
+        options.Authority = jwtAuthority;
+        options.Audience = jwtAudience;
         options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
     });
 
