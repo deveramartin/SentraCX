@@ -8,6 +8,10 @@ importers:
 
   .: {}
 
+  apps/api-ai-analytics: {}
+
+  apps/api-crm: {}
+
   apps/web-crm:
     dependencies:
       next:
