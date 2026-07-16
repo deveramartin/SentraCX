@@ -81,9 +81,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseMiddleware<JitProvisioningMiddleware>();
-app.UseAuthorization();
+// TODO: Re-enable authentication before production/merge to main
+// app.UseAuthentication();
+// app.UseMiddleware<JitProvisioningMiddleware>();
+// app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
