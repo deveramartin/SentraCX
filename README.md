@@ -2,7 +2,7 @@
 
 # SentraCX
 
-**S**mart **EN**gagement **T**icketing **R**elationship and **A**nalytics — **CX**
+**S**mart **EN**gagement **T**icketing **R**elationship and **A**nalytics — **C**ustomer E**X**perience
 
 [![Status](https://img.shields.io/badge/status-under%20development-yellow)](https://github.com/your-org/sentracx)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
