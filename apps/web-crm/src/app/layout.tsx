@@ -3,6 +3,7 @@ import { Hanken_Grotesk, Geist_Mono } from "next/font/google";
 import { auth } from "@/auth";
 import { Sidebar } from "@/components/shared/Sidebar";
 import { Header } from "@/components/shared/Header";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import "./globals.css";
 
 const hankenGrotesk = Hanken_Grotesk({
@@ -44,15 +45,15 @@ export default async function RootLayout({
     <html lang="en" className={`${hankenGrotesk.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {hasAccess ? (
-          <div className="flex min-h-screen w-full">
+          <SidebarProvider>
             <Sidebar />
-            <div className="flex-1 flex flex-col md:ml-64">
+            <div className="flex-1 flex flex-col overflow-hidden">
               <Header />
-              <main className="flex-1 bg-background relative overflow-hidden">
+              <main className="flex-1 bg-background relative overflow-hidden animate-in fade-in duration-500">
                 {children}
               </main>
             </div>
-          </div>
+          </SidebarProvider>
         ) : (
           <div style={{ padding: 40, fontFamily: "monospace" }}>
             <h1>Access Denied</h1>
