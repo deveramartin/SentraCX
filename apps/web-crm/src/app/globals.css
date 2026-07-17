@@ -1,69 +1,97 @@
 @import "tailwindcss";
 
+:root {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 240 5.9% 10%;
+  --radius: 0.5rem;
+  
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 240 4.9% 83.9%;
+  
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+}
+
 @theme {
-  --color-surface: #fdf8f8;
-  --color-surface-dim: #ddd9d9;
-  --color-surface-bright: #fdf8f8;
-  --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f7f3f2;
-  --color-surface-container: #f1eded;
-  --color-surface-container-high: #ebe7e7;
-  --color-surface-container-highest: #e5e2e1;
-  --color-on-surface: #1c1b1c;
-  --color-on-surface-variant: #47464b;
-  --color-inverse-surface: #313030;
-  --color-inverse-on-surface: #f4f0ef;
-  --color-outline: #77767b;
-  --color-outline-variant: #c8c5cb;
-  --color-surface-tint: #5f5e61;
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
   
-  --color-primary: #000000;
-  --color-on-primary: #ffffff;
-  --color-primary-container: #1b1b1e;
-  --color-on-primary-container: #858387;
-  --color-inverse-primary: #c8c5ca;
-  
-  --color-secondary: #5d5e66;
-  --color-on-secondary: #ffffff;
-  --color-secondary-container: #e3e1ec;
-  --color-on-secondary-container: #63646c;
-  
-  --color-tertiary: #000000;
-  --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #1d1b16;
-  --color-on-tertiary-container: #88837c;
-  
-  --color-error: #ba1a1a;
-  --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #93000a;
-  
-  --color-primary-fixed: #e4e1e6;
-  --color-primary-fixed-dim: #c8c5ca;
-  --color-on-primary-fixed: #1b1b1e;
-  --color-on-primary-fixed-variant: #47464a;
-  --color-secondary-fixed: #e3e1ec;
-  --color-secondary-fixed-dim: #c6c5cf;
-  --color-on-secondary-fixed: #1a1b22;
-  --color-on-secondary-fixed-variant: #46464e;
-  --color-tertiary-fixed: #e8e2d9;
-  --color-tertiary-fixed-dim: #cbc6bd;
-  --color-on-tertiary-fixed: #1d1b16;
-  --color-on-tertiary-fixed-variant: #494640;
-  
-  --color-background: #fdf8f8;
-  --color-on-background: #1c1b1c;
-  --color-surface-variant: #e5e2e1;
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 
   --font-sans: var(--font-hanken-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  
-  --radius-sm: 0.125rem;
-  --radius-default: 0.25rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-  
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Spacing */
   --spacing-base: 4px;
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -79,89 +107,71 @@
 
 body {
   background: var(--color-background);
-  color: var(--color-on-background);
+  color: var(--color-foreground);
   font-family: var(--font-sans);
 }
 
-/* Bren Raphael's Typography Utilities */
+/* Typography Utilities */
 @utility text-display-lg {
-  font-family: var(--font-sans);
-  font-size: 48px;
-  font-weight: 700;
-  line-height: 1.1;
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
   letter-spacing: -0.02em;
 }
 
 @utility text-display-sm {
-  font-family: var(--font-sans);
-  font-size: 36px;
+  font-size: 2.25rem;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 2.5rem;
   letter-spacing: -0.02em;
 }
 
 @utility text-headline-lg {
-  font-family: var(--font-sans);
-  font-size: 30px;
+  font-size: 1.875rem;
   font-weight: 600;
-  line-height: 36px;
-  letter-spacing: -0.01em;
-}
-
-@utility text-headline-lg-mobile {
-  font-family: var(--font-sans);
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 32px;
+  line-height: 2.25rem;
+  letter-spacing: -0.02em;
 }
 
 @utility text-headline-md {
-  font-family: var(--font-sans);
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 600;
-  line-height: 32px;
+  line-height: 2rem;
+  letter-spacing: -0.02em;
 }
 
 @utility text-title-lg {
-  font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 600;
-  line-height: 28px;
+  line-height: 1.75rem;
 }
 
 @utility text-body-lg {
-  font-family: var(--font-sans);
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 400;
-  line-height: 28px;
+  line-height: 1.75rem;
 }
 
 @utility text-body-md {
-  font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
-  line-height: 24px;
+  line-height: 1.5rem;
 }
 
 @utility text-body-sm {
-  font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 400;
-  line-height: 20px;
+  line-height: 1.25rem;
 }
 
 @utility text-label-md {
-  font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
-  line-height: 16px;
-  letter-spacing: 0.01em;
+  line-height: 1.25rem;
 }
 
 @utility text-label-sm {
-  font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 500;
-  line-height: 16px;
-  letter-spacing: 0.01em;
+  line-height: 1rem;
 }
