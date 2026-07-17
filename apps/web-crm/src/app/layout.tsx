@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, Geist_Mono } from "next/font/google";
 import { auth } from "@/auth";
-import { Sidebar } from "@/components/shared/Sidebar";
 import { Header } from "@/components/shared/Header";
-import { MobileNav } from "@/components/shared/MobileNav";
 import "./globals.css";
 
 const hankenGrotesk = Hanken_Grotesk({
@@ -45,15 +43,11 @@ export default async function RootLayout({
     <html lang="en" className={`${hankenGrotesk.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {hasAccess ? (
-          <div className="flex min-h-screen w-full">
-            <Sidebar />
-            <div className="flex-1 flex flex-col md:ml-64 pb-16 md:pb-0">
-              <Header />
-              <main className="flex-1 bg-background relative overflow-hidden">
-                {children}
-              </main>
-            </div>
-            <MobileNav />
+          <div className="flex flex-col min-h-screen w-full">
+            <Header />
+            <main className="flex-1 bg-background relative overflow-hidden">
+              {children}
+            </main>
           </div>
         ) : (
           <div style={{ padding: 40, fontFamily: "monospace" }}>

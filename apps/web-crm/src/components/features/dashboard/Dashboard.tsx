@@ -124,14 +124,20 @@ export function Dashboard() {
         </div>
       )}
 
-      {/* Welcome Banner */}
-      <div className="space-y-sm">
-        <h1 className="text-display-sm font-bold tracking-tight text-foreground">
-          Operations Dashboard
-        </h1>
-        <p className="text-body-md text-muted-foreground max-w-2xl">
-          Here is the current operational overview for SentraCX. Real-time updates are enabled.
-        </p>
+      {/* Page Header block */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md border-b border-border pb-lg">
+        <div className="space-y-sm">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h2>
+        </div>
+        <div className="flex items-center gap-sm">
+          <Button variant="outline" size="sm" className="h-9 flex items-center gap-xs text-xs font-semibold cursor-pointer">
+            <Clock className="w-3.5 h-3.5 mr-1" />
+            Jan 01, 2026 - Jun 30, 2026
+          </Button>
+          <Button size="sm" className="h-9 bg-primary text-primary-foreground hover:bg-neutral-800 transition-colors font-medium rounded-lg text-xs cursor-pointer px-4" onClick={() => showToast("Downloading CSV reports...")}>
+            Download Report
+          </Button>
+        </div>
       </div>
 
       {/* KPI Metrics Grid */}
@@ -165,64 +171,67 @@ export function Dashboard() {
         })}
       </div>
 
-      {/* Area Chart Section */}
-      <Card className="bg-card border-border rounded-xl shadow-none">
-        <CardHeader>
-          <CardTitle className="text-title-lg font-bold text-foreground">Support Operations Trend</CardTitle>
-          <p className="text-body-sm text-muted-foreground">
-            Monthly summary of logged support tickets vs resolved tickets.
-          </p>
-        </CardHeader>
-        <CardContent className="pb-4">
-          <ChartContainer config={chartConfig} className="h-[200px] w-full">
-            <AreaChart
-              accessibilityLayer
-              data={chartData}
-              margin={{
-                left: 12,
-                right: 12,
-              }}
-            >
-              <CartesianGrid vertical={false} className="stroke-border" />
-              <XAxis
-                dataKey="month"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                tickFormatter={(value) => value.slice(0, 3)}
-                className="fill-muted-foreground text-xs"
-              />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent indicator="dot" />}
-              />
-              <Area
-                dataKey="resolved"
-                type="natural"
-                fill="var(--color-chart-2)"
-                fillOpacity={0.4}
-                stroke="var(--color-chart-2)"
-                stackId="a"
-              />
-              <Area
-                dataKey="tickets"
-                type="natural"
-                fill="var(--color-chart-1)"
-                fillOpacity={0.4}
-                stroke="var(--color-chart-1)"
-                stackId="a"
-              />
-            </AreaChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
+      {/* Dashboard Main Grid: Chart + Recent Tickets list */}
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-lg">
+        {/* Area Chart Section (col-span 4) */}
+        <Card className="lg:col-span-4 bg-card border-border rounded-xl shadow-none">
+          <CardHeader>
+            <CardTitle className="text-title-lg font-bold text-foreground">Support Operations Trend</CardTitle>
+            <p className="text-body-sm text-muted-foreground">
+              Monthly summary of logged support tickets vs resolved tickets.
+            </p>
+          </CardHeader>
+          <CardContent className="pb-4">
+            <ChartContainer config={chartConfig} className="h-[300px] w-full">
+              <AreaChart
+                accessibilityLayer
+                data={chartData}
+                margin={{
+                  left: 12,
+                  right: 12,
+                }}
+              >
+                <CartesianGrid vertical={false} className="stroke-border" />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  tickFormatter={(value) => value.slice(0, 3)}
+                  className="fill-muted-foreground text-xs"
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator="dot" />}
+                />
+                <Area
+                  dataKey="resolved"
+                  type="natural"
+                  fill="var(--color-chart-2)"
+                  fillOpacity={0.4}
+                  stroke="var(--color-chart-2)"
+                  stackId="a"
+                />
+                <Area
+                  dataKey="tickets"
+                  type="natural"
+                  fill="var(--color-chart-1)"
+                  fillOpacity={0.4}
+                  stroke="var(--color-chart-1)"
+                  stackId="a"
+                />
+              </AreaChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
 
-      {/* Secondary section: Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-lg">
-        {/* Recent Tickets Panel */}
-        <Card className="lg:col-span-2 bg-card border-border rounded-xl flex flex-col shadow-none">
+        {/* Recent Tickets Panel (col-span 3) */}
+        <Card className="lg:col-span-3 bg-card border-border rounded-xl flex flex-col shadow-none">
           <CardHeader className="flex flex-row justify-between items-center pb-6 p-lg">
-            <CardTitle className="text-title-lg font-bold text-foreground">Recent Tickets</CardTitle>
+            <div className="space-y-xs">
+              <CardTitle className="text-title-lg font-bold text-foreground">Recent Tickets</CardTitle>
+              <p className="text-body-sm text-muted-foreground">You have {tickets.length} active tickets</p>
+            </div>
             <Button variant="ghost" size="sm" className="text-label-md font-medium text-muted-foreground hover:text-foreground flex items-center gap-xs group transition-colors cursor-pointer">
               View all 
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -232,16 +241,16 @@ export function Dashboard() {
           <CardContent className="flex-1 divide-y divide-border p-lg pt-0">
             {tickets.map((ticket) => (
               <div key={ticket.id} className="py-md first:pt-0 last:pb-0 flex items-center justify-between hover:bg-muted/50 px-sm transition-colors rounded-lg">
-                <div className="space-y-xs">
+                <div className="space-y-xs overflow-hidden max-w-[70%]">
                   <div className="flex items-center gap-sm">
                     <Badge variant="secondary" className="text-label-sm font-bold text-foreground bg-muted px-sm py-0.5 rounded-sm shadow-none">
                       {ticket.id}
                     </Badge>
-                    <span className="text-label-md font-semibold text-foreground">{ticket.customer}</span>
+                    <span className="text-label-md font-semibold text-foreground truncate">{ticket.customer}</span>
                   </div>
-                  <p className="text-body-sm text-muted-foreground font-medium">{ticket.issue}</p>
+                  <p className="text-body-sm text-muted-foreground font-medium truncate">{ticket.issue}</p>
                 </div>
-                <div className="text-right space-y-xs">
+                <div className="text-right space-y-xs shrink-0">
                   <Badge className={`text-[11px] font-bold px-2 py-0.5 rounded-full shadow-none border-none ${
                     ticket.priority === "High" 
                       ? "bg-red-100 text-red-800 hover:bg-red-100" 
@@ -257,100 +266,92 @@ export function Dashboard() {
             ))}
           </CardContent>
         </Card>
-
-        {/* Quick Actions Panel */}
-        <Card className="bg-card border-border rounded-xl flex flex-col justify-between shadow-none">
-          <CardHeader className="pb-6 p-lg">
-            <CardTitle className="text-title-lg font-bold text-foreground">Quick Operations</CardTitle>
-            <p className="text-body-sm text-muted-foreground mt-sm">
-              Perform administrative actions quickly using the design system's action definitions.
-            </p>
-          </CardHeader>
-          <CardContent className="space-y-sm p-lg pt-0">
-            {/* Primary action using Sheet for Form creation */}
-            <Sheet open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-              <SheetTrigger asChild>
-                <Button className="w-full flex items-center justify-center gap-sm px-md py-sm bg-primary text-primary-foreground hover:bg-neutral-800 transition-colors font-medium rounded-lg text-label-md cursor-pointer">
-                  <Plus className="w-4 h-4" />
-                  Create New Ticket
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="bg-card border-border w-[400px] sm:w-[540px]">
-                <SheetHeader className="pb-lg">
-                  <SheetTitle className="text-headline-md font-bold text-foreground">Create Support Ticket</SheetTitle>
-                  <SheetDescription className="text-body-sm text-muted-foreground">
-                    Submit a support query. It will immediately populate on the active system log.
-                  </SheetDescription>
-                </SheetHeader>
-                <form onSubmit={handleCreateTicket} className="space-y-lg mt-lg">
-                  <div className="space-y-xs">
-                    <label className="text-label-sm font-semibold text-foreground block">Customer Name</label>
-                    <Input 
-                      placeholder="e.g. Olivia Vance" 
-                      value={newCustomer}
-                      onChange={(e) => setNewCustomer(e.target.value)}
-                      className="bg-muted/50 border-border focus:border-primary text-body-sm"
-                    />
-                  </div>
-                  <div className="space-y-xs">
-                    <label className="text-label-sm font-semibold text-foreground block">Support Issue</label>
-                    <Input 
-                      placeholder="e.g. Database connectivity failed" 
-                      value={newIssue}
-                      onChange={(e) => setNewIssue(e.target.value)}
-                      className="bg-muted/50 border-border focus:border-primary text-body-sm"
-                    />
-                  </div>
-                  <div className="space-y-xs">
-                    <label className="text-label-sm font-semibold text-foreground block">Priority</label>
-                    <div className="flex gap-sm">
-                      {(["High", "Medium", "Low"] as const).map((p) => (
-                        <Button
-                          type="button"
-                          key={p}
-                          variant={newPriority === p ? "default" : "outline"}
-                          className="flex-1"
-                          onClick={() => setNewPriority(p)}
-                        >
-                          {p}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="pt-xl">
-                    <Button type="submit" className="w-full bg-primary hover:bg-neutral-800 text-primary-foreground">
-                      Submit Ticket
-                    </Button>
-                  </div>
-                </form>
-              </SheetContent>
-            </Sheet>
-            
-            {/* Secondary action */}
-            <Button 
-              variant="outline" 
-              className="w-full flex items-center justify-center gap-sm px-md py-sm border border-border text-foreground hover:bg-muted transition-colors font-medium rounded-lg text-label-md cursor-pointer"
-              onClick={() => showToast("Marketing Campaign launched successfully!")}
-            >
-              Launch Campaign
-            </Button>
-
-            {/* Ghost action */}
-            <Button 
-              variant="ghost" 
-              className="w-full flex items-center justify-center gap-sm px-md py-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors font-medium rounded-lg text-label-md cursor-pointer"
-              onClick={() => showToast("SSO Configuration settings fetched.")}
-            >
-              Configure SSO Gateway
-            </Button>
-            
-            <div className="border-t border-border pt-lg mt-lg flex items-center gap-sm text-[11px] text-muted-foreground font-mono">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              System Live: Client Gateway SSO Active
-            </div>
-          </CardContent>
-        </Card>
       </div>
+
+      {/* Bottom section: Quick Actions */}
+      <Card className="bg-card border-border rounded-xl flex flex-col md:flex-row justify-between items-center shadow-none p-lg gap-md border">
+        <div className="space-y-xs">
+          <CardTitle className="text-title-lg font-bold text-foreground">Quick Operations</CardTitle>
+          <p className="text-body-sm text-muted-foreground">
+            Perform administrative tasks, launch campaigns, or trigger security portal updates.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-sm">
+          <Sheet open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+            <SheetTrigger asChild>
+              <Button className="bg-primary text-primary-foreground hover:bg-neutral-800 transition-colors font-medium rounded-lg text-label-md cursor-pointer py-2 px-4">
+                <Plus className="w-4 h-4 mr-sm" />
+                Create New Ticket
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="bg-card border-border w-[400px] sm:w-[540px]">
+              <SheetHeader className="pb-lg">
+                <SheetTitle className="text-headline-md font-bold text-foreground">Create Support Ticket</SheetTitle>
+                <SheetDescription className="text-body-sm text-muted-foreground">
+                  Submit a support query. It will immediately populate on the active system log.
+                </SheetDescription>
+              </SheetHeader>
+              <form onSubmit={handleCreateTicket} className="space-y-lg mt-lg">
+                <div className="space-y-xs">
+                  <label className="text-label-sm font-semibold text-foreground block">Customer Name</label>
+                  <Input 
+                    placeholder="e.g. Olivia Vance" 
+                    value={newCustomer}
+                    onChange={(e) => setNewCustomer(e.target.value)}
+                    className="bg-muted/50 border-border focus:border-primary text-body-sm"
+                  />
+                </div>
+                <div className="space-y-xs">
+                  <label className="text-label-sm font-semibold text-foreground block">Support Issue</label>
+                  <Input 
+                    placeholder="e.g. Database connectivity failed" 
+                    value={newIssue}
+                    onChange={(e) => setNewIssue(e.target.value)}
+                    className="bg-muted/50 border-border focus:border-primary text-body-sm"
+                  />
+                </div>
+                <div className="space-y-xs">
+                  <label className="text-label-sm font-semibold text-foreground block">Priority</label>
+                  <div className="flex gap-sm">
+                    {(["High", "Medium", "Low"] as const).map((p) => (
+                      <Button
+                        type="button"
+                        key={p}
+                        variant={newPriority === p ? "default" : "outline"}
+                        className="flex-1"
+                        onClick={() => setNewPriority(p)}
+                      >
+                        {p}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+                <div className="pt-xl">
+                  <Button type="submit" className="w-full bg-primary hover:bg-neutral-800 text-primary-foreground">
+                    Submit Ticket
+                  </Button>
+                </div>
+              </form>
+            </SheetContent>
+          </Sheet>
+
+          <Button 
+            variant="outline" 
+            className="border border-border text-foreground hover:bg-muted transition-colors font-medium rounded-lg text-label-md cursor-pointer"
+            onClick={() => showToast("Marketing Campaign launched successfully!")}
+          >
+            Launch Campaign
+          </Button>
+
+          <Button 
+            variant="ghost" 
+            className="text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors font-medium rounded-lg text-label-md cursor-pointer"
+            onClick={() => showToast("SSO Configuration settings fetched.")}
+          >
+            Configure SSO Gateway
+          </Button>
+        </div>
+      </Card>
     </div>
   );
 }
