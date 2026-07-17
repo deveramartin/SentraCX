@@ -9,6 +9,9 @@ import {
   TrendingUp,
   AlertCircle
 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export default async function Home() {
   const session = await auth();
@@ -31,7 +34,7 @@ export default async function Home() {
     <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-2xl">
       {/* Welcome Banner */}
       <div className="space-y-sm">
-        <h1 className="text-display-sm font-bold tracking-tight text-primary">
+        <h1 className="text-display-sm font-bold tracking-tight text-primary animate-in fade-in slide-in-from-top-4 duration-500">
           Welcome back, {session?.user?.name ?? "Administrator"}
         </h1>
         <p className="text-body-md text-on-surface-variant max-w-2xl">
@@ -44,17 +47,17 @@ export default async function Home() {
         {metrics.map((metric) => {
           const Icon = metric.icon;
           return (
-            <div 
+            <Card 
               key={metric.name} 
-              className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col justify-between transition-all hover:border-primary duration-300"
+              className="bg-surface-container-lowest border-outline-variant rounded-xl flex flex-col justify-between transition-all hover:border-primary duration-300 shadow-none"
             >
-              <div className="flex justify-between items-start">
+              <CardHeader className="flex flex-row justify-between items-start space-y-0 pb-2 p-lg">
                 <span className="text-label-md text-on-surface-variant font-medium">{metric.name}</span>
                 <div className="p-2 bg-surface-container rounded-lg">
                   <Icon className="w-5 h-5 text-primary" />
                 </div>
-              </div>
-              <div className="mt-lg">
+              </CardHeader>
+              <CardContent className="p-lg pt-0 mt-lg">
                 <span className="text-display-sm font-bold text-primary">{metric.value}</span>
                 <div className="flex items-center gap-xs mt-sm text-body-sm">
                   {metric.trend === "up" && <TrendingUp className="w-4 h-4 text-primary" />}
@@ -64,8 +67,8 @@ export default async function Home() {
                     {metric.change}
                   </span>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           );
         })}
       </div>
@@ -73,75 +76,75 @@ export default async function Home() {
       {/* Secondary section: Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-lg">
         {/* Recent Tickets Panel */}
-        <div className="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col">
-          <div className="flex justify-between items-center mb-lg">
-            <h3 className="text-title-lg font-bold text-primary">Recent Tickets</h3>
-            <button className="text-label-md font-medium text-on-surface-variant hover:text-primary flex items-center gap-xs group transition-colors cursor-pointer">
+        <Card className="lg:col-span-2 bg-surface-container-lowest border-outline-variant rounded-xl flex flex-col shadow-none">
+          <CardHeader className="flex flex-row justify-between items-center pb-6 p-lg">
+            <CardTitle className="text-title-lg font-bold text-primary">Recent Tickets</CardTitle>
+            <Button variant="ghost" size="sm" className="text-label-md font-medium text-on-surface-variant hover:text-primary flex items-center gap-xs group transition-colors cursor-pointer">
               View all 
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </button>
-          </div>
+            </Button>
+          </CardHeader>
 
-          <div className="flex-1 divide-y divide-outline-variant">
+          <CardContent className="flex-1 divide-y divide-outline-variant p-lg pt-0">
             {recentTickets.map((ticket) => (
               <div key={ticket.id} className="py-md first:pt-0 last:pb-0 flex items-center justify-between hover:bg-surface-container-low px-sm transition-colors rounded-lg">
                 <div className="space-y-xs">
                   <div className="flex items-center gap-sm">
-                    <span className="text-label-sm font-bold text-primary bg-surface-container px-sm py-0.5 rounded-sm">
+                    <Badge variant="secondary" className="text-label-sm font-bold text-primary bg-surface-container px-sm py-0.5 rounded-sm shadow-none">
                       {ticket.id}
-                    </span>
+                    </Badge>
                     <span className="text-label-md font-semibold text-primary">{ticket.customer}</span>
                   </div>
                   <p className="text-body-sm text-on-surface-variant font-medium">{ticket.issue}</p>
                 </div>
                 <div className="text-right space-y-xs">
-                  <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                  <Badge className={`text-[11px] font-bold px-2 py-0.5 rounded-full shadow-none border-none ${
                     ticket.priority === "High" 
-                      ? "bg-red-100 text-red-800" 
+                      ? "bg-red-100 text-red-800 hover:bg-red-100" 
                       : ticket.priority === "Medium"
-                      ? "bg-amber-100 text-amber-800"
-                      : "bg-zinc-100 text-zinc-800"
+                      ? "bg-amber-100 text-amber-800 hover:bg-amber-100"
+                      : "bg-zinc-100 text-zinc-800 hover:bg-zinc-100"
                   }`}>
                     {ticket.priority}
-                  </span>
+                  </Badge>
                   <p className="text-[11px] text-on-surface-variant font-mono">{ticket.time}</p>
                 </div>
               </div>
             ))}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Quick Actions Panel */}
-        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col justify-between">
-          <div className="space-y-lg">
-            <h3 className="text-title-lg font-bold text-primary">Quick Operations</h3>
-            <p className="text-body-sm text-on-surface-variant">
+        <Card className="bg-surface-container-lowest border-outline-variant rounded-xl flex flex-col justify-between shadow-none">
+          <CardHeader className="pb-6 p-lg">
+            <CardTitle className="text-title-lg font-bold text-primary">Quick Operations</CardTitle>
+            <p className="text-body-sm text-on-surface-variant mt-sm">
               Perform administrative actions quickly using the design system's action definitions.
             </p>
-            <div className="space-y-sm">
-              {/* Primary action */}
-              <button className="w-full flex items-center justify-center gap-sm px-md py-sm bg-primary text-on-primary hover:bg-neutral-800 transition-colors font-medium rounded-lg text-label-md cursor-pointer">
-                <Plus className="w-4 h-4" />
-                Create New Ticket
-              </button>
-              
-              {/* Secondary action */}
-              <button className="w-full flex items-center justify-center gap-sm px-md py-sm border border-outline-variant text-primary hover:bg-surface-container transition-colors font-medium rounded-lg text-label-md cursor-pointer">
-                Launch Campaign
-              </button>
+          </CardHeader>
+          <CardContent className="space-y-sm p-lg pt-0">
+            {/* Primary action */}
+            <Button className="w-full flex items-center justify-center gap-sm px-md py-sm bg-primary text-on-primary hover:bg-neutral-800 transition-colors font-medium rounded-lg text-label-md cursor-pointer">
+              <Plus className="w-4 h-4" />
+              Create New Ticket
+            </Button>
+            
+            {/* Secondary action */}
+            <Button variant="outline" className="w-full flex items-center justify-center gap-sm px-md py-sm border border-outline-variant text-primary hover:bg-surface-container transition-colors font-medium rounded-lg text-label-md cursor-pointer">
+              Launch Campaign
+            </Button>
 
-              {/* Ghost action */}
-              <button className="w-full flex items-center justify-center gap-sm px-md py-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors font-medium rounded-lg text-label-md cursor-pointer">
-                Configure SSO Gateway
-              </button>
+            {/* Ghost action */}
+            <Button variant="ghost" className="w-full flex items-center justify-center gap-sm px-md py-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors font-medium rounded-lg text-label-md cursor-pointer">
+              Configure SSO Gateway
+            </Button>
+            
+            <div className="border-t border-outline-variant pt-lg mt-lg flex items-center gap-sm text-[11px] text-on-surface-variant font-mono">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              System Live: Client Gateway SSO Active
             </div>
-          </div>
-
-          <div className="border-t border-outline-variant pt-lg mt-lg flex items-center gap-sm text-[11px] text-on-surface-variant font-mono">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            System Live: Client Gateway SSO Active
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
