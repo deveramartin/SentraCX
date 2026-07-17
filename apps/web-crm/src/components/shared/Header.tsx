@@ -98,26 +98,6 @@ export function Header() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
-        {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center gap-md lg:gap-lg">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link 
-                key={item.name} 
-                href={item.href} 
-                className={`text-label-md font-semibold transition-colors py-1 ${
-                  isActive 
-                    ? "text-foreground font-bold border-b-2 border-primary" 
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {item.name}
-              </Link>
-            );
-          })}
-        </nav>
       </div>
 
       {/* Right: Actions */}
