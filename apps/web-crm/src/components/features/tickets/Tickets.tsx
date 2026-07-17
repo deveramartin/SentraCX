@@ -1,7 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import { Ticket as TicketIcon, Search, Plus, Filter, RefreshCw } from "lucide-react";
+import { 
+  Plus, 
+  Search, 
+  X, 
+  MoreHorizontal, 
+  Circle, 
+  Clock, 
+  CheckCircle2, 
+  ArrowUp, 
+  ArrowRight, 
+  ArrowDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  SlidersHorizontal
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +30,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface SupportTicket {
   id: string;
@@ -37,6 +61,9 @@ export function Tickets() {
     { id: "TCK-1021", customer: "Liam Anderson", issue: "Feature Request: Export PDF", priority: "Low", status: "Resolved", time: "3 hours ago" },
     { id: "TCK-1020", customer: "Sophia Martinez", issue: "Email configuration latency", priority: "Medium", status: "Resolved", time: "1 day ago" },
   ]);
+
+  // Checkbox Selection State
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   // Form State
   const [newCustomer, setNewCustomer] = useState("");
@@ -72,7 +99,13 @@ export function Tickets() {
     setNewIssue("");
     setNewPriority("Medium");
     setIsCreateOpen(false);
-    showToast(`Ticket ${newTicket.id} has been logged.`);
+    showToast(`Ticket ${newTicket.id} created successfully!`);
+  };
+
+  const handleDeleteTicket = (id: string) => {
+    setTickets(tickets.filter(t => t.id !== id));
+    setSelectedIds(selectedIds.filter(item => item !== id));
+    showToast(`Ticket ${id} deleted.`);
   };
 
   const handleCycleStatus = (ticketId: string) => {
@@ -85,11 +118,33 @@ export function Tickets() {
     setTickets(tickets.map(t => {
       if (t.id === ticketId) {
         const nextStatus = statusCycle[t.status];
-        showToast(`Ticket ${t.id} updated to ${nextStatus}`);
         return { ...t, status: nextStatus };
       }
       return t;
     }));
+    showToast(`Ticket ${ticketId} status updated.`);
+  };
+
+  const handleToggleSelectAll = () => {
+    if (selectedIds.length === filteredTickets.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(filteredTickets.map(t => t.id));
+    }
+  };
+
+  const handleToggleSelectRow = (id: string) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter(item => item !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
+  };
+
+  const handleResetFilters = () => {
+    setSearchQuery("");
+    setPriorityFilter("All");
+    setStatusFilter("All");
   };
 
   const filteredTickets = tickets.filter(t => {
@@ -101,11 +156,29 @@ export function Tickets() {
     return matchesSearch && matchesPriority && matchesStatus;
   });
 
+  const getStatusIcon = (status: SupportTicket["status"]) => {
+    switch (status) {
+      case "Open": return <Circle className="w-4 h-4 text-red-500 shrink-0" />;
+      case "In Progress": return <Clock className="w-4 h-4 text-sky-500 shrink-0" />;
+      case "Resolved": return <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />;
+    }
+  };
+
+  const getPriorityIcon = (priority: SupportTicket["priority"]) => {
+    switch (priority) {
+      case "High": return <ArrowUp className="w-4 h-4 text-red-600 shrink-0" />;
+      case "Medium": return <ArrowRight className="w-4 h-4 text-amber-500 shrink-0" />;
+      case "Low": return <ArrowDown className="w-4 h-4 text-zinc-500 shrink-0" />;
+    }
+  };
+
+  const isFiltered = searchQuery !== "" || priorityFilter !== "All" || statusFilter !== "All";
+
   return (
     <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-2xl">
       {/* Toast Alert */}
       {toastMsg && (
-        <div className="fixed bottom-20 right-6 md:right-10 bg-primary text-on-primary px-lg py-sm rounded-lg text-body-sm font-medium z-[100] shadow-md border border-outline-variant animate-in fade-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed bottom-20 right-6 md:right-10 bg-primary text-primary-foreground px-lg py-sm rounded-lg text-body-sm font-medium z-[100] shadow-md border border-border animate-in fade-in slide-in-from-bottom-5 duration-300">
           {toastMsg}
         </div>
       )}
@@ -113,46 +186,46 @@ export function Tickets() {
       {/* Header Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md">
         <div className="space-y-sm">
-          <h1 className="text-display-sm font-bold tracking-tight text-primary">Support Tickets</h1>
-          <p className="text-body-md text-on-surface-variant">
-            Orchestrate active queries, update ticket status, and review escalations.
+          <h2 className="text-headline-md font-bold tracking-tight text-foreground">Welcome back!</h2>
+          <p className="text-body-md text-muted-foreground">
+            Here's a list of your support tickets and tasks for this month.
           </p>
         </div>
         <Sheet open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <SheetTrigger asChild>
-            <Button className="flex items-center gap-sm px-md py-sm bg-primary text-on-primary hover:bg-neutral-800 transition-colors font-medium rounded-lg text-label-md cursor-pointer self-start sm:self-center">
+            <Button className="flex items-center gap-sm px-md py-sm bg-primary text-primary-foreground hover:bg-neutral-800 transition-colors font-medium rounded-lg text-label-md cursor-pointer self-start sm:self-center shadow-sm">
               <Plus className="w-4 h-4" />
-              File Ticket
+              Create Task
             </Button>
           </SheetTrigger>
-          <SheetContent className="bg-surface border-outline-variant w-[400px] sm:w-[540px]">
+          <SheetContent className="bg-card border-border w-[400px] sm:w-[540px]">
             <SheetHeader className="pb-lg">
-              <SheetTitle className="text-headline-md font-bold text-primary">File Support Ticket</SheetTitle>
-              <SheetDescription className="text-body-sm text-on-surface-variant">
-                Manually record a client issue inside the CRM registry.
+              <SheetTitle className="text-headline-md font-bold text-foreground">Create Support Ticket</SheetTitle>
+              <SheetDescription className="text-body-sm text-muted-foreground">
+                Log a new support query into the CRM task queue.
               </SheetDescription>
             </SheetHeader>
             <form onSubmit={handleCreateTicket} className="space-y-lg mt-lg">
               <div className="space-y-xs">
-                <label className="text-label-sm font-semibold text-primary block">Customer Name</label>
+                <label className="text-label-sm font-semibold text-foreground block">Customer Name</label>
                 <Input 
                   placeholder="e.g. Jackson Reed" 
                   value={newCustomer}
                   onChange={(e) => setNewCustomer(e.target.value)}
-                  className="bg-surface-container-lowest border-outline-variant focus:border-primary text-body-sm"
+                  className="bg-muted/50 border-border focus:border-primary text-body-sm"
                 />
               </div>
               <div className="space-y-xs">
-                <label className="text-label-sm font-semibold text-primary block">Support Query Details</label>
+                <label className="text-label-sm font-semibold text-foreground block">Support Query</label>
                 <Input 
                   placeholder="e.g. Account lockout during checkout" 
                   value={newIssue}
                   onChange={(e) => setNewIssue(e.target.value)}
-                  className="bg-surface-container-lowest border-outline-variant focus:border-primary text-body-sm"
+                  className="bg-muted/50 border-border focus:border-primary text-body-sm"
                 />
               </div>
               <div className="space-y-xs">
-                <label className="text-label-sm font-semibold text-primary block">Severity Priority</label>
+                <label className="text-label-sm font-semibold text-foreground block">Severity Priority</label>
                 <div className="flex gap-sm">
                   {(["High", "Medium", "Low"] as const).map((p) => (
                     <Button
@@ -168,8 +241,8 @@ export function Tickets() {
                 </div>
               </div>
               <div className="pt-xl">
-                <Button type="submit" className="w-full bg-primary hover:bg-neutral-800 text-on-primary">
-                  Log Ticket
+                <Button type="submit" className="w-full bg-primary hover:bg-neutral-800 text-primary-foreground">
+                  Create Task
                 </Button>
               </div>
             </form>
@@ -178,128 +251,231 @@ export function Tickets() {
       </div>
 
       {/* Main Ticket Center Panel */}
-      <Card className="bg-surface-container-lowest border-outline-variant rounded-xl flex flex-col shadow-none">
-        <CardHeader className="pb-6 p-lg flex flex-col xl:flex-row xl:items-center xl:justify-between gap-md border-b border-outline-variant">
-          <CardTitle className="text-title-lg font-bold text-primary flex items-center gap-sm">
-            <TicketIcon className="w-5 h-5" />
-            Tickets Registry
-          </CardTitle>
-
+      <Card className="bg-card border-border rounded-xl flex flex-col shadow-none border-none">
+        <CardContent className="p-0 space-y-md">
           {/* Filters Dashboard */}
-          <div className="flex flex-wrap items-center gap-md">
-            {/* Search Input */}
-            <div className="flex items-center bg-surface-container-low rounded-full px-md py-1 border border-outline-variant focus-within:border-primary transition-all w-full md:w-64">
-              <Search className="text-on-surface-variant w-4 h-4 mr-sm shrink-0" />
-              <Input 
-                className="bg-transparent border-none shadow-none outline-none focus:outline-none focus-visible:ring-0 text-body-sm w-full h-8 px-0 py-0" 
-                placeholder="Search ID, customer, issue..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-md pb-md">
+            <div className="flex flex-wrap items-center gap-sm flex-1">
+              {/* Search Input */}
+              <div className="flex items-center bg-transparent rounded-lg px-md w-full md:w-64 border border-input focus-within:border-ring transition-all">
+                <Search className="text-muted-foreground w-4 h-4 mr-sm shrink-0" />
+                <Input 
+                  className="bg-transparent border-none shadow-none outline-none focus:outline-none focus-visible:ring-0 text-body-sm w-full h-8 px-0 py-0" 
+                  placeholder="Filter tasks..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
 
-            {/* Status Filter buttons */}
-            <div className="flex items-center gap-xs border border-outline-variant rounded-lg p-0.5 bg-surface-container">
-              {["All", "Open", "In Progress", "Resolved"].map((status) => (
-                <button
-                  key={status}
-                  onClick={() => setStatusFilter(status)}
-                  className={`px-sm py-1 rounded-md text-xs font-medium transition-all cursor-pointer ${
-                    statusFilter === status 
-                      ? "bg-surface-container-lowest text-primary font-bold shadow-sm" 
-                      : "text-on-surface-variant hover:text-primary"
-                  }`}
-                >
-                  {status}
-                </button>
-              ))}
-            </div>
+              {/* Status Selector Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-8 border-dashed flex items-center gap-xs text-xs font-semibold cursor-pointer">
+                    <SlidersHorizontal className="w-3.5 h-3.5" />
+                    Status
+                    {statusFilter !== "All" && (
+                      <Badge variant="secondary" className="ml-1 px-1 bg-muted font-bold text-[10px] rounded-sm text-foreground">{statusFilter}</Badge>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-popover border-border w-40" align="start">
+                  <DropdownMenuLabel className="text-xs text-muted-foreground">Filter by Status</DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-border" />
+                  {["All", "Open", "In Progress", "Resolved"].map((status) => (
+                    <DropdownMenuItem 
+                      key={status} 
+                      onClick={() => setStatusFilter(status)}
+                      className="cursor-pointer text-xs font-medium"
+                    >
+                      {status}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-            {/* Priority Filter buttons */}
-            <div className="flex items-center gap-xs border border-outline-variant rounded-lg p-0.5 bg-surface-container">
-              {["All", "High", "Medium", "Low"].map((prio) => (
-                <button
-                  key={prio}
-                  onClick={() => setPriorityFilter(prio)}
-                  className={`px-sm py-1 rounded-md text-xs font-medium transition-all cursor-pointer ${
-                    priorityFilter === prio 
-                      ? "bg-surface-container-lowest text-primary font-bold shadow-sm" 
-                      : "text-on-surface-variant hover:text-primary"
-                  }`}
+              {/* Priority Selector Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-8 border-dashed flex items-center gap-xs text-xs font-semibold cursor-pointer">
+                    <SlidersHorizontal className="w-3.5 h-3.5" />
+                    Priority
+                    {priorityFilter !== "All" && (
+                      <Badge variant="secondary" className="ml-1 px-1 bg-muted font-bold text-[10px] rounded-sm text-foreground">{priorityFilter}</Badge>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-popover border-border w-40" align="start">
+                  <DropdownMenuLabel className="text-xs text-muted-foreground">Filter by Priority</DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-border" />
+                  {["All", "High", "Medium", "Low"].map((prio) => (
+                    <DropdownMenuItem 
+                      key={prio} 
+                      onClick={() => setPriorityFilter(prio)}
+                      className="cursor-pointer text-xs font-medium"
+                    >
+                      {prio}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Reset filter button */}
+              {isFiltered && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handleResetFilters}
+                  className="h-8 text-xs font-semibold flex items-center gap-xs cursor-pointer"
                 >
-                  {prio}
-                </button>
-              ))}
+                  Reset
+                  <X className="w-3.5 h-3.5" />
+                </Button>
+              )}
             </div>
           </div>
-        </CardHeader>
 
-        {/* Tickets Table */}
-        <CardContent className="p-lg pt-0 overflow-x-auto">
-          <table className="w-full text-left border-collapse text-body-sm">
-            <thead>
-              <tr className="border-b border-outline-variant text-label-sm font-bold text-on-surface-variant">
-                <th className="py-md pr-md">Ticket ID</th>
-                <th className="py-md px-md">Customer</th>
-                <th className="py-md px-md">Support Issue</th>
-                <th className="py-md px-md">Priority</th>
-                <th className="py-md px-md">Status</th>
-                <th className="py-md px-md">Logged Time</th>
-                <th className="py-md pl-md text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-outline-variant">
-              {filteredTickets.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="py-lg text-center text-on-surface-variant">
-                    No tickets found matching the filter criteria.
-                  </td>
+          {/* Table Container */}
+          <div className="border border-border rounded-lg bg-card overflow-hidden">
+            <table className="w-full text-left border-collapse text-body-sm">
+              <thead>
+                <tr className="border-b border-border bg-muted/40 text-label-sm font-semibold text-muted-foreground">
+                  <th className="py-md pl-md pr-xs w-10">
+                    <input 
+                      type="checkbox"
+                      checked={filteredTickets.length > 0 && selectedIds.length === filteredTickets.length}
+                      onChange={handleToggleSelectAll}
+                      className="w-4 h-4 accent-primary rounded border-input cursor-pointer"
+                    />
+                  </th>
+                  <th className="py-md px-md w-28">Task</th>
+                  <th className="py-md px-md">Title</th>
+                  <th className="py-md px-md w-36">Status</th>
+                  <th className="py-md px-md w-32">Priority</th>
+                  <th className="py-md pr-md w-12 text-right"></th>
                 </tr>
-              ) : (
-                filteredTickets.map((t) => (
-                  <tr key={t.id} className="hover:bg-surface-container-low transition-colors group">
-                    <td className="py-md pr-md font-mono text-xs font-semibold text-primary">{t.id}</td>
-                    <td className="py-md px-md font-semibold text-primary">{t.customer}</td>
-                    <td className="py-md px-md text-on-surface-variant">{t.issue}</td>
-                    <td className="py-md px-md">
-                      <Badge className={`text-[11px] font-bold px-2 py-0.5 rounded-full border-none shadow-none ${
-                        t.priority === "High" 
-                          ? "bg-red-100 text-red-800" 
-                          : t.priority === "Medium"
-                          ? "bg-amber-100 text-amber-800"
-                          : "bg-zinc-100 text-zinc-800"
-                      }`}>
-                        {t.priority}
-                      </Badge>
-                    </td>
-                    <td className="py-md px-md">
-                      <Badge variant="outline" className={`text-[11px] font-bold px-2 py-0.5 rounded-full shadow-none ${
-                        t.status === "Open" 
-                          ? "border-red-300 text-red-700 bg-red-50/50" 
-                          : t.status === "In Progress"
-                          ? "border-sky-300 text-sky-700 bg-sky-50/50"
-                          : "border-emerald-300 text-emerald-700 bg-emerald-50/50"
-                      }`}>
-                        {t.status}
-                      </Badge>
-                    </td>
-                    <td className="py-md px-md text-on-surface-variant font-mono text-xs">{t.time}</td>
-                    <td className="py-md pl-md text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 px-2 text-xs flex items-center gap-xs ml-auto cursor-pointer"
-                        onClick={() => handleCycleStatus(t.id)}
-                      >
-                        <RefreshCw className="w-3 h-3 text-on-surface-variant group-hover:animate-spin" />
-                        Cycle Status
-                      </Button>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filteredTickets.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-lg text-center text-muted-foreground italic bg-background/50">
+                      No tasks found matching current filters.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  filteredTickets.map((t) => {
+                    const isSelected = selectedIds.includes(t.id);
+                    return (
+                      <tr 
+                        key={t.id} 
+                        className={`transition-colors border-border ${
+                          isSelected ? "bg-muted/40 hover:bg-muted/50" : "hover:bg-muted/30"
+                        }`}
+                      >
+                        <td className="py-md pl-md pr-xs">
+                          <input 
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => handleToggleSelectRow(t.id)}
+                            className="w-4 h-4 accent-primary rounded border-input cursor-pointer"
+                          />
+                        </td>
+                        <td className="py-md px-md font-mono text-xs font-medium text-muted-foreground">{t.id}</td>
+                        <td className="py-md px-md flex items-center gap-xs">
+                          <Badge variant="outline" className="mr-sm font-semibold bg-muted/20 border-border text-[11px] py-0 px-2 rounded-md shrink-0 shadow-none text-foreground">
+                            {t.customer}
+                          </Badge>
+                          <span className="font-semibold text-foreground truncate max-w-sm md:max-w-md">{t.issue}</span>
+                        </td>
+                        <td className="py-md px-md">
+                          <div className="flex items-center gap-sm">
+                            {getStatusIcon(t.status)}
+                            <span className="text-xs font-semibold text-foreground">{t.status}</span>
+                          </div>
+                        </td>
+                        <td className="py-md px-md">
+                          <div className="flex items-center gap-sm">
+                            {getPriorityIcon(t.priority)}
+                            <span className="text-xs text-muted-foreground">{t.priority}</span>
+                          </div>
+                        </td>
+                        <td className="py-md pr-md text-right">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8 p-0 cursor-pointer">
+                                <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="bg-popover border-border w-40" align="end">
+                              <DropdownMenuLabel className="text-xs text-muted-foreground font-semibold">Row Actions</DropdownMenuLabel>
+                              <DropdownMenuSeparator className="bg-border" />
+                              <DropdownMenuItem 
+                                className="cursor-pointer text-xs font-medium hover:bg-accent"
+                                onClick={() => handleCycleStatus(t.id)}
+                              >
+                                Cycle Status
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                className="cursor-pointer text-xs font-medium hover:bg-accent"
+                                onClick={() => showToast(`Ticket ID ${t.id} copied to clipboard!`)}
+                              >
+                                Copy ID
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator className="bg-border" />
+                              <DropdownMenuItem 
+                                className="cursor-pointer text-xs font-medium hover:bg-destructive/10 text-destructive"
+                                onClick={() => handleDeleteTicket(t.id)}
+                              >
+                                Delete Task
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Table Pagination Section */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-md pt-xs text-muted-foreground text-xs font-medium px-xs">
+            {/* Rows selected summary */}
+            <div>
+              {selectedIds.length} of {filteredTickets.length} row(s) selected.
+            </div>
+
+            {/* Pagination controls */}
+            <div className="flex items-center gap-lg">
+              <div className="flex items-center gap-xs">
+                <span>Rows per page</span>
+                <select className="bg-transparent border border-input rounded p-1 text-xs outline-none text-foreground font-semibold">
+                  <option>10</option>
+                  <option>20</option>
+                  <option>50</option>
+                </select>
+              </div>
+
+              <div>
+                Page 1 of 1
+              </div>
+
+              <div className="flex items-center gap-xs">
+                <Button variant="outline" size="icon" className="w-8 h-8 rounded p-0 text-muted-foreground" disabled>
+                  <ChevronsLeft className="w-4 h-4" />
+                </Button>
+                <Button variant="outline" size="icon" className="w-8 h-8 rounded p-0 text-muted-foreground" disabled>
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button variant="outline" size="icon" className="w-8 h-8 rounded p-0 text-muted-foreground" disabled>
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+                <Button variant="outline" size="icon" className="w-8 h-8 rounded p-0 text-muted-foreground" disabled>
+                  <ChevronsRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
