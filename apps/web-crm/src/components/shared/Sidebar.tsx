@@ -11,6 +11,15 @@ import {
   Settings,
   MoreVertical
 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -56,22 +65,38 @@ export function Sidebar() {
         </div>
       </nav>
 
-      {/* Sidebar Footer/Avatar */}
+      {/* Sidebar Footer/Avatar with shadcn/ui DropdownMenu */}
       <div className="px-md mt-auto pt-lg border-t border-outline-variant">
-        <div className="flex items-center gap-md p-sm rounded-lg hover:bg-primary-container transition-colors cursor-pointer">
-          <div className="w-10 h-10 rounded-full bg-primary-container overflow-hidden">
-            <img 
-              className="w-full h-full object-cover" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmN3cisO6-__3amuuQs9HUIpCz4TETRbyjrnu6EVNy2ZR5yYtQH2H1K4r--KKrPb2XfLrYtuNnfV6VwnXGG_ypUNFqWjm8EIzXq34nPGsMFNniMF6D0O4IeXnEpLuhpSqO1kEoYwFIPtY49IzTbJ6E6af-bEr_rrvZDB6_DPRpobOCqDHjwT-QItw70F98rUOwgt-ocSgDmReBZ57Oi3D4YhaostxGM1OkePOcgArmsDcEPH9VzaSpEw" 
-              alt="Bren Raphael" 
-            />
-          </div>
-          <div className="flex-1 overflow-hidden">
-            <p className="font-label-md text-label-md font-bold truncate text-on-primary">Bren Raphael</p>
-            <p className="text-[11px] text-on-primary-container truncate font-sans">Administrator</p>
-          </div>
-          <MoreVertical className="w-5 h-5 text-on-primary-container" />
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="flex items-center gap-md p-sm rounded-lg hover:bg-primary-container transition-colors cursor-pointer outline-none">
+              <Avatar className="w-10 h-10 bg-primary-container">
+                <AvatarImage 
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmN3cisO6-__3amuuQs9HUIpCz4TETRbyjrnu6EVNy2ZR5yYtQH2H1K4r--KKrPb2XfLrYtuNnfV6VwnXGG_ypUNFqWjm8EIzXq34nPGsMFNniMF6D0O4IeXnEpLuhpSqO1kEoYwFIPtY49IzTbJ6E6af-bEr_rrvZDB6_DPRpobOCqDHjwT-QItw70F98rUOwgt-ocSgDmReBZ57Oi3D4YhaostxGM1OkePOcgArmsDcEPH9VzaSpEw" 
+                  alt="Bren Raphael"
+                  className="object-cover"
+                />
+                <AvatarFallback className="text-on-primary bg-primary-container font-bold text-xs">BR</AvatarFallback>
+              </Avatar>
+              <div className="flex-1 overflow-hidden">
+                <p className="font-label-md text-label-md font-bold truncate text-on-primary">Bren Raphael</p>
+                <p className="text-[11px] text-on-primary-container truncate font-sans">Administrator</p>
+              </div>
+              <MoreVertical className="w-5 h-5 text-on-primary-container" />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56 bg-surface border-outline-variant" align="end" side="top">
+            <DropdownMenuLabel className="text-primary font-bold text-label-md">My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator className="bg-outline-variant" />
+            <DropdownMenuItem className="cursor-pointer hover:bg-surface-container text-on-surface text-body-sm font-medium">Profile Settings</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer hover:bg-surface-container text-on-surface text-body-sm font-medium">Security Options</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer hover:bg-surface-container text-on-surface text-body-sm font-medium">Activity Logs</DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-outline-variant" />
+            <DropdownMenuItem className="cursor-pointer hover:bg-red-50 text-red-600 hover:text-red-700 text-body-sm font-medium">
+              Sign out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </aside>
   );
