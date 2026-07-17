@@ -91,7 +91,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseMiddleware<JitProvisioningMiddleware>();
 app.UseAuthorization();
-
 app.MapControllers();
 app.MapHub<ChatHub>("/hubs/chat");
 

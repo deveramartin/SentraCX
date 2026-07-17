@@ -77,6 +77,42 @@ namespace Crm.Api.Data.Migrations
                     b.ToTable("customer_profiles", (string)null);
                 });
 
+            modelBuilder.Entity("Crm.Api.Models.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsRead")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("SenderId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("TicketId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("messages", (string)null);
+                });
+
             modelBuilder.Entity("Crm.Api.Models.OrderHistory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -112,6 +148,61 @@ namespace Crm.Api.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("order_histories", (string)null);
+                });
+
+            modelBuilder.Entity("Crm.Api.Models.Ticket", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("AssignedToId")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasDefaultValue("Unclaimed");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignedToId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("tickets", (string)null);
                 });
 
             modelBuilder.Entity("Crm.Api.Models.User", b =>
@@ -177,6 +268,25 @@ namespace Crm.Api.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Crm.Api.Models.Message", b =>
+                {
+                    b.HasOne("Crm.Api.Models.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Crm.Api.Models.Ticket", "Ticket")
+                        .WithMany("Messages")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sender");
+
+                    b.Navigation("Ticket");
+                });
+
             modelBuilder.Entity("Crm.Api.Models.OrderHistory", b =>
                 {
                     b.HasOne("Crm.Api.Models.CustomerProfile", "CustomerProfile")
@@ -188,9 +298,34 @@ namespace Crm.Api.Data.Migrations
                     b.Navigation("CustomerProfile");
                 });
 
+            modelBuilder.Entity("Crm.Api.Models.Ticket", b =>
+                {
+                    b.HasOne("Crm.Api.Models.User", "AssignedTo")
+                        .WithMany()
+                        .HasForeignKey("AssignedToId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Crm.Api.Models.CustomerProfile", "Customer")
+                        .WithMany("Tickets")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssignedTo");
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("Crm.Api.Models.CustomerProfile", b =>
                 {
                     b.Navigation("OrderHistories");
+
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("Crm.Api.Models.Ticket", b =>
+                {
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Crm.Api.Models.User", b =>

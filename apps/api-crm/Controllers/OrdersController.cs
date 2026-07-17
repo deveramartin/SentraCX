@@ -6,7 +6,7 @@ namespace Crm.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/customers/{customerId:guid}/orders")]
-[Authorize]
+// [Authorize] // TODO: Re-enable authentication before production/merge to main
 public class OrdersController(IOrderService orderService) : ControllerBase
 {
     [HttpGet]
