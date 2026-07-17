@@ -4,9 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  Landmark,
-  FileText,
-  BarChart3,
+  Users,
+  MessageSquare,
+  Ticket,
+  Megaphone,
   Settings,
   MoreVertical
 } from "lucide-react";
@@ -16,9 +17,10 @@ export function Sidebar() {
 
   const navItems = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
-    { name: "Account Operations", href: "/accounts", icon: Landmark },
-    { name: "Reports", href: "/reports", icon: FileText },
-    { name: "Analytics", href: "/analytics", icon: BarChart3 },
+    { name: "Customers", href: "/customers", icon: Users },
+    { name: "Conversations", href: "/conversations", icon: MessageSquare },
+    { name: "Tickets", href: "/tickets", icon: Ticket },
+    { name: "Campaigns", href: "/campaigns", icon: Megaphone },
     { name: "Settings", href: "/settings", icon: Settings },
   ];
 

@@ -2,16 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Landmark, BarChart3, Settings } from "lucide-react";
+import { LayoutDashboard, Users, MessageSquare, Ticket, Megaphone } from "lucide-react";
 
 export function MobileNav() {
   const pathname = usePathname();
 
   const navItems = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
-    { name: "Accounts", href: "/accounts", icon: Landmark },
-    { name: "Analytics", href: "/analytics", icon: BarChart3 },
-    { name: "Settings", href: "/settings", icon: Settings },
+    { name: "Customers", href: "/customers", icon: Users },
+    { name: "Conversations", href: "/conversations", icon: MessageSquare },
+    { name: "Tickets", href: "/tickets", icon: Ticket },
+    { name: "Campaigns", href: "/campaigns", icon: Megaphone },
   ];
 
   return (
