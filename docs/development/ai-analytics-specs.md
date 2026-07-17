@@ -5,9 +5,9 @@
 | Emerging Tech | Description | Done |
 | :--- | :--- | :---: |
 | **Customer Segmentation** | Automatically groups customers into categories (e.g., New, High-Value, At-Risk, Dormant, Loyal) based on order history, engagement, and activity patterns. Helps internal users prioritize outreach and personalize campaigns. | [ ] |
-| **Churn / At-Risk Prediction** | Scores each customer on their likelihood to stop ordering or disengage, based on signals like declining order frequency, negative ticket sentiment, or inactivity. Flags customers for proactive retention efforts. | [ ] |
-| **Customer Lifetime Value (CLV) Prediction** | Estimates a customer's future value to the business based on their purchase history and behavior patterns. Helps prioritize which customers deserve extra attention or exclusive offers. | [ ] |
-| **Next-Best-Action Recommendation** | Suggests the most relevant action for a given customer — e.g., "send a re-engagement email," "offer a discount," "flag for account manager follow-up" — based on their profile and recent activity. | [ ] |
+| **Churn / At-Risk Prediction** | Scores each customer on their likelihood to stop ordering or disengage, based on signals like declining order frequency, negative ticket sentiment, or inactivity. Flags customers for proactive retention efforts. | [x] |
+| **Customer Lifetime Value (CLV) Prediction** | Estimates a customer's future value to the business based on their purchase history and behavior patterns. Helps prioritize which customers deserve extra attention or exclusive offers. | [x] |
+| **Next-Best-Action Recommendation** | Suggests the most relevant action for a given customer — e.g., "send a re-engagement email," "offer a discount," "flag for account manager follow-up" — based on their profile and recent activity. | [x] |
 
 ## Campaigns
 | Emerging Tech | Description | Done |
@@ -21,9 +21,9 @@
 ## Tickets
 | Emerging Tech | Description | Done |
 | :--- | :--- | :---: |
-| **Sentiment Analysis** | Analyzes the text of a new ticket to determine if the customer's tone is positive, neutral, or negative — helps internal users spot frustrated customers immediately. | [ ] |
-| **Auto-Categorization** | Automatically tags incoming tickets by type (e.g., billing, shipping, technical issue, complaint, refund request) so they can be routed to the right team without manual sorting. | [ ] |
-| **Urgency/Priority Scoring** | Combines sentiment, customer value (from CLV), and ticket content to assign a priority score — helps internal users triage which tickets to claim first. | [ ] |
+| **Sentiment Analysis** | Analyzes the text of a new ticket to determine if the customer's tone is positive, neutral, or negative — helps internal users spot frustrated customers immediately. | [x] |
+| **Auto-Categorization** | Automatically tags incoming tickets by type (e.g., billing, shipping, technical issue, complaint, refund request) so they can be routed to the right team without manual sorting. | [x] |
+| **Urgency/Priority Scoring** | Combines sentiment, customer value (from CLV), and ticket content to assign a priority score — helps internal users triage which tickets to claim first. | [x] |
 | **Resolution Time Prediction** | Estimates how long a ticket will likely take to resolve based on category and historical data, useful for setting customer expectations and staffing. | [ ] |
 | **Ticket Volume Forecasting** | Predicts upcoming spikes in ticket volume (e.g., after a campaign or product launch) so support teams can staff accordingly. | [ ] |
 

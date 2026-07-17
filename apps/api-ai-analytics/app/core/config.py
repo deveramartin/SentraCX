@@ -34,6 +34,10 @@ class Settings(BaseSettings):
     jwt_secret: str = "dev-secret"
     jwt_issuer: str = "https://localhost:5001/"
 
+    # Groq API
+    groq_api_key: str = ""
+    groq_model_id: str = "llama-3.1-8b-instant"
+
     @property
     def is_development(self) -> bool:
         """Check if the application is running in development mode."""

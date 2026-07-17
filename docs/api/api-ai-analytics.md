@@ -66,6 +66,7 @@ Authorization: Bearer <token>
 | POST | `/api/v1/insights/next-action` | Suggest next best action for a contact |
 | POST | `/api/v1/insights/churn-risk` | Assess customer churn risk |
 | GET | `/api/v1/insights/summary/:accountId` | AI-generated account summary |
+| POST | `/api/v1/tickets/analyze-intent` | Analyze ticket sentiment, category, and urgency |
 
 ### Reports
 

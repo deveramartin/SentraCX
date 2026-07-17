@@ -21,9 +21,9 @@ This document outlines the high-level, end-to-end development roadmap for the Se
 **Goal:** Build the core ticketing workflow on the backend and start scaffolding the Next.js frontend to consume these APIs.
 
 **Tasks:**
-- [ ] Initialize the `Next.js` frontend repository with TailwindCSS and `shadcn/ui`.
-- [ ] Build the CRM backend APIs for `Ticket` management (Create, Claim, Update Status).
-- [ ] Enforce the strict Ticket state machine (`Unclaimed`, `Claimed`, `Ongoing`, `Completed`, `Canceled`) in the backend.
+- [x] Initialize the `Next.js` frontend repository with TailwindCSS and `shadcn/ui`.
+- [x] Build the CRM backend APIs for `Ticket` management (Create, Claim, Update Status).
+- [x] Enforce the strict Ticket state machine (`Unclaimed`, `Claimed`, `Ongoing`, `Completed`, `Canceled`) in the backend.
 - [ ] Develop the Frontend Customer Portal: View Order History and submit/view Pending Tickets.
 - [ ] Develop the Frontend Staff Dashboard: View Customer lists and manage/claim Unclaimed Tickets.
 
@@ -45,8 +45,8 @@ This document outlines the high-level, end-to-end development roadmap for the Se
 **Goal:** Stand up the Python microservice and establish the data pipeline flowing from the CRM into the analytical databases.
 
 **Tasks:**
-- [ ] Initialize the `Python / FastAPI` repository for AI-Analytics.
-- [ ] Provision **MongoDB** and define the PyMongo/Motor schemas for `CustomerFeatureLogs` and `ConversationTranscripts`.
+- [x] Initialize the `Python / FastAPI` repository for AI-Analytics.
+- [x] Provision **MongoDB** and define the PyMongo/Motor schemas for `CustomerFeatureLogs` and `ConversationTranscripts`.
 - [ ] Configure the Event Bus (RabbitMQ/Kafka) so the CRM can publish events (e.g., `TicketClosed`, `MessageSent`).
 - [ ] Build FastAPI consumer workers to ingest these events and store denormalized payloads into MongoDB.
 
@@ -58,10 +58,10 @@ This document outlines the high-level, end-to-end development roadmap for the Se
 **Tasks:**
 - [ ] Provision the dedicated PostgreSQL instance for `pgvector`.
 - [ ] Build the LLM embedding pipeline: convert ticket texts into 1536-dimensional vectors and store them in `pgvector`.
-- [ ] Provision the **AI-Analytics Redis** instance.
-- [ ] Develop background batch jobs in Python to calculate ML scores (Churn, CLV, Next-Best-Action) from MongoDB data.
-- [ ] Cache these computed scores into Redis with TTLs (e.g., 24 hours).
-- [ ] Build the streaming sentiment analyzer to push real-time conversation sentiment into Redis Sorted Sets.
+- [x] Provision the **AI-Analytics Redis** instance.
+- [x] Develop background batch jobs in Python to calculate ML scores (Churn, CLV, Next-Best-Action) from MongoDB data.
+- [x] Cache these computed scores into Redis with TTLs (e.g., 24 hours).
+- [x] Build the streaming sentiment analyzer to push real-time conversation sentiment into Redis Sorted Sets.
 
 ---
 
@@ -69,7 +69,7 @@ This document outlines the high-level, end-to-end development roadmap for the Se
 **Goal:** Expose the AI insights back to the CRMS via API and build the unified management dashboards in the frontend.
 
 **Tasks:**
-- [ ] Build FastAPI REST endpoints to expose AI predictions (e.g., `GET /api/v1/customers/{id}/insights`).
+- [x] Build FastAPI REST endpoints to expose AI predictions (e.g., `GET /api/v1/customers/{id}/insights`).
 - [ ] Build FastAPI REST endpoints for Natural Language Query (NLQ) leveraging `pgvector`.
 - [ ] Update the Next.js Staff Dashboard to display Churn Scores, CLV, and Next-Best-Action badges on customer profiles.
 - [ ] Develop the Unified Analytics Dashboard in Next.js (displaying aggregate metrics, campaign ROI, and ticket volume forecasts).

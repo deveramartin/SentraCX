@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from scalar_fastapi import get_scalar_api_reference
 
 from app.api.v1.routes.customers import router as customers_router
+from app.api.v1.routes.tickets import router as tickets_router
 from app.core.config import get_settings
 from app.db.mongo import close_mongo, connect_mongo
 from app.db.redis import close_redis, connect_redis
@@ -48,6 +49,7 @@ app = FastAPI(
 
 # Register routers
 app.include_router(customers_router, prefix="/api/v1")
+app.include_router(tickets_router, prefix="/api/v1")
 
 
 @app.get("/docs", include_in_schema=False)

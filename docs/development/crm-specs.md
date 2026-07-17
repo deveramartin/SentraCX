@@ -45,26 +45,26 @@ This document outlines the phased approach for building the CRM system.
 
 | Acceptance Criteria | Done |
 | :--- | :---: |
-| The system shall display all available tickets in tickets tab (status=unclaimed or available). | [ ] |
-| The system shall display all claimed tickets assigned to the user under the claimed tickets tab. | [ ] |
-| The system shall display all completed tickets assigned to the user under the completed tickets tab. | [ ] |
-| The system shall allow the user to view the ticket details when the user clicks it. | [ ] |
-| The system shall allow the user to claim or unclaim the ticket. | [ ] |
-| The system shall redirect the user to conversation when a message button is clicked inside the ticket's component. | [ ] |
+| The system shall display all available tickets in tickets tab (status=unclaimed or available). | [x] |
+| The system shall display all claimed tickets assigned to the user under the claimed tickets tab. | [x] |
+| The system shall display all completed tickets assigned to the user under the completed tickets tab. | [x] |
+| The system shall allow the user to view the ticket details when the user clicks it. | [x] |
+| The system shall allow the user to claim or unclaim the ticket. | [x] |
+| The system shall redirect the user to conversation when a message button is clicked inside the ticket's component. | [x] |
 
 ### CRM-006: Ticket Creation (Customer)
 **As a customer**, I want to be able to create a ticket to raise concern, inquire, or request to the system.
 
 | Acceptance Criteria | Done |
 | :--- | :---: |
-| The system shall display four tabs on this page (pending, ongoing, completed, cancel). | [ ] |
-| The system shall display all pending tickets raised by the customer under the pending tab. | [ ] |
-| The system shall display all ongoing tickets raised by the customer under the ongoing tab. | [ ] |
-| The system shall display all completed tickets raised by the customer under the completed tab. | [ ] |
-| The system shall allow the user to create a ticket to raise concern, inquire, or request to the system (title, description, image (optional)). | [ ] |
-| The system shall allow the user to view the details of the ticket. | [ ] |
-| The system shall allow the user to cancel a ticket. | [ ] |
-| The system shall show a message button inside the ticket’s component. | [ ] |
+| The system shall display four tabs on this page (pending, ongoing, completed, cancel). | [x] |
+| The system shall display all pending tickets raised by the customer under the pending tab. | [x] |
+| The system shall display all ongoing tickets raised by the customer under the ongoing tab. | [x] |
+| The system shall display all completed tickets raised by the customer under the completed tab. | [x] |
+| The system shall allow the user to create a ticket to raise concern, inquire, or request to the system (title, description, image (optional)). | [x] |
+| The system shall allow the user to view the details of the ticket. | [x] |
+| The system shall allow the user to cancel a ticket. | [x] |
+| The system shall show a message button inside the ticket’s component. | [x] |
 
 
 ## Phase 3: Real-time Support Chat (Sprint 3)
