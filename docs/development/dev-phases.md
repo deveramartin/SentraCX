@@ -21,8 +21,8 @@ This document outlines the high-level, end-to-end development roadmap for the Se
 **Goal:** Build the core ticketing workflow on the backend and start scaffolding the Next.js frontend to consume these APIs.
 
 **Tasks:**
-- [ ] Initialize the `Next.js` frontend repository with TailwindCSS and `shadcn/ui`.
-- [ ] Build the CRM backend APIs for `Ticket` management (Create, Claim, Update Status).
+- [x] Initialize the `Next.js` frontend repository with TailwindCSS and `shadcn/ui`.
+- [x] Build the CRM backend APIs for `Ticket` management (Create, Claim, Update Status).
 - [ ] Enforce the strict Ticket state machine (`Unclaimed`, `Claimed`, `Ongoing`, `Completed`, `Canceled`) in the backend.
 - [ ] Develop the Frontend Customer Portal: View Order History and submit/view Pending Tickets.
 - [ ] Develop the Frontend Staff Dashboard: View Customer lists and manage/claim Unclaimed Tickets.

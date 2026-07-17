@@ -82,6 +82,8 @@ Machine Learning feature stores, AI-generated content variations, and NLP transc
 }
 ```
 
+*Note: Transcript analysis, categorization, and sentiment extraction are powered by the Groq API (llama-3.1-8b-instant) with heuristic fallback when the API is unavailable.*
+
 ---
 
 ## 3. Redis — Low-Latency & Ephemeral Data
@@ -106,6 +108,10 @@ Certain AI predictions (like Churn Score, CLV, or Next-Best-Action) are constant
     *   **Score**: Unix Timestamp (allows querying the sentiment trend over time)
     *   **Value**: `"-0.75"` (Negative), `"0.90"` (Positive)
     *   *Usage*: Allows the Unified Dashboard to instantly detect if a live conversation is escalating negatively.
+*   **Ticket Analysis Cache** (String with TTL)
+    *   **Key**: `ticket:{crms_ticket_id}:analysis`
+    *   **Value**: `{ "sentiment": "negative", "category": "shipping", "urgency_score": 0.8, ... }`
+    *   **TTL**: 1 hour.
 
 ---
 

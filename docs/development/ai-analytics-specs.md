@@ -21,9 +21,9 @@
 ## Tickets
 | Emerging Tech | Description | Done |
 | :--- | :--- | :---: |
-| **Sentiment Analysis** | Analyzes the text of a new ticket to determine if the customer's tone is positive, neutral, or negative — helps internal users spot frustrated customers immediately. | [ ] |
-| **Auto-Categorization** | Automatically tags incoming tickets by type (e.g., billing, shipping, technical issue, complaint, refund request) so they can be routed to the right team without manual sorting. | [ ] |
-| **Urgency/Priority Scoring** | Combines sentiment, customer value (from CLV), and ticket content to assign a priority score — helps internal users triage which tickets to claim first. | [ ] |
+| **Sentiment Analysis** | Analyzes the text of a new ticket to determine if the customer's tone is positive, neutral, or negative — helps internal users spot frustrated customers immediately. | [x] |
+| **Auto-Categorization** | Automatically tags incoming tickets by type (e.g., billing, shipping, technical issue, complaint, refund request) so they can be routed to the right team without manual sorting. | [x] |
+| **Urgency/Priority Scoring** | Combines sentiment, customer value (from CLV), and ticket content to assign a priority score — helps internal users triage which tickets to claim first. | [x] |
 | **Resolution Time Prediction** | Estimates how long a ticket will likely take to resolve based on category and historical data, useful for setting customer expectations and staffing. | [ ] |
 | **Ticket Volume Forecasting** | Predicts upcoming spikes in ticket volume (e.g., after a campaign or product launch) so support teams can staff accordingly. | [ ] |
 
