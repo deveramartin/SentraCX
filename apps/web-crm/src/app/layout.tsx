@@ -26,19 +26,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
-  if (session == null) {
-    return (
-      <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-        <body className="min-h-full flex flex-col">
-          <RedirectToLogin />
-        </body>
-      </html>
-    );
-  }
-
-  const hasAccess = session.systems?.includes(THIS_SYSTEM_CODE) ?? false;
+  // Temporarily commented out for UI/UX development
+  // const session = await auth();
+  // if (session == null) {
+  //   return (
+  //     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+  //       <body className="min-h-full flex flex-col">
+  //         <RedirectToLogin />
+  //       </body>
+  //     </html>
+  //   );
+  // }
+  // const hasAccess = session.systems?.includes(THIS_SYSTEM_CODE) ?? false;
+  const hasAccess = true;
 
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
@@ -52,7 +52,7 @@ export default async function RootLayout({
           <div style={{ padding: 40, fontFamily: "monospace" }}>
             <h1>Access Denied</h1>
             <p>
-              You are logged in as {session.user?.name}, but you don&apos;t have access to SentraCX (CRMS).
+              Access Denied Placeholder
             </p>
           </div>
         )}
