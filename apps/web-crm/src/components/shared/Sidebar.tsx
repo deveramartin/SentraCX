@@ -95,7 +95,7 @@ export function Sidebar() {
               <ChevronsUpDown className="w-4 h-4 text-muted-foreground shrink-0 group-hover:text-sidebar-foreground transition-colors" />
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-64 bg-popover border-border text-popover-foreground" align="start" side="bottom">
+          <DropdownMenuContent className="w-64 bg-popover border-border text-popover-foreground z-[999]" align="start" side="bottom">
             <DropdownMenuLabel className="text-xs text-muted-foreground font-semibold">
               Select Enterprise Module
             </DropdownMenuLabel>
