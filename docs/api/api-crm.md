@@ -75,6 +75,13 @@ Tokens are issued by the Auth Service at `AUTH_ISSUER`.
 | PUT | `/api/v1/accounts/:id` | Update an account |
 | DELETE | `/api/v1/accounts/:id` | Delete an account |
 
+### Tickets
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/v1/tickets/:id` | Get ticket by ID |
+| GET | `/api/v1/tickets/:id/messages` | Get ticket messages |
+
 ## Pagination
 
 List endpoints support pagination via query parameters:

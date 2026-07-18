@@ -11,6 +11,11 @@ from app.repositories.redis.customer_cache_repository import (
     CustomerCacheRepository,
 )
 from app.services.customer_insights_service import CustomerInsightsService
+from app.lib.groq_client import GroqClient
+from app.ml.ticket_analyzer import TicketAnalyzer
+from app.repositories.mongo.conversation_transcript_repository import ConversationTranscriptRepository
+from app.repositories.redis.ticket_sentiment_repository import TicketSentimentRepository
+from app.services.ticket_analysis_service import TicketAnalysisService
 
 
 def get_customer_insights_service() -> CustomerInsightsService:
@@ -32,4 +37,32 @@ def get_customer_insights_service() -> CustomerInsightsService:
         crm_client=crm_client,
         cache_repo=cache_repo,
         feature_repo=feature_repo,
+    )
+
+def get_ticket_analysis_service() -> TicketAnalysisService:
+    """Build and return TicketAnalysisService with all dependencies."""
+    settings = get_settings()
+
+    crm_client = CrmClient(
+        base_url=settings.crm_api_base_url,
+        service_token=settings.crm_service_token,
+    )
+    
+    groq_client = GroqClient(
+        api_key=settings.groq_api_key,
+        model_id=settings.groq_model_id,
+    )
+    analyzer = TicketAnalyzer(groq_client=groq_client)
+
+    redis_client = get_redis_client()
+    redis_repo = TicketSentimentRepository(redis_client)
+
+    database = get_database()
+    mongo_repo = ConversationTranscriptRepository(database)
+
+    return TicketAnalysisService(
+        crm_client=crm_client,
+        analyzer=analyzer,
+        redis_repo=redis_repo,
+        mongo_repo=mongo_repo,
     )
