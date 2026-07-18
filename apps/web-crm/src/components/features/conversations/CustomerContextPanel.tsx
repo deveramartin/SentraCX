@@ -16,13 +16,13 @@ export function CustomerContextPanel({ activeChat, onUseTemplate }: CustomerCont
     "I checked the API access token scopes for your account. The keys have been re-verified. Please try generating a new token from the dashboard.";
 
   return (
-    <div className="hidden lg:flex w-72 border-l border-outline-variant flex-col h-full bg-surface p-lg space-y-lg overflow-y-auto">
+    <div className="hidden lg:flex w-72 border-l border-border flex-col h-full bg-surface p-lg space-y-lg overflow-y-auto">
       <h3 className="text-label-md font-bold text-primary flex items-center gap-sm">
         <User className="w-4 h-4" />
         Customer Context
       </h3>
 
-      <div className="space-y-sm bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
+      <div className="space-y-sm bg-surface-container-lowest border border-border rounded-xl p-md">
         <p className="text-[11px] text-on-surface-variant font-mono">CLIENT IDENTITY</p>
         <div className="space-y-xs">
           <h4 className="text-body-sm font-bold text-primary">{activeChat.customerName}</h4>
@@ -30,7 +30,7 @@ export function CustomerContextPanel({ activeChat, onUseTemplate }: CustomerCont
         </div>
       </div>
 
-      <div className="space-y-sm bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
+      <div className="space-y-sm bg-surface-container-lowest border border-border rounded-xl p-md">
         <p className="text-[11px] text-on-surface-variant font-mono">FINANCIAL METRICS</p>
         <div className="flex justify-between items-baseline">
           <span className="text-body-sm text-on-surface-variant">LTV (CLV)</span>
@@ -38,7 +38,7 @@ export function CustomerContextPanel({ activeChat, onUseTemplate }: CustomerCont
         </div>
       </div>
 
-      <div className="space-y-sm bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
+      <div className="space-y-sm bg-surface-container-lowest border border-border rounded-xl p-md">
         <p className="text-[11px] text-on-surface-variant font-mono">AI PREDICTIVE INSIGHTS</p>
         <div className="flex justify-between items-center">
           <span className="text-body-sm text-on-surface-variant">Churn Risk</span>

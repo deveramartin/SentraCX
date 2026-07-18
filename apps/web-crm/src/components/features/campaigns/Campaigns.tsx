@@ -53,7 +53,7 @@ export function Campaigns() {
   return (
     <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-2xl">
       {toastMsg && (
-        <div className="fixed bottom-20 right-6 md:right-10 bg-primary text-on-primary px-lg py-sm rounded-lg text-body-sm font-medium z-[100] shadow-md border border-outline-variant animate-in fade-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed bottom-20 right-6 md:right-10 bg-primary text-on-primary px-lg py-sm rounded-lg text-body-sm font-medium z-[100] shadow-md border border-border animate-in fade-in slide-in-from-bottom-5 duration-300">
           {toastMsg}
         </div>
       )}

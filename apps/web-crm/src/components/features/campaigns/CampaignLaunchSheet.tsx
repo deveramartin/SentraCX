@@ -54,7 +54,7 @@ export function CampaignLaunchSheet({ onLaunchCampaign, nextIdNum }: CampaignLau
           New Campaign
         </Button>
       </SheetTrigger>
-      <SheetContent className="bg-surface border-outline-variant w-[400px] sm:w-[540px]">
+      <SheetContent className="bg-surface border-border w-[400px] sm:w-[540px]">
         <SheetHeader className="pb-lg">
           <SheetTitle className="text-headline-md font-bold text-primary">Launch Campaign</SheetTitle>
           <SheetDescription className="text-body-sm text-on-surface-variant">
@@ -68,7 +68,7 @@ export function CampaignLaunchSheet({ onLaunchCampaign, nextIdNum }: CampaignLau
               placeholder="e.g. Q4 Black Friday Promo"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              className="bg-surface-container-lowest border-outline-variant focus:border-primary text-body-sm"
+              className="bg-surface-container-lowest border-border focus:border-primary text-body-sm"
             />
           </div>
           <div className="space-y-xs">
@@ -78,7 +78,7 @@ export function CampaignLaunchSheet({ onLaunchCampaign, nextIdNum }: CampaignLau
               placeholder="e.g. 10000"
               value={newBudget}
               onChange={(e) => setNewBudget(Number(e.target.value))}
-              className="bg-surface-container-lowest border-outline-variant focus:border-primary text-body-sm"
+              className="bg-surface-container-lowest border-border focus:border-primary text-body-sm"
             />
           </div>
           <div className="space-y-xs">

@@ -14,8 +14,8 @@ interface ConversationListProps {
 
 export function ConversationList({ chats, activeChatId, onSelectChat }: ConversationListProps) {
   return (
-    <div className="w-full md:w-80 border-r border-outline-variant flex flex-col h-full bg-surface">
-      <div className="p-md border-b border-outline-variant flex items-center justify-between">
+    <div className="w-full md:w-80 border-r border-border flex flex-col h-full bg-surface">
+      <div className="p-md border-b border-border flex items-center justify-between">
         <h2 className="text-title-lg font-bold text-primary flex items-center gap-sm">
           <MessageSquare className="w-5 h-5" />
           Conversations
@@ -24,7 +24,7 @@ export function ConversationList({ chats, activeChatId, onSelectChat }: Conversa
           {chats.filter((c) => c.unread).length} Unread
         </Badge>
       </div>
-      <div className="flex-1 overflow-y-auto divide-y divide-outline-variant">
+      <div className="flex-1 overflow-y-auto divide-y divide-border">
         {chats.map((chat) => (
           <div
             key={chat.id}

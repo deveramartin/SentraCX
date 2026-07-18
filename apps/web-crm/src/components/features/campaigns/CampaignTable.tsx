@@ -31,11 +31,11 @@ export function CampaignTable({
   });
 
   return (
-    <Card className="bg-surface-container-lowest border-outline-variant rounded-xl flex flex-col shadow-none">
-      <CardHeader className="pb-6 p-lg flex flex-col md:flex-row md:items-center md:justify-between gap-md border-b border-outline-variant">
+    <Card className="bg-surface-container-lowest border-border rounded-xl flex flex-col shadow-none">
+      <CardHeader className="pb-6 p-lg flex flex-col md:flex-row md:items-center md:justify-between gap-md border-b border-border">
         <CardTitle className="text-title-lg font-bold text-primary">Campaign Audit Log</CardTitle>
         <div className="flex items-center gap-md">
-          <div className="flex items-center bg-surface-container-low rounded-full px-md py-1 border border-outline-variant focus-within:border-primary transition-all w-full max-w-sm">
+          <div className="flex items-center bg-surface-container-low rounded-full px-md py-1 border border-border focus-within:border-primary transition-all w-full max-w-sm">
             <Search className="text-on-surface-variant w-4 h-4 mr-sm shrink-0" />
             <Input
               className="bg-transparent border-none shadow-none outline-none focus:outline-none focus-visible:ring-0 text-body-sm w-full h-8 px-0 py-0"
@@ -45,7 +45,7 @@ export function CampaignTable({
             />
           </div>
 
-          <div className="flex items-center gap-xs border border-outline-variant rounded-lg p-0.5 bg-surface-container shrink-0">
+          <div className="flex items-center gap-xs border border-border rounded-lg p-0.5 bg-surface-container shrink-0">
             {["All", "Active", "Scheduled", "Completed"].map((status) => (
               <Button
                 key={status}
@@ -66,7 +66,7 @@ export function CampaignTable({
       <CardContent className="p-lg pt-0 overflow-x-auto">
         <table className="w-full text-left border-collapse text-body-sm">
           <thead>
-            <tr className="border-b border-outline-variant text-label-sm font-bold text-on-surface-variant">
+            <tr className="border-b border-border text-label-sm font-bold text-on-surface-variant">
               <th className="py-md pr-md">Campaign ID</th>
               <th className="py-md px-md">Campaign Name</th>
               <th className="py-md px-md">Status</th>
@@ -76,7 +76,7 @@ export function CampaignTable({
               <th className="py-md pl-md text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-outline-variant">
+          <tbody className="divide-y divide-border">
             {filteredCampaigns.length === 0 ? (
               <tr>
                 <td colSpan={7} className="py-lg text-center text-on-surface-variant">
@@ -116,10 +116,10 @@ export function CampaignTable({
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 px-2 text-xs flex items-center gap-xs ml-auto cursor-pointer"
+                        className="ml-auto"
                         onClick={() => onStartCampaign(c.id)}
                       >
-                        <Play className="w-3 h-3 text-on-surface-variant" />
+                        <Play />
                         Launch Now
                       </Button>
                     ) : (

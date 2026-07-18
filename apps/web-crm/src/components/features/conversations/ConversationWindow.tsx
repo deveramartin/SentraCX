@@ -30,7 +30,7 @@ export function ConversationWindow({
   return (
     <div className="flex-1 flex flex-col h-full bg-surface-container-lowest">
       {/* Chat window Header */}
-      <div className="p-md border-b border-outline-variant flex items-center justify-between bg-surface">
+      <div className="p-md border-b border-border flex items-center justify-between bg-surface">
         <div className="flex items-center gap-md">
           <Avatar className="h-9 w-9">
             <AvatarFallback className="bg-primary text-on-primary font-bold text-xs">
@@ -62,7 +62,7 @@ export function ConversationWindow({
                 className={`max-w-[70%] p-md rounded-xl space-y-xs ${
                   isAgent
                     ? "bg-primary text-on-primary rounded-tr-none"
-                    : "bg-surface-container border border-outline-variant text-primary rounded-tl-none"
+                    : "bg-surface-container border border-border text-primary rounded-tl-none"
                 }`}
               >
                 <p className="text-body-sm leading-relaxed whitespace-pre-wrap">{m.text}</p>
@@ -83,13 +83,13 @@ export function ConversationWindow({
       {/* Chat input form */}
       <form
         onSubmit={onSendMessage}
-        className="p-md border-t border-outline-variant bg-surface flex gap-md"
+        className="p-md border-t border-border bg-surface flex gap-md"
       >
         <Input
           placeholder="Type message here..."
           value={typedMessage}
           onChange={(e) => onTypedMessageChange(e.target.value)}
-          className="flex-1 bg-surface-container-low border-outline-variant focus:border-primary text-body-sm"
+          className="flex-1 bg-surface-container-low border-border focus:border-primary text-body-sm"
         />
         <Button type="submit" size="icon">
           <Send className="w-4 h-4" />
