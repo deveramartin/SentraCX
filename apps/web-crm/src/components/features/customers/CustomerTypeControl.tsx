@@ -40,14 +40,14 @@ export function CustomerTypeControl({
   };
 
   return (
-    <div className="flex items-center gap-xs">
-      <span className="text-xs font-medium text-muted-foreground">Type:</span>
+    <div className="flex items-center gap-2 w-full sm:w-auto">
+      <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">Type:</span>
       <Select
         value={currentType}
         onValueChange={(val) => handleChange(val as CustomerType)}
         disabled={isUpdating}
       >
-        <SelectTrigger className="w-[160px] h-8 text-xs font-semibold bg-surface-container-lowest border-outline-variant">
+        <SelectTrigger className="w-full sm:w-[160px] h-8 text-xs font-semibold">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

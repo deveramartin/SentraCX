@@ -25,10 +25,10 @@ export function MarketingInteractionDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-surface border-outline-variant max-w-lg">
+      <DialogContent className="max-w-lg w-[95vw] sm:w-full">
         <DialogHeader>
-          <div className="flex items-center justify-between gap-md pr-6">
-            <DialogTitle className="text-title-lg font-bold text-primary">
+          <div className="flex items-center justify-between gap-4 pr-6">
+            <DialogTitle className="text-lg font-bold">
               {interaction.title}
             </DialogTitle>
             <Badge variant="outline" className="text-xs uppercase">
@@ -37,15 +37,15 @@ export function MarketingInteractionDetailDialog({
           </div>
         </DialogHeader>
 
-        <div className="space-y-md pt-xs">
-          <div className="flex items-center justify-between text-xs text-muted-foreground pb-sm border-b border-outline-variant">
-            <span>Type: <strong className="text-primary font-medium">{interaction.interactionType}</strong></span>
-            <span>Sent At: <strong className="text-primary font-medium">{new Date(interaction.sentAt).toLocaleString()}</strong></span>
+        <div className="space-y-4 pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-muted-foreground gap-1 pb-3 border-b border-border">
+            <span>Type: <strong className="text-foreground font-semibold">{interaction.interactionType}</strong></span>
+            <span>Sent At: <strong className="text-foreground font-semibold">{new Date(interaction.sentAt).toLocaleString()}</strong></span>
           </div>
 
-          <div className="space-y-xs">
-            <h4 className="text-label-sm font-semibold text-primary">Description / Payload</h4>
-            <p className="text-body-sm text-on-surface p-md bg-surface-container-low rounded-lg border border-outline-variant whitespace-pre-wrap">
+          <div className="space-y-1">
+            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Description / Payload</h4>
+            <p className="text-sm text-foreground p-3 bg-muted/30 rounded-lg border border-border whitespace-pre-wrap">
               {interaction.description || "No description payload logged."}
             </p>
           </div>

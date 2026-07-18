@@ -48,20 +48,22 @@ export function DeleteCustomerDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="bg-surface border-outline-variant">
+      <AlertDialogContent className="max-w-md w-[95vw] sm:w-full">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-primary">Delete Customer Record</AlertDialogTitle>
-          <AlertDialogDescription className="text-on-surface-variant">
-            Are you sure you want to delete <strong className="text-primary">{customer.displayName}</strong>?
+          <AlertDialogTitle>Delete Customer Record</AlertDialogTitle>
+          <AlertDialogDescription className="text-muted-foreground">
+            Are you sure you want to delete <strong className="text-foreground">{customer.displayName}</strong>?
             This action will soft-delete the customer profile from the CRM database.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+        <AlertDialogFooter className="flex-col-reverse sm:flex-row gap-2">
+          <AlertDialogCancel disabled={isDeleting} className="w-full sm:w-auto">
+            Cancel
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
             disabled={isDeleting}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            className="w-full sm:w-auto bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
             {isDeleting ? "Deleting..." : "Delete Customer"}
           </AlertDialogAction>

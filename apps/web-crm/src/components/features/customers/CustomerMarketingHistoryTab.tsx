@@ -32,7 +32,7 @@ export function CustomerMarketingHistoryTab({ customerId }: CustomerMarketingHis
 
   if (isLoading) {
     return (
-      <div className="space-y-sm py-md">
+      <div className="space-y-2 py-4">
         {[1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-10 w-full rounded-md" />
         ))}
@@ -42,7 +42,7 @@ export function CustomerMarketingHistoryTab({ customerId }: CustomerMarketingHis
 
   if (error) {
     return (
-      <div className="p-md text-xs text-red-600 bg-red-50 border border-red-200 rounded-md">
+      <div className="p-4 text-xs text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
         {error}
       </div>
     );
@@ -50,58 +50,61 @@ export function CustomerMarketingHistoryTab({ customerId }: CustomerMarketingHis
 
   if (interactions.length === 0) {
     return (
-      <div className="py-xl text-center text-on-surface-variant">
-        <p className="text-body-sm font-medium">No marketing history found for this customer.</p>
+      <div className="py-12 text-center text-muted-foreground">
+        <p className="text-sm font-medium">No marketing history found for this customer.</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-md">
-      <Table>
-        <TableHeader>
-          <TableRow className="border-b border-outline-variant text-label-sm font-bold">
-            <TableHead>Title</TableHead>
-            <TableHead>Channel</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Sent At</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="divide-y divide-outline-variant">
-          {interactions.map((item) => (
-            <TableRow
-              key={item.id}
-              onClick={() => setSelectedInteraction(item)}
-              className="hover:bg-surface-container-low cursor-pointer transition-colors"
-            >
-              <TableCell className="font-semibold text-primary">{item.title}</TableCell>
-              <TableCell>
-                <Badge variant="outline" className="text-xs">
-                  {item.channel}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-body-sm text-on-surface-variant">
-                {item.interactionType}
-              </TableCell>
-              <TableCell className="text-xs text-muted-foreground font-mono">
-                {new Date(item.sentAt).toLocaleString()}
-              </TableCell>
+    <div className="space-y-4">
+      <div className="w-full overflow-x-auto border rounded-md border-border">
+        <Table className="min-w-[500px] w-full text-left text-sm">
+          <TableHeader>
+            <TableRow className="border-b border-border">
+              <TableHead>Title</TableHead>
+              <TableHead>Channel</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Sent At</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody className="divide-y divide-border">
+            {interactions.map((item) => (
+              <TableRow
+                key={item.id}
+                onClick={() => setSelectedInteraction(item)}
+                className="hover:bg-muted/50 cursor-pointer transition-colors"
+              >
+                <TableCell className="font-semibold text-foreground">{item.title}</TableCell>
+                <TableCell>
+                  <Badge variant="outline" className="text-xs">
+                    {item.channel}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-muted-foreground text-xs sm:text-sm">
+                  {item.interactionType}
+                </TableCell>
+                <TableCell className="text-xs text-muted-foreground font-mono">
+                  {new Date(item.sentAt).toLocaleString()}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between pt-md border-t border-outline-variant">
-          <span className="text-xs text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-border">
+          <span className="text-xs text-muted-foreground order-2 sm:order-1">
             Page {page} of {totalPages}
           </span>
-          <div className="flex gap-xs">
+          <div className="flex gap-2 w-full sm:w-auto justify-end order-1 sm:order-2">
             <Button
               variant="outline"
               size="sm"
               disabled={page <= 1}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
+              className="flex-1 sm:flex-none"
             >
               Previous
             </Button>
@@ -110,6 +113,7 @@ export function CustomerMarketingHistoryTab({ customerId }: CustomerMarketingHis
               size="sm"
               disabled={page >= totalPages}
               onClick={() => setPage((p) => p + 1)}
+              className="flex-1 sm:flex-none"
             >
               Next
             </Button>

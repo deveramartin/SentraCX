@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -93,76 +94,76 @@ export function CustomerFormSheet({
 
   return (
     <Sheet open={open} onOpenChange={(val) => { if (!val) resetForm(); onOpenChange(val); }}>
-      <SheetContent className="bg-surface border-outline-variant w-[400px] sm:w-[540px]">
-        <SheetHeader className="pb-lg">
-          <SheetTitle className="text-headline-md font-bold text-primary">Add Customer Profile</SheetTitle>
-          <SheetDescription className="text-body-sm text-on-surface-variant">
+      <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto p-6">
+        <SheetHeader className="pb-4">
+          <SheetTitle className="text-xl font-bold">Add Customer Profile</SheetTitle>
+          <SheetDescription className="text-sm text-muted-foreground">
             Create a new customer profile in the CRM database.
           </SheetDescription>
         </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-lg mt-lg">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-2">
           {formError && (
-            <div className="p-sm text-xs text-red-600 bg-red-50 border border-red-200 rounded-md">
+            <div className="p-3 text-xs text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
               {formError}
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-md">
-            <div className="space-y-xs">
-              <label className="text-label-sm font-semibold text-primary block">First Name *</label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label htmlFor="firstName" className="text-xs font-semibold">First Name *</Label>
               <Input
+                id="firstName"
                 placeholder="e.g. Olivia"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 disabled={isSubmitting}
-                className="bg-surface-container-lowest border-outline-variant"
               />
             </div>
-            <div className="space-y-xs">
-              <label className="text-label-sm font-semibold text-primary block">Last Name *</label>
+            <div className="space-y-1">
+              <Label htmlFor="lastName" className="text-xs font-semibold">Last Name *</Label>
               <Input
+                id="lastName"
                 placeholder="e.g. Vance"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 disabled={isSubmitting}
-                className="bg-surface-container-lowest border-outline-variant"
               />
             </div>
           </div>
 
-          <div className="space-y-xs">
-            <label className="text-label-sm font-semibold text-primary block">Email Address *</label>
+          <div className="space-y-1">
+            <Label htmlFor="email" className="text-xs font-semibold">Email Address *</Label>
             <Input
+              id="email"
               type="email"
               placeholder="e.g. olivia@vance-media.io"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={isSubmitting}
-              className="bg-surface-container-lowest border-outline-variant"
             />
           </div>
 
-          <div className="space-y-xs">
-            <label className="text-label-sm font-semibold text-primary block">Phone Number</label>
+          <div className="space-y-1">
+            <Label htmlFor="phone" className="text-xs font-semibold">Phone Number</Label>
             <Input
+              id="phone"
               type="tel"
               placeholder="e.g. +1 555-0192"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               disabled={isSubmitting}
-              className="bg-surface-container-lowest border-outline-variant"
             />
           </div>
 
-          <div className="space-y-xs">
-            <label className="text-label-sm font-semibold text-primary block">Customer Type *</label>
+          <div className="space-y-1">
+            <Label htmlFor="type" className="text-xs font-semibold">Customer Type *</Label>
             <Select
               value={customerType}
               onValueChange={(val) => setCustomerType(val as CustomerType)}
               disabled={isSubmitting}
             >
-              <SelectTrigger className="bg-surface-container-lowest border-outline-variant">
+              <SelectTrigger id="type">
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
@@ -172,20 +173,20 @@ export function CustomerFormSheet({
             </Select>
           </div>
 
-          <div className="pt-xl flex gap-md">
+          <div className="pt-4 flex flex-col sm:flex-row gap-2">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isSubmitting}
-              className="flex-1"
+              className="w-full sm:flex-1"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-primary text-on-primary hover:bg-neutral-800"
+              className="w-full sm:flex-1"
             >
               {isSubmitting ? "Saving..." : "Create Profile"}
             </Button>

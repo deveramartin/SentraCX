@@ -24,7 +24,7 @@ export function CustomerDetail({ customerId }: CustomerDetailProps) {
 
   if (isLoading) {
     return (
-      <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-lg">
+      <div className="w-full min-h-full p-4 sm:p-6 md:p-8 space-y-4 max-w-7xl mx-auto">
         <Skeleton className="h-8 w-32" />
         <Skeleton className="h-32 w-full rounded-xl" />
         <Skeleton className="h-64 w-full rounded-xl" />
@@ -34,16 +34,16 @@ export function CustomerDetail({ customerId }: CustomerDetailProps) {
 
   if (error || !customer) {
     return (
-      <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-md">
+      <div className="w-full min-h-full p-4 sm:p-6 md:p-8 space-y-4 max-w-7xl mx-auto">
         <Link href="/customers">
-          <Button variant="ghost" size="sm" className="gap-xs text-xs">
+          <Button variant="ghost" size="sm" className="gap-2 text-xs">
             <ArrowLeft className="w-4 h-4" /> Back to Customers
           </Button>
         </Link>
-        <div className="p-xl bg-red-50 border border-red-200 text-red-700 rounded-xl text-center">
-          <p className="font-bold text-body-md">Customer Not Found</p>
-          <p className="text-body-sm mt-xs">{error || "The requested customer profile could not be loaded."}</p>
-          <Button variant="outline" size="sm" onClick={() => refetch()} className="mt-md">
+        <div className="p-6 bg-destructive/10 border border-destructive/20 text-destructive rounded-xl text-center">
+          <p className="font-bold text-base">Customer Not Found</p>
+          <p className="text-sm mt-1">{error || "The requested customer profile could not be loaded."}</p>
+          <Button variant="outline" size="sm" onClick={() => refetch()} className="mt-4">
             Retry
           </Button>
         </div>
@@ -61,33 +61,33 @@ export function CustomerDetail({ customerId }: CustomerDetailProps) {
     : "CU";
 
   return (
-    <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-xl">
+    <div className="w-full min-h-full p-4 sm:p-6 md:p-8 space-y-6 max-w-7xl mx-auto">
       {/* Back Navigation */}
       <div>
         <Link href="/customers">
-          <Button variant="ghost" size="sm" className="gap-xs text-xs font-semibold text-muted-foreground hover:text-primary">
+          <Button variant="ghost" size="sm" className="gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground">
             <ArrowLeft className="w-4 h-4" /> Back to Customers
           </Button>
         </Link>
       </div>
 
-      {/* Customer Header Card */}
-      <div className="p-lg bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-md">
-        <div className="flex items-center gap-md">
-          <Avatar className="w-14 h-14 border border-outline-variant">
+      {/* Customer Header Card - Mobile First */}
+      <div className="p-4 sm:p-6 bg-card border border-border rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <Avatar className="w-12 h-12 sm:w-14 sm:h-14 border border-border">
             {customer.profileImage && <AvatarImage src={customer.profileImage} alt={customer.displayName} />}
-            <AvatarFallback className="bg-primary text-on-primary font-bold text-title-lg">
+            <AvatarFallback className="bg-primary text-primary-foreground font-bold text-lg">
               {initials}
             </AvatarFallback>
           </Avatar>
-          <div className="space-y-xs">
-            <h1 className="text-headline-md font-bold text-primary">{customer.displayName}</h1>
-            <p className="text-body-sm text-on-surface-variant">{customer.email}</p>
+          <div className="space-y-1 overflow-hidden">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground truncate">{customer.displayName}</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">{customer.email}</p>
           </div>
         </div>
 
-        {/* Dynamic Controls */}
-        <div className="flex flex-wrap items-center gap-md border-t md:border-t-0 pt-md md:pt-0 border-outline-variant">
+        {/* Dynamic Controls - Stacked on mobile */}
+        <div className="flex flex-wrap items-center gap-3 border-t sm:border-t-0 pt-3 sm:pt-0 border-border">
           <CustomerStatusControl
             customerId={customer.id}
             currentStatus={customer.status}
@@ -102,20 +102,22 @@ export function CustomerDetail({ customerId }: CustomerDetailProps) {
       </div>
 
       {/* Three Tabs View */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-md">
-        <TabsList className="bg-surface-container-low border border-outline-variant p-1 rounded-lg">
-          <TabsTrigger value="overview" className="text-xs font-semibold">
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="marketing" className="text-xs font-semibold">
-            Marketing History
-          </TabsTrigger>
-          <TabsTrigger value="orders" className="text-xs font-semibold">
-            Order History
-          </TabsTrigger>
-        </TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-4">
+        <div className="w-full overflow-x-auto pb-1">
+          <TabsList className="w-full sm:w-auto grid grid-cols-3 sm:inline-flex h-9 p-1">
+            <TabsTrigger value="overview" className="text-xs font-semibold">
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="marketing" className="text-xs font-semibold">
+              Marketing History
+            </TabsTrigger>
+            <TabsTrigger value="orders" className="text-xs font-semibold">
+              Order History
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
-        <TabsContent value="overview" className="p-lg bg-surface-container-lowest border border-outline-variant rounded-xl">
+        <TabsContent value="overview" className="p-4 sm:p-6 bg-card border border-border rounded-xl">
           <CustomerOverviewTab
             customer={customer}
             onCustomerUpdated={(updated) => setCustomer(updated)}
@@ -123,11 +125,11 @@ export function CustomerDetail({ customerId }: CustomerDetailProps) {
           />
         </TabsContent>
 
-        <TabsContent value="marketing" className="p-lg bg-surface-container-lowest border border-outline-variant rounded-xl">
+        <TabsContent value="marketing" className="p-4 sm:p-6 bg-card border border-border rounded-xl">
           <CustomerMarketingHistoryTab customerId={customer.id} />
         </TabsContent>
 
-        <TabsContent value="orders" className="p-lg bg-surface-container-lowest border border-outline-variant rounded-xl">
+        <TabsContent value="orders" className="p-4 sm:p-6 bg-card border border-border rounded-xl">
           <CustomerOrderHistoryTab customerId={customer.id} />
         </TabsContent>
       </Tabs>

@@ -25,7 +25,7 @@ export function CustomerOrderHistoryTab({ customerId }: CustomerOrderHistoryTabP
 
   if (isLoading) {
     return (
-      <div className="space-y-sm py-md">
+      <div className="space-y-2 py-4">
         {[1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-10 w-full rounded-md" />
         ))}
@@ -35,7 +35,7 @@ export function CustomerOrderHistoryTab({ customerId }: CustomerOrderHistoryTabP
 
   if (error) {
     return (
-      <div className="p-md text-xs text-red-600 bg-red-50 border border-red-200 rounded-md">
+      <div className="p-4 text-xs text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
         {error}
       </div>
     );
@@ -43,46 +43,48 @@ export function CustomerOrderHistoryTab({ customerId }: CustomerOrderHistoryTabP
 
   if (orders.length === 0) {
     return (
-      <div className="py-xl text-center text-on-surface-variant">
-        <p className="text-body-sm font-medium">No orders found for this customer.</p>
+      <div className="py-12 text-center text-muted-foreground">
+        <p className="text-sm font-medium">No orders found for this customer.</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-md">
-      <Table>
-        <TableHeader>
-          <TableRow className="border-b border-outline-variant text-label-sm font-bold">
-            <TableHead>Order Number</TableHead>
-            <TableHead>Total Amount</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Ordered At</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="divide-y divide-outline-variant">
-          {orders.map((item) => (
-            <TableRow
-              key={item.id}
-              onClick={() => setSelectedOrder(item)}
-              className="hover:bg-surface-container-low cursor-pointer transition-colors"
-            >
-              <TableCell className="font-semibold text-primary">{item.orderNumber}</TableCell>
-              <TableCell className="font-medium text-primary">
-                ${item.totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-              </TableCell>
-              <TableCell>
-                <Badge variant="outline" className="text-xs">
-                  {item.status}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-xs text-muted-foreground font-mono">
-                {new Date(item.orderedAt).toLocaleString()}
-              </TableCell>
+    <div className="space-y-4">
+      <div className="w-full overflow-x-auto border rounded-md border-border">
+        <Table className="min-w-[500px] w-full text-left text-sm">
+          <TableHeader>
+            <TableRow className="border-b border-border">
+              <TableHead>Order Number</TableHead>
+              <TableHead>Total Amount</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Ordered At</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody className="divide-y divide-border">
+            {orders.map((item) => (
+              <TableRow
+                key={item.id}
+                onClick={() => setSelectedOrder(item)}
+                className="hover:bg-muted/50 cursor-pointer transition-colors"
+              >
+                <TableCell className="font-semibold text-foreground">{item.orderNumber}</TableCell>
+                <TableCell className="font-medium text-foreground">
+                  ${item.totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline" className="text-xs">
+                    {item.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-xs text-muted-foreground font-mono">
+                  {new Date(item.orderedAt).toLocaleString()}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       <OrderDetailDialog
         order={selectedOrder}

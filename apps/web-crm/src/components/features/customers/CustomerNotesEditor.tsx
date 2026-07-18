@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Edit2, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { crmClient } from "@/lib/api/crm-client";
 import { toast } from "sonner";
 
@@ -38,20 +39,20 @@ export function CustomerNotesEditor({
 
   if (!isEditing) {
     return (
-      <div className="space-y-xs">
+      <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <label className="text-label-sm font-semibold text-primary">Internal Notes</label>
+          <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Internal Notes</Label>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setIsEditing(true)}
-            className="h-7 text-xs gap-xs text-muted-foreground hover:text-primary"
+            className="h-7 text-xs gap-1 text-muted-foreground hover:text-foreground"
           >
             <Edit2 className="w-3.5 h-3.5" />
             Edit
           </Button>
         </div>
-        <div className="p-md bg-surface-container-low rounded-lg border border-outline-variant text-body-sm text-on-surface">
+        <div className="p-4 bg-muted/30 rounded-lg border border-border text-sm text-foreground">
           {initialNotes ? (
             <p className="whitespace-pre-wrap">{initialNotes}</p>
           ) : (
@@ -63,16 +64,17 @@ export function CustomerNotesEditor({
   }
 
   return (
-    <div className="space-y-xs">
-      <label className="text-label-sm font-semibold text-primary block">Edit Notes</label>
+    <div className="space-y-2">
+      <Label htmlFor="notes" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block">Edit Notes</Label>
       <Textarea
+        id="notes"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         rows={4}
         placeholder="Enter internal notes about this customer..."
-        className="bg-surface-container-lowest border-outline-variant text-body-sm"
+        className="text-sm"
       />
-      <div className="flex justify-end gap-xs pt-xs">
+      <div className="flex justify-end gap-2 pt-1">
         <Button
           variant="outline"
           size="sm"
@@ -81,7 +83,7 @@ export function CustomerNotesEditor({
             setIsEditing(false);
           }}
           disabled={isSaving}
-          className="h-8 text-xs gap-xs"
+          className="h-8 text-xs gap-1"
         >
           <X className="w-3.5 h-3.5" />
           Cancel
@@ -90,7 +92,7 @@ export function CustomerNotesEditor({
           size="sm"
           onClick={handleSave}
           disabled={isSaving}
-          className="h-8 text-xs gap-xs bg-primary text-on-primary hover:bg-neutral-800"
+          className="h-8 text-xs gap-1"
         >
           <Check className="w-3.5 h-3.5" />
           {isSaving ? "Saving..." : "Save Notes"}
