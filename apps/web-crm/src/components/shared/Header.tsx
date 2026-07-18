@@ -9,6 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSidebar } from "@/components/ui/sidebar";
 import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -23,7 +31,8 @@ import {
 } from "@/components/ui/sheet";
 
 export function Header() {
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+  const pathname = rawPathname || "/";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { toggleSidebar } = useSidebar();
 
@@ -36,24 +45,48 @@ export function Header() {
     { name: "Settings", href: "/settings" },
   ];
 
-  const systemLinks = [
-    { name: "Shop", href: "#" },
-    { name: "CRM", href: "/customers", active: true },
-    { name: "HRM", href: "#" },
-    { name: "POS", href: "#" },
-    { name: "SCM", href: "#" },
-  ];
+  // Helper to build breadcrumb items from current path
+  const getBreadcrumbItems = () => {
+    const segments = pathname.split("/").filter(Boolean);
+    
+    if (segments.length === 0) {
+      return [
+        { label: "CRM", href: "/" },
+        { label: "Dashboard", isCurrent: true },
+      ];
+    }
+
+    const items: Array<{ label: string; href?: string; isCurrent?: boolean }> = [
+      { label: "CRM", href: "/customers" },
+    ];
+
+    if (segments[0] === "customers") {
+      if (segments.length === 1) {
+        items.push({ label: "Customers", isCurrent: true });
+      } else {
+        items.push({ label: "Customers", href: "/customers" });
+        items.push({ label: "Detail", isCurrent: true });
+      }
+    } else {
+      const pageName = segments[0].charAt(0).toUpperCase() + segments[0].slice(1);
+      items.push({ label: pageName, isCurrent: true });
+    }
+
+    return items;
+  };
+
+  const breadcrumbItems = getBreadcrumbItems();
 
   return (
     <header className="sticky top-0 z-50 flex justify-between items-center w-full px-4 sm:px-6 h-16 bg-background border-b border-border">
-      {/* Left: Sidebar Toggle Button (outside sidebar) & System Nav */}
-      <div className="flex items-center gap-3 sm:gap-6 flex-1">
+      {/* Left: Sidebar Toggle Button & Dynamic Route Breadcrumb */}
+      <div className="flex items-center gap-3 sm:gap-4 flex-1 overflow-hidden">
         {/* Sidebar Toggle Button (outside sidebar) */}
         <Button
           variant="ghost"
           size="icon"
           onClick={toggleSidebar}
-          className="text-muted-foreground hover:text-foreground h-9 w-9 cursor-pointer"
+          className="text-muted-foreground hover:text-foreground h-9 w-9 cursor-pointer shrink-0"
           title="Toggle Sidebar"
         >
           <PanelLeft className="w-5 h-5" />
@@ -62,7 +95,7 @@ export function Header() {
         {/* Mobile menu trigger */}
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden text-muted-foreground hover:text-foreground h-9 w-9">
+            <Button variant="ghost" size="icon" className="md:hidden text-muted-foreground hover:text-foreground h-9 w-9 shrink-0">
               <Menu className="w-5 h-5" />
             </Button>
           </SheetTrigger>
@@ -92,24 +125,31 @@ export function Header() {
           </SheetContent>
         </Sheet>
 
-        {/* System Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-4 ml-2">
-          {systemLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={`text-xs font-medium transition-colors ${
-                link.active ? "text-foreground font-bold" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
+        {/* Dynamic Route Breadcrumb */}
+        <Breadcrumb className="overflow-hidden">
+          <BreadcrumbList className="flex-nowrap whitespace-nowrap text-xs font-medium">
+            {breadcrumbItems.map((item, index) => (
+              <React.Fragment key={index}>
+                {index > 0 && <BreadcrumbSeparator className="text-muted-foreground" />}
+                <BreadcrumbItem>
+                  {item.isCurrent ? (
+                    <BreadcrumbPage className="font-bold text-foreground">
+                      {item.label}
+                    </BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink asChild className="text-muted-foreground hover:text-foreground font-semibold">
+                      <Link href={item.href || "#"}>{item.label}</Link>
+                    </BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+              </React.Fragment>
+            ))}
+          </BreadcrumbList>
+        </Breadcrumb>
       </div>
 
       {/* Right: Notification, Help, Profile Dropdown */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 shrink-0">
         <div className="flex items-center gap-1">
           <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative w-8 h-8">
             <Bell className="w-4 h-4" />
@@ -135,7 +175,7 @@ export function Header() {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 bg-popover border-border text-popover-foreground" align="end" forceMount>
+          <DropdownMenuContent className="w-56 bg-popover border-border text-popover-foreground z-[999]" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-semibold text-foreground leading-none">Bren Raphael</p>
