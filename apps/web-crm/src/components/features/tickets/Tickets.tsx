@@ -98,7 +98,7 @@ export function Tickets() {
         <div className="space-y-sm">
           <h2 className="text-headline-md font-bold tracking-tight text-foreground">Welcome back!</h2>
           <p className="text-body-md text-muted-foreground">
-            Here's a list of your support tickets and tasks for this month.
+            Here&apos;s a list of your support tickets and tasks for this month.
           </p>
         </div>
         <TicketCreateSheet onCreateTicket={handleCreateTicket} nextId={nextIdNum} />

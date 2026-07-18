@@ -49,40 +49,40 @@ export function CampaignLaunchSheet({ onLaunchCampaign, nextIdNum }: CampaignLau
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button className="flex items-center gap-2 self-start sm:self-center">
-          <Plus className="w-4 h-4" />
+        <Button className="self-start sm:self-center">
+          <Plus />
           New Campaign
         </Button>
       </SheetTrigger>
-      <SheetContent className="bg-surface border-border w-[400px] sm:w-[540px]">
+      <SheetContent className="bg-card border-border w-[400px] sm:w-[540px]">
         <SheetHeader className="pb-lg">
-          <SheetTitle className="text-headline-md font-bold text-primary">Launch Campaign</SheetTitle>
-          <SheetDescription className="text-body-sm text-on-surface-variant">
+          <SheetTitle className="text-headline-md font-bold text-foreground">Launch Campaign</SheetTitle>
+          <SheetDescription className="text-body-sm text-muted-foreground">
             Configure parameters for your marketing dispatch.
           </SheetDescription>
         </SheetHeader>
         <form onSubmit={handleSubmit} className="space-y-lg mt-lg">
           <div className="space-y-xs">
-            <label className="text-label-sm font-semibold text-primary block">Campaign Name</label>
+            <label className="text-label-sm font-semibold text-foreground block">Campaign Name</label>
             <Input
               placeholder="e.g. Q4 Black Friday Promo"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              className="bg-surface-container-lowest border-border focus:border-primary text-body-sm"
+              className="bg-background border-border text-body-sm"
             />
           </div>
           <div className="space-y-xs">
-            <label className="text-label-sm font-semibold text-primary block">Allocated Budget ($)</label>
+            <label className="text-label-sm font-semibold text-foreground block">Allocated Budget ($)</label>
             <Input
               type="number"
               placeholder="e.g. 10000"
               value={newBudget}
               onChange={(e) => setNewBudget(Number(e.target.value))}
-              className="bg-surface-container-lowest border-border focus:border-primary text-body-sm"
+              className="bg-background border-border text-body-sm"
             />
           </div>
           <div className="space-y-xs">
-            <label className="text-label-sm font-semibold text-primary block">Launch Strategy</label>
+            <label className="text-label-sm font-semibold text-foreground block">Launch Strategy</label>
             <div className="flex gap-sm">
               {(["Active", "Scheduled"] as const).map((s) => (
                 <Button

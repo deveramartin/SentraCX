@@ -6,7 +6,7 @@ import { Customer } from "@/types/customer";
 
 export function useCustomer(id: string) {
   const [customer, setCustomer] = useState<Customer | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => Boolean(id));
   const [error, setError] = useState<string | null>(null);
 
   const fetchCustomer = useCallback(async () => {
@@ -24,8 +24,26 @@ export function useCustomer(id: string) {
   }, [id]);
 
   useEffect(() => {
-    fetchCustomer();
-  }, [fetchCustomer]);
+    if (!id) return;
+    let isMounted = true;
+    crmClient.customers.getById(id)
+      .then((data) => {
+        if (isMounted) {
+          setCustomer(data);
+          setError(null);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (isMounted) {
+          setError(err instanceof Error ? err.message : "Failed to load customer profile.");
+          setIsLoading(false);
+        }
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
 
   return {
     customer,

@@ -41,13 +41,13 @@ export function CustomerStatusControl({
 
   return (
     <div className="flex items-center gap-2 w-full sm:w-auto">
-      <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">Status:</span>
+      <span className="text-label-sm font-semibold text-muted-foreground whitespace-nowrap">Status:</span>
       <Select
         value={currentStatus}
         onValueChange={(val) => handleChange(val as CustomerStatus)}
         disabled={isUpdating}
       >
-        <SelectTrigger className="w-full sm:w-[130px] h-8 text-xs font-semibold">
+        <SelectTrigger className="w-full sm:w-[130px] h-8 text-label-sm font-semibold">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

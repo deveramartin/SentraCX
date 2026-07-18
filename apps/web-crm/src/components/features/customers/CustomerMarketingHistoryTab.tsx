@@ -42,7 +42,7 @@ export function CustomerMarketingHistoryTab({ customerId }: CustomerMarketingHis
 
   if (error) {
     return (
-      <div className="p-4 text-xs text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
+      <div className="p-md text-body-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
         {error}
       </div>
     );
@@ -51,15 +51,15 @@ export function CustomerMarketingHistoryTab({ customerId }: CustomerMarketingHis
   if (interactions.length === 0) {
     return (
       <div className="py-12 text-center text-muted-foreground">
-        <p className="text-sm font-medium">No marketing history found for this customer.</p>
+        <p className="text-body-sm font-medium">No marketing history found for this customer.</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-md">
       <div className="w-full overflow-x-auto border rounded-md border-border">
-        <Table className="min-w-[500px] w-full text-left text-sm">
+        <Table className="min-w-[500px] w-full text-left text-body-sm">
           <TableHeader>
             <TableRow className="border-b border-border">
               <TableHead>Title</TableHead>
@@ -77,14 +77,14 @@ export function CustomerMarketingHistoryTab({ customerId }: CustomerMarketingHis
               >
                 <TableCell className="font-semibold text-foreground">{item.title}</TableCell>
                 <TableCell>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-label-sm">
                     {item.channel}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-muted-foreground text-xs sm:text-sm">
+                <TableCell className="text-muted-foreground text-body-sm">
                   {item.interactionType}
                 </TableCell>
-                <TableCell className="text-xs text-muted-foreground font-mono">
+                <TableCell className="text-label-sm text-muted-foreground font-mono">
                   {new Date(item.sentAt).toLocaleString()}
                 </TableCell>
               </TableRow>
@@ -94,11 +94,11 @@ export function CustomerMarketingHistoryTab({ customerId }: CustomerMarketingHis
       </div>
 
       {totalPages > 1 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-border">
-          <span className="text-xs text-muted-foreground order-2 sm:order-1">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-sm pt-sm border-t border-border">
+          <span className="text-label-sm text-muted-foreground order-2 sm:order-1">
             Page {page} of {totalPages}
           </span>
-          <div className="flex gap-2 w-full sm:w-auto justify-end order-1 sm:order-2">
+          <div className="flex gap-sm w-full sm:w-auto justify-end order-1 sm:order-2">
             <Button
               variant="outline"
               size="sm"

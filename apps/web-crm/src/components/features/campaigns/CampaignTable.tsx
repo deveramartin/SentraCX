@@ -31,12 +31,12 @@ export function CampaignTable({
   });
 
   return (
-    <Card className="bg-surface-container-lowest border-border rounded-xl flex flex-col shadow-none">
+    <Card className="bg-card border-border rounded-xl flex flex-col shadow-none">
       <CardHeader className="pb-6 p-lg flex flex-col md:flex-row md:items-center md:justify-between gap-md border-b border-border">
-        <CardTitle className="text-title-lg font-bold text-primary">Campaign Audit Log</CardTitle>
+        <CardTitle className="text-title-lg font-bold text-foreground">Campaign Audit Log</CardTitle>
         <div className="flex items-center gap-md">
-          <div className="flex items-center bg-surface-container-low rounded-full px-md py-1 border border-border focus-within:border-primary transition-all w-full max-w-sm">
-            <Search className="text-on-surface-variant w-4 h-4 mr-sm shrink-0" />
+          <div className="flex items-center bg-muted/50 rounded-full px-md py-1 border border-border focus-within:border-primary transition-all w-full max-w-sm">
+            <Search className="text-muted-foreground w-4 h-4 mr-sm shrink-0" />
             <Input
               className="bg-transparent border-none shadow-none outline-none focus:outline-none focus-visible:ring-0 text-body-sm w-full h-8 px-0 py-0"
               placeholder="Search campaigns..."
@@ -45,14 +45,14 @@ export function CampaignTable({
             />
           </div>
 
-          <div className="flex items-center gap-xs border border-border rounded-lg p-0.5 bg-surface-container shrink-0">
+          <div className="flex items-center gap-xs border border-border rounded-lg p-0.5 bg-muted shrink-0">
             {["All", "Active", "Scheduled", "Completed"].map((status) => (
               <Button
                 key={status}
                 size="sm"
                 variant={statusFilter === status ? "secondary" : "ghost"}
                 onClick={() => onStatusFilterChange(status)}
-                className={`h-7 px-3 text-xs font-semibold ${
+                className={`h-7 px-3 text-label-sm font-semibold ${
                   statusFilter === status ? "shadow-sm font-bold" : "text-muted-foreground"
                 }`}
               >
@@ -66,7 +66,7 @@ export function CampaignTable({
       <CardContent className="p-lg pt-0 overflow-x-auto">
         <table className="w-full text-left border-collapse text-body-sm">
           <thead>
-            <tr className="border-b border-border text-label-sm font-bold text-on-surface-variant">
+            <tr className="border-b border-border text-label-sm font-bold text-muted-foreground">
               <th className="py-md pr-md">Campaign ID</th>
               <th className="py-md px-md">Campaign Name</th>
               <th className="py-md px-md">Status</th>
@@ -79,34 +79,35 @@ export function CampaignTable({
           <tbody className="divide-y divide-border">
             {filteredCampaigns.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-lg text-center text-on-surface-variant">
+                <td colSpan={7} className="py-lg text-center text-muted-foreground">
                   No campaigns found matching filter settings.
                 </td>
               </tr>
             ) : (
               filteredCampaigns.map((c) => (
-                <tr key={c.id} className="hover:bg-surface-container-low transition-colors group">
-                  <td className="py-md pr-md font-mono text-xs font-semibold text-primary">{c.id}</td>
-                  <td className="py-md px-md font-semibold text-primary">{c.name}</td>
+                <tr key={c.id} className="hover:bg-muted/50 transition-colors group">
+                  <td className="py-md pr-md font-mono text-label-sm font-semibold text-foreground">{c.id}</td>
+                  <td className="py-md px-md font-semibold text-foreground">{c.name}</td>
                   <td className="py-md px-md">
                     <Badge
-                      className={`text-[11px] font-bold px-2 py-0.5 rounded-full border-none shadow-none ${
+                      variant={
                         c.status === "Active"
-                          ? "bg-emerald-100 text-emerald-800"
+                          ? "success"
                           : c.status === "Scheduled"
-                          ? "bg-amber-100 text-amber-800"
-                          : "bg-zinc-100 text-zinc-800"
-                      }`}
+                          ? "warning"
+                          : "secondary"
+                      }
+                      className="text-label-sm font-bold"
                     >
                       {c.status}
                     </Badge>
                   </td>
-                  <td className="py-md px-md font-medium text-primary">${c.budget.toLocaleString()}</td>
-                  <td className="py-md px-md text-on-surface-variant">${c.spent.toLocaleString()}</td>
+                  <td className="py-md px-md font-medium text-foreground">${c.budget.toLocaleString()}</td>
+                  <td className="py-md px-md text-muted-foreground">${c.spent.toLocaleString()}</td>
                   <td className="py-md px-md">
                     <div className="flex items-center gap-sm">
-                      <span className="w-10 text-xs font-semibold">{c.conversion}%</span>
-                      <div className="flex-1 w-20 h-1.5 bg-surface-container rounded-full overflow-hidden">
+                      <span className="w-10 text-label-sm font-semibold">{c.conversion}%</span>
+                      <div className="flex-1 w-20 h-1.5 bg-muted rounded-full overflow-hidden">
                         <div className="h-full rounded-full bg-primary" style={{ width: `${c.conversion * 5}%` }} />
                       </div>
                     </div>
@@ -123,7 +124,7 @@ export function CampaignTable({
                         Launch Now
                       </Button>
                     ) : (
-                      <span className="text-xs text-on-surface-variant italic font-sans flex items-center justify-end gap-xs py-1">
+                      <span className="text-label-sm text-muted-foreground italic font-sans flex items-center justify-end gap-xs py-1">
                         <Award className="w-3 h-3" />
                         Logged
                       </span>

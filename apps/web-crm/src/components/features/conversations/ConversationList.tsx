@@ -14,13 +14,13 @@ interface ConversationListProps {
 
 export function ConversationList({ chats, activeChatId, onSelectChat }: ConversationListProps) {
   return (
-    <div className="w-full md:w-80 border-r border-border flex flex-col h-full bg-surface">
+    <div className="w-full md:w-80 border-r border-border flex flex-col h-full bg-card">
       <div className="p-md border-b border-border flex items-center justify-between">
-        <h2 className="text-title-lg font-bold text-primary flex items-center gap-sm">
+        <h2 className="text-title-lg font-bold text-foreground flex items-center gap-sm">
           <MessageSquare className="w-5 h-5" />
           Conversations
         </h2>
-        <Badge className="bg-primary text-on-primary border-none shadow-none">
+        <Badge className="bg-primary text-primary-foreground border-none shadow-none">
           {chats.filter((c) => c.unread).length} Unread
         </Badge>
       </div>
@@ -31,27 +31,27 @@ export function ConversationList({ chats, activeChatId, onSelectChat }: Conversa
             onClick={() => onSelectChat(chat.id)}
             className={`p-md flex gap-md cursor-pointer transition-colors ${
               chat.id === activeChatId
-                ? "bg-surface-container-high"
-                : "hover:bg-surface-container-low"
+                ? "bg-muted"
+                : "hover:bg-muted/50"
             }`}
           >
             <Avatar className="h-10 h-10 shrink-0">
-              <AvatarFallback className="bg-primary text-on-primary font-bold text-xs">
+              <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
                 {chat.customerName.split(" ").map((n) => n[0]).join("")}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-baseline mb-1">
-                <h4 className="text-body-sm font-bold text-primary truncate">
+                <h4 className="text-body-sm font-bold text-foreground truncate">
                   {chat.customerName}
                 </h4>
-                <span className="text-[10px] text-on-surface-variant font-mono">
+                <span className="text-label-sm text-muted-foreground font-mono">
                   {chat.time}
                 </span>
               </div>
               <p
-                className={`text-[11px] truncate ${
-                  chat.unread ? "text-primary font-bold" : "text-on-surface-variant"
+                className={`text-label-sm truncate ${
+                  chat.unread ? "text-foreground font-bold" : "text-muted-foreground"
                 }`}
               >
                 {chat.lastMessage}

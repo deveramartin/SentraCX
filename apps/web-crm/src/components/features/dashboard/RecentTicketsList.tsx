@@ -22,10 +22,10 @@ export function RecentTicketsList({ tickets }: RecentTicketsListProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-label-md font-medium text-muted-foreground hover:text-foreground flex items-center gap-xs group transition-colors cursor-pointer"
+          className="group text-muted-foreground hover:text-foreground"
         >
           View all
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          <ArrowRight className="transition-transform group-hover:translate-x-1" />
         </Button>
       </CardHeader>
 
@@ -51,17 +51,18 @@ export function RecentTicketsList({ tickets }: RecentTicketsListProps) {
             </div>
             <div className="text-right space-y-xs shrink-0">
               <Badge
-                className={`text-[11px] font-bold px-2 py-0.5 rounded-full shadow-none border-none ${
+                variant={
                   ticket.priority === "High"
-                    ? "bg-red-100 text-red-800 hover:bg-red-100"
+                    ? "destructive"
                     : ticket.priority === "Medium"
-                    ? "bg-amber-100 text-amber-800 hover:bg-amber-100"
-                    : "bg-zinc-100 text-zinc-800 hover:bg-zinc-100"
-                }`}
+                    ? "warning"
+                    : "secondary"
+                }
+                className="text-label-sm font-bold"
               >
                 {ticket.priority}
               </Badge>
-              <p className="text-[11px] text-muted-foreground font-mono">{ticket.time}</p>
+              <p className="text-label-sm text-muted-foreground font-mono">{ticket.time}</p>
             </div>
           </div>
         ))}

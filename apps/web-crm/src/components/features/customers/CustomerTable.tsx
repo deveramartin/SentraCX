@@ -39,8 +39,8 @@ export function CustomerTable({
   if (customers.length === 0) {
     return (
       <div className="py-12 text-center text-muted-foreground">
-        <p className="text-sm font-medium">No customers found.</p>
-        <p className="text-xs text-muted-foreground mt-1">
+        <p className="text-body-sm font-medium">No customers found.</p>
+        <p className="text-label-sm text-muted-foreground mt-xs">
           Try searching with a different keyword or create a new customer record.
         </p>
       </div>
@@ -49,7 +49,7 @@ export function CustomerTable({
 
   return (
     <div className="w-full overflow-x-auto border rounded-md border-border">
-      <Table className="min-w-[600px] w-full text-left text-sm">
+      <Table className="min-w-[600px] w-full text-left text-body-sm">
         <TableHeader>
           <TableRow className="border-b border-border">
             <TableHead className="w-[30%]">Customer Name</TableHead>
@@ -70,7 +70,7 @@ export function CustomerTable({
                   {c.displayName}
                 </Link>
               </TableCell>
-              <TableCell className="text-muted-foreground text-xs sm:text-sm">{c.email}</TableCell>
+              <TableCell className="text-muted-foreground text-body-sm">{c.email}</TableCell>
               <TableCell>
                 <CustomerTypeBadge customerType={c.customerType} />
               </TableCell>

@@ -42,11 +42,11 @@ export function Dashboard() {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md border-b border-border pb-lg">
         <div className="space-y-sm">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h2>
+          <h2 className="text-headline-md font-bold tracking-tight text-foreground">Dashboard</h2>
         </div>
         <div className="flex items-center gap-sm">
           <Button variant="outline" size="sm">
-            <Clock className="w-3.5 h-3.5 mr-1" />
+            <Clock />
             Jan 01, 2026 - Jun 30, 2026
           </Button>
           <Button

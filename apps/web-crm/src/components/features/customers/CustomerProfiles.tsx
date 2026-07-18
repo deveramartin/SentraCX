@@ -24,41 +24,41 @@ export function CustomerProfiles() {
   });
 
   return (
-    <div className="w-full min-h-full p-4 sm:p-6 md:p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-2xl max-w-7xl mx-auto">
       {/* Header Banner - Mobile-first layout */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">Customer Profiles</h1>
-          <p className="text-sm text-muted-foreground">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md">
+        <div className="space-y-sm">
+          <h1 className="text-headline-md font-bold tracking-tight text-foreground">Customer Profiles</h1>
+          <p className="text-body-md text-muted-foreground">
             Manage customer records, contact profiles, and transactional details.
           </p>
         </div>
         <Button
           onClick={() => setIsAddOpen(true)}
-          className="w-full sm:w-auto flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full sm:w-auto"
         >
-          <Plus className="w-4 h-4" />
+          <Plus />
           Add Customer
         </Button>
       </div>
 
       {/* KPI Overview */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-md">
         <Card className="shadow-none border-border">
-          <CardHeader className="flex flex-row justify-between items-start space-y-0 pb-2 p-4">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total Customers</span>
+          <CardHeader className="flex flex-row justify-between items-start space-y-0 pb-2 p-lg">
+            <span className="text-label-md text-muted-foreground font-medium uppercase tracking-wider">Total Customers</span>
             <Users className="w-4 h-4 text-foreground" />
           </CardHeader>
-          <CardContent className="p-4 pt-0">
-            <span className="text-2xl sm:text-3xl font-bold text-foreground">{totalCount}</span>
-            <p className="text-xs text-muted-foreground mt-1">Registered CRM accounts</p>
+          <CardContent className="p-lg pt-0">
+            <span className="text-display-sm font-bold text-foreground">{totalCount}</span>
+            <p className="text-body-sm text-muted-foreground mt-sm">Registered CRM accounts</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Error Banner */}
       {error && (
-        <div className="p-4 bg-destructive/10 border border-destructive/20 text-destructive rounded-lg text-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="p-lg bg-destructive/10 border border-destructive/20 text-destructive rounded-lg text-body-sm flex flex-col sm:flex-row sm:items-center justify-between gap-sm">
           <span>{error}</span>
           <Button variant="outline" size="sm" onClick={() => refetch()}>
             Retry
@@ -68,12 +68,12 @@ export function CustomerProfiles() {
 
       {/* Main Customers Table Card */}
       <Card className="shadow-none border-border flex flex-col">
-        <CardHeader className="pb-4 p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <CardTitle className="text-lg font-bold">Customer Registry</CardTitle>
+        <CardHeader className="pb-md p-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md">
+          <CardTitle className="text-title-lg font-bold">Customer Registry</CardTitle>
           <div className="relative w-full sm:max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
-              className="pl-9 h-9 text-sm"
+              className="pl-9 h-9 text-body-sm"
               placeholder="Search by name or email..."
               value={searchQuery}
               onChange={(e) => {
@@ -84,7 +84,7 @@ export function CustomerProfiles() {
           </div>
         </CardHeader>
 
-        <CardContent className="p-4 sm:p-6 pt-0 overflow-x-auto">
+        <CardContent className="p-lg pt-0 overflow-x-auto">
           <CustomerTable
             customers={customers}
             isLoading={isLoading}
@@ -93,11 +93,11 @@ export function CustomerProfiles() {
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-border mt-4">
-              <span className="text-xs text-muted-foreground order-2 sm:order-1">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-sm pt-md border-t border-border mt-md">
+              <span className="text-label-sm text-muted-foreground order-2 sm:order-1">
                 Page {page} of {totalPages}
               </span>
-              <div className="flex gap-2 w-full sm:w-auto justify-end order-1 sm:order-2">
+              <div className="flex gap-sm w-full sm:w-auto justify-end order-1 sm:order-2">
                 <Button
                   variant="outline"
                   size="sm"

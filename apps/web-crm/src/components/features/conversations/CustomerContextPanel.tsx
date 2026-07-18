@@ -16,64 +16,61 @@ export function CustomerContextPanel({ activeChat, onUseTemplate }: CustomerCont
     "I checked the API access token scopes for your account. The keys have been re-verified. Please try generating a new token from the dashboard.";
 
   return (
-    <div className="hidden lg:flex w-72 border-l border-border flex-col h-full bg-surface p-lg space-y-lg overflow-y-auto">
-      <h3 className="text-label-md font-bold text-primary flex items-center gap-sm">
+    <div className="hidden lg:flex w-72 border-l border-border flex-col h-full bg-card p-lg space-y-lg overflow-y-auto">
+      <h3 className="text-label-md font-bold text-foreground flex items-center gap-sm">
         <User className="w-4 h-4" />
         Customer Context
       </h3>
 
-      <div className="space-y-sm bg-surface-container-lowest border border-border rounded-xl p-md">
-        <p className="text-[11px] text-on-surface-variant font-mono">CLIENT IDENTITY</p>
+      <div className="space-y-sm bg-muted/50 border border-border rounded-xl p-md">
+        <p className="text-label-sm text-muted-foreground font-mono">CLIENT IDENTITY</p>
         <div className="space-y-xs">
-          <h4 className="text-body-sm font-bold text-primary">{activeChat.customerName}</h4>
-          <p className="text-xs text-on-surface-variant font-mono truncate">{activeChat.email}</p>
+          <h4 className="text-body-sm font-bold text-foreground">{activeChat.customerName}</h4>
+          <p className="text-label-sm text-muted-foreground font-mono truncate">{activeChat.email}</p>
         </div>
       </div>
 
-      <div className="space-y-sm bg-surface-container-lowest border border-border rounded-xl p-md">
-        <p className="text-[11px] text-on-surface-variant font-mono">FINANCIAL METRICS</p>
+      <div className="space-y-sm bg-muted/50 border border-border rounded-xl p-md">
+        <p className="text-label-sm text-muted-foreground font-mono">FINANCIAL METRICS</p>
         <div className="flex justify-between items-baseline">
-          <span className="text-body-sm text-on-surface-variant">LTV (CLV)</span>
-          <span className="text-label-md font-bold text-primary">${activeChat.clv.toLocaleString()}</span>
+          <span className="text-body-sm text-muted-foreground">LTV (CLV)</span>
+          <span className="text-label-md font-bold text-foreground">${activeChat.clv.toLocaleString()}</span>
         </div>
       </div>
 
-      <div className="space-y-sm bg-surface-container-lowest border border-border rounded-xl p-md">
-        <p className="text-[11px] text-on-surface-variant font-mono">AI PREDICTIVE INSIGHTS</p>
+      <div className="space-y-sm bg-muted/50 border border-border rounded-xl p-md">
+        <p className="text-label-sm text-muted-foreground font-mono">AI PREDICTIVE INSIGHTS</p>
         <div className="flex justify-between items-center">
-          <span className="text-body-sm text-on-surface-variant">Churn Risk</span>
+          <span className="text-body-sm text-muted-foreground">Churn Risk</span>
           <Badge
-            className={`text-[10px] font-bold border-none shadow-none ${
-              activeChat.risk >= 40
-                ? "bg-red-100 text-red-800"
-                : "bg-emerald-100 text-emerald-800"
-            }`}
+            variant={activeChat.risk >= 40 ? "destructive" : "success"}
+            className="text-label-sm font-bold"
           >
             {activeChat.risk}% Risk
           </Badge>
         </div>
-        <div className="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+        <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full ${
-              activeChat.risk >= 40 ? "bg-red-500" : "bg-emerald-500"
+              activeChat.risk >= 40 ? "bg-destructive" : "bg-success"
             }`}
             style={{ width: `${activeChat.risk}%` }}
           />
         </div>
       </div>
 
-      <div className="space-y-sm border border-black/5 rounded-xl p-md bg-zinc-900 text-on-primary">
-        <div className="flex items-center gap-xs text-[11px] text-on-primary-container font-mono">
-          <Sparkles className="w-3.5 h-3.5 text-on-primary animate-pulse" />
+      <div className="space-y-sm border border-border rounded-xl p-md bg-muted text-foreground">
+        <div className="flex items-center gap-xs text-label-sm text-foreground font-mono">
+          <Sparkles className="w-3.5 h-3.5 text-primary animate-pulse" />
           AI SUGGESTED SMART REPLY
         </div>
-        <p className="text-xs italic leading-relaxed text-on-primary/95">
-          "{smartReply}"
+        <p className="text-body-sm italic leading-relaxed text-muted-foreground">
+          &quot;{smartReply}&quot;
         </p>
         <Button
-          variant="secondary"
+          variant="default"
           size="sm"
-          className="w-full text-xs font-bold mt-xs"
+          className="w-full text-label-sm font-bold mt-xs"
           onClick={() => onUseTemplate(smartReply)}
         >
           Use Template

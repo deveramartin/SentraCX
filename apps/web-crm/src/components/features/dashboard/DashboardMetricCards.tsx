@@ -81,10 +81,10 @@ export function DashboardMetricCards({
               </span>
               <div className="flex items-center gap-xs mt-sm text-body-sm">
                 {metric.trend === "up" && (
-                  <TrendingUp className="w-4 h-4 text-emerald-600" />
+                  <TrendingUp className="w-4 h-4 text-success" />
                 )}
                 {metric.trend === "down" && (
-                  <TrendingDown className="w-4 h-4 text-rose-600" />
+                  <TrendingDown className="w-4 h-4 text-destructive" />
                 )}
                 {metric.trend === "stable" && (
                   <AlertCircle className="w-4 h-4 text-muted-foreground" />
@@ -92,7 +92,7 @@ export function DashboardMetricCards({
                 <span
                   className={
                     metric.trend === "up"
-                      ? "text-emerald-600 font-medium"
+                      ? "text-success font-medium"
                       : "text-muted-foreground"
                   }
                 >

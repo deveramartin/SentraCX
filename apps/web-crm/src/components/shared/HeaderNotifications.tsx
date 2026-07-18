@@ -56,12 +56,12 @@ export function HeaderNotifications() {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-80 bg-popover border-border text-popover-foreground z-[999]" align="end">
-        <div className="flex items-center justify-between p-3 border-b border-border">
-          <DropdownMenuLabel className="p-0 text-sm font-bold text-foreground">
+        <div className="flex items-center justify-between p-sm border-b border-border">
+          <DropdownMenuLabel className="p-0 text-body-sm font-bold text-foreground">
             Notifications
           </DropdownMenuLabel>
-          <Button variant="ghost" size="sm" className="h-auto p-0 text-[11px] text-muted-foreground hover:text-foreground gap-1">
-            <CheckCheck className="w-3 h-3" /> Mark all read
+          <Button variant="ghost" size="sm" className="h-auto p-0 text-label-sm text-muted-foreground hover:text-foreground">
+            <CheckCheck /> Mark all read
           </Button>
         </div>
 
@@ -71,7 +71,7 @@ export function HeaderNotifications() {
             return (
               <DropdownMenuItem
                 key={n.id}
-                className={`flex items-start gap-3 p-3 cursor-pointer hover:bg-accent ${
+                className={`flex items-start gap-sm p-sm cursor-pointer hover:bg-accent ${
                   n.unread ? "bg-accent/40 font-medium" : ""
                 }`}
               >
@@ -79,11 +79,11 @@ export function HeaderNotifications() {
                   <Icon className="w-3.5 h-3.5 text-foreground" />
                 </div>
                 <div className="flex-1 space-y-0.5 overflow-hidden">
-                  <div className="flex items-center justify-between gap-1">
-                    <span className="text-xs font-semibold text-foreground truncate">{n.title}</span>
-                    <span className="text-[10px] text-muted-foreground shrink-0">{n.time}</span>
+                  <div className="flex items-center justify-between gap-xs">
+                    <span className="text-label-sm font-semibold text-foreground truncate">{n.title}</span>
+                    <span className="text-label-sm text-muted-foreground shrink-0">{n.time}</span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground line-clamp-2">{n.description}</p>
+                  <p className="text-label-sm text-muted-foreground line-clamp-2">{n.description}</p>
                 </div>
               </DropdownMenuItem>
             );
@@ -91,8 +91,8 @@ export function HeaderNotifications() {
         </div>
 
         <DropdownMenuSeparator className="bg-border m-0" />
-        <div className="p-2 text-center">
-          <Button variant="ghost" size="sm" className="w-full h-8 text-xs font-semibold text-foreground hover:bg-accent">
+        <div className="p-xs text-center">
+          <Button variant="ghost" size="sm" className="w-full h-8 text-label-sm font-semibold text-foreground hover:bg-accent">
             View all notifications
           </Button>
         </div>

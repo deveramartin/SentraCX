@@ -53,15 +53,15 @@ export function Campaigns() {
   return (
     <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-2xl">
       {toastMsg && (
-        <div className="fixed bottom-20 right-6 md:right-10 bg-primary text-on-primary px-lg py-sm rounded-lg text-body-sm font-medium z-[100] shadow-md border border-border animate-in fade-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed bottom-20 right-6 md:right-10 bg-primary text-primary-foreground px-lg py-sm rounded-lg text-body-sm font-medium z-[100] shadow-md border border-border animate-in fade-in slide-in-from-bottom-5 duration-300">
           {toastMsg}
         </div>
       )}
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md">
         <div className="space-y-sm">
-          <h1 className="text-display-sm font-bold tracking-tight text-primary">Marketing Campaigns</h1>
-          <p className="text-body-md text-on-surface-variant">
+          <h1 className="text-display-sm font-bold tracking-tight text-foreground">Marketing Campaigns</h1>
+          <p className="text-body-md text-muted-foreground">
             Create email marketing outreaches, track clicks, and audit conversion metrics.
           </p>
         </div>

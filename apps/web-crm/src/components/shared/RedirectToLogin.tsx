@@ -13,7 +13,7 @@ export function RedirectToLogin() {
   }, [callbackUrl]);
 
   return (
-    <div style={{ padding: 40, fontFamily: "sans-serif" }}>
+    <div className="p-xl font-sans text-body-md text-muted-foreground">
       Redirecting to sign in...
     </div>
   );

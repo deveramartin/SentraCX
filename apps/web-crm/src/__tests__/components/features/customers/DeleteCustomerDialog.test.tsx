@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { toast } from "sonner";
 import { DeleteCustomerDialog } from "@/components/features/customers/DeleteCustomerDialog";
 import { crmClient } from "@/lib/api/crm-client";
 import type { CustomerListItem } from "@/types/customer";
@@ -122,7 +123,6 @@ describe("DeleteCustomerDialog", () => {
   });
 
   it("shows error toast and does not call onDeleted on failure", async () => {
-    const { toast } = require("sonner");
     (crmClient.customers.delete as jest.Mock).mockRejectedValue(new Error("Network error"));
 
     render(

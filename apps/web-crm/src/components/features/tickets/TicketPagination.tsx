@@ -11,7 +11,7 @@ interface TicketPaginationProps {
 
 export function TicketPagination({ selectedCount, totalCount }: TicketPaginationProps) {
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-md pt-xs text-muted-foreground text-xs font-medium px-xs">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-md pt-xs text-muted-foreground text-label-sm font-medium px-xs">
       <div>
         {selectedCount} of {totalCount} row(s) selected.
       </div>
@@ -19,7 +19,7 @@ export function TicketPagination({ selectedCount, totalCount }: TicketPagination
       <div className="flex items-center gap-lg">
         <div className="flex items-center gap-xs">
           <span>Rows per page</span>
-          <select className="bg-transparent border border-input rounded p-1 text-xs outline-none text-foreground font-semibold">
+          <select className="bg-transparent border border-input rounded p-1 text-label-sm outline-none text-foreground font-semibold">
             <option>10</option>
             <option>20</option>
             <option>50</option>

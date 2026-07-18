@@ -50,22 +50,22 @@ export function TicketFilters({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-8 border-dashed flex items-center gap-xs text-xs font-semibold cursor-pointer">
-              <SlidersHorizontal className="w-3.5 h-3.5" />
+            <Button variant="outline" size="sm" className="border-dashed">
+              <SlidersHorizontal />
               Status
               {statusFilter !== "All" && (
-                <Badge variant="secondary" className="ml-1 px-1 bg-muted font-bold text-[10px] rounded-sm text-foreground">{statusFilter}</Badge>
+                <Badge variant="secondary" className="ml-1 px-1 bg-muted font-bold text-label-sm rounded-sm text-foreground">{statusFilter}</Badge>
               )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-popover border-border w-40" align="start">
-            <DropdownMenuLabel className="text-xs text-muted-foreground">Filter by Status</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-label-sm text-muted-foreground">Filter by Status</DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-border" />
             {["All", "Open", "In Progress", "Resolved"].map((status) => (
               <DropdownMenuItem
                 key={status}
                 onClick={() => onStatusChange(status)}
-                className="cursor-pointer text-xs font-medium"
+                className="cursor-pointer text-label-sm font-medium"
               >
                 {status}
               </DropdownMenuItem>
@@ -75,22 +75,22 @@ export function TicketFilters({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-8 border-dashed flex items-center gap-xs text-xs font-semibold cursor-pointer">
-              <SlidersHorizontal className="w-3.5 h-3.5" />
+            <Button variant="outline" size="sm" className="border-dashed">
+              <SlidersHorizontal />
               Priority
               {priorityFilter !== "All" && (
-                <Badge variant="secondary" className="ml-1 px-1 bg-muted font-bold text-[10px] rounded-sm text-foreground">{priorityFilter}</Badge>
+                <Badge variant="secondary" className="ml-1 px-1 bg-muted font-bold text-label-sm rounded-sm text-foreground">{priorityFilter}</Badge>
               )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-popover border-border w-40" align="start">
-            <DropdownMenuLabel className="text-xs text-muted-foreground">Filter by Priority</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-label-sm text-muted-foreground">Filter by Priority</DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-border" />
             {["All", "High", "Medium", "Low"].map((prio) => (
               <DropdownMenuItem
                 key={prio}
                 onClick={() => onPriorityChange(prio)}
-                className="cursor-pointer text-xs font-medium"
+                className="cursor-pointer text-label-sm font-medium"
               >
                 {prio}
               </DropdownMenuItem>
@@ -103,10 +103,9 @@ export function TicketFilters({
             variant="ghost"
             size="sm"
             onClick={onReset}
-            className="h-8 text-xs font-semibold flex items-center gap-xs cursor-pointer"
           >
             Reset
-            <X className="w-3.5 h-3.5" />
+            <X />
           </Button>
         )}
       </div>

@@ -28,26 +28,26 @@ export function ConversationWindow({
   }, [activeChat.messages]);
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-surface-container-lowest">
+    <div className="flex-1 flex flex-col h-full bg-background">
       {/* Chat window Header */}
-      <div className="p-md border-b border-border flex items-center justify-between bg-surface">
+      <div className="p-md border-b border-border flex items-center justify-between bg-card">
         <div className="flex items-center gap-md">
           <Avatar className="h-9 w-9">
-            <AvatarFallback className="bg-primary text-on-primary font-bold text-xs">
+            <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
               {activeChat.customerName.split(" ").map((n) => n[0]).join("")}
             </AvatarFallback>
           </Avatar>
           <div>
-            <h3 className="text-label-md font-bold text-primary">
+            <h3 className="text-label-md font-bold text-foreground">
               {activeChat.customerName}
             </h3>
-            <p className="text-[10px] text-emerald-600 flex items-center gap-xs font-medium">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+            <p className="text-label-sm text-success flex items-center gap-xs font-medium">
+              <span className="w-1.5 h-1.5 bg-success rounded-full animate-pulse"></span>
               Active Support Channel
             </p>
           </div>
         </div>
-        <Badge className="bg-surface-container text-primary hover:bg-surface-container border-none shadow-none text-[11px] font-bold py-1 px-3">
+        <Badge className="bg-muted text-foreground hover:bg-muted border-none shadow-none text-label-sm font-bold py-1 px-3">
           SSO Linked
         </Badge>
       </div>
@@ -61,14 +61,14 @@ export function ConversationWindow({
               <div
                 className={`max-w-[70%] p-md rounded-xl space-y-xs ${
                   isAgent
-                    ? "bg-primary text-on-primary rounded-tr-none"
-                    : "bg-surface-container border border-border text-primary rounded-tl-none"
+                    ? "bg-primary text-primary-foreground rounded-tr-none"
+                    : "bg-muted border border-border text-foreground rounded-tl-none"
                 }`}
               >
                 <p className="text-body-sm leading-relaxed whitespace-pre-wrap">{m.text}</p>
                 <span
-                  className={`text-[9px] block text-right font-mono ${
-                    isAgent ? "text-on-primary/75" : "text-on-surface-variant"
+                  className={`text-label-sm block text-right font-mono ${
+                    isAgent ? "text-primary-foreground/75" : "text-muted-foreground"
                   }`}
                 >
                   {m.time}
@@ -83,13 +83,13 @@ export function ConversationWindow({
       {/* Chat input form */}
       <form
         onSubmit={onSendMessage}
-        className="p-md border-t border-border bg-surface flex gap-md"
+        className="p-md border-t border-border bg-card flex gap-md"
       >
         <Input
           placeholder="Type message here..."
           value={typedMessage}
           onChange={(e) => onTypedMessageChange(e.target.value)}
-          className="flex-1 bg-surface-container-low border-border focus:border-primary text-body-sm"
+          className="flex-1 bg-muted/50 border-border text-body-sm"
         />
         <Button type="submit" size="icon">
           <Send className="w-4 h-4" />

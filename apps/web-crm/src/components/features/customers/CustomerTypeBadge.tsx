@@ -11,7 +11,7 @@ export function CustomerTypeBadge({ customerType }: CustomerTypeBadgeProps) {
   const variant = customerType === "InstitutionalBuyer" ? "outline" : "secondary";
 
   return (
-    <Badge variant={variant} className="text-[11px] font-medium">
+    <Badge variant={variant} className="text-label-sm font-medium">
       {label}
     </Badge>
   );

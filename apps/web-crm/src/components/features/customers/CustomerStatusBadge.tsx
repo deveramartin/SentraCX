@@ -21,7 +21,7 @@ export function CustomerStatusBadge({ status }: CustomerStatusBadgeProps) {
   };
 
   return (
-    <Badge variant={getVariant()} className="text-[11px] font-semibold">
+    <Badge variant={getVariant()} className="text-label-sm font-semibold">
       {status}
     </Badge>
   );

@@ -6,7 +6,7 @@ import { OrderHistory } from "@/types/customer";
 
 export function useCustomerOrders(customerId: string) {
   const [orders, setOrders] = useState<OrderHistory[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => Boolean(customerId));
   const [error, setError] = useState<string | null>(null);
 
   const fetchOrders = useCallback(async () => {
@@ -24,8 +24,26 @@ export function useCustomerOrders(customerId: string) {
   }, [customerId]);
 
   useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders]);
+    if (!customerId) return;
+    let isMounted = true;
+    crmClient.orders.listByCustomer(customerId)
+      .then((data) => {
+        if (isMounted) {
+          setOrders(data || []);
+          setError(null);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (isMounted) {
+          setError(err instanceof Error ? err.message : "Failed to load order history.");
+          setIsLoading(false);
+        }
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, [customerId]);
 
   return {
     orders,

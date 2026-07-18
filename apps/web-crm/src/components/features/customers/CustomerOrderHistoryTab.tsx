@@ -35,7 +35,7 @@ export function CustomerOrderHistoryTab({ customerId }: CustomerOrderHistoryTabP
 
   if (error) {
     return (
-      <div className="p-4 text-xs text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
+      <div className="p-md text-body-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
         {error}
       </div>
     );
@@ -44,15 +44,15 @@ export function CustomerOrderHistoryTab({ customerId }: CustomerOrderHistoryTabP
   if (orders.length === 0) {
     return (
       <div className="py-12 text-center text-muted-foreground">
-        <p className="text-sm font-medium">No orders found for this customer.</p>
+        <p className="text-body-sm font-medium">No orders found for this customer.</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-md">
       <div className="w-full overflow-x-auto border rounded-md border-border">
-        <Table className="min-w-[500px] w-full text-left text-sm">
+        <Table className="min-w-[500px] w-full text-left text-body-sm">
           <TableHeader>
             <TableRow className="border-b border-border">
               <TableHead>Order Number</TableHead>
@@ -73,11 +73,11 @@ export function CustomerOrderHistoryTab({ customerId }: CustomerOrderHistoryTabP
                   ${item.totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-label-sm">
                     {item.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-xs text-muted-foreground font-mono">
+                <TableCell className="text-label-sm text-muted-foreground font-mono">
                   {new Date(item.orderedAt).toLocaleString()}
                 </TableCell>
               </TableRow>

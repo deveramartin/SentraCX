@@ -61,7 +61,7 @@ export function DashboardQuickOps({ onCreateTicket, onShowToast }: DashboardQuic
         <Sheet open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <SheetTrigger asChild>
             <Button>
-              <Plus className="w-4 h-4 mr-1" />
+              <Plus />
               Create New Ticket
             </Button>
           </SheetTrigger>

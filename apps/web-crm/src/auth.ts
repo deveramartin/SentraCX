@@ -30,7 +30,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.systems = (token.systems as string[]) ?? [];
       return session;
     },
-    async authorized({ auth, request }) {
+    async authorized({ auth: _auth, request: _request }) {
       // Temporarily bypass for local UI/UX development
       return true;
       /*

@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, HelpCircle, PanelLeft } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSidebar } from "@/components/ui/sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,21 +13,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { HeaderNotifications } from "./HeaderNotifications";
-
-const navItems = [
-  { name: "Dashboard", href: "/" },
-  { name: "Customers", href: "/customers" },
-  { name: "Conversations", href: "/conversations" },
-  { name: "Tickets", href: "/tickets" },
-  { name: "Campaigns", href: "/campaigns" },
-  { name: "Settings", href: "/settings" },
-];
 
 function getBreadcrumbItems(pathname: string) {
   const segments = pathname.split("/").filter(Boolean);
@@ -62,59 +47,12 @@ function getBreadcrumbItems(pathname: string) {
 export function Header() {
   const rawPathname = usePathname();
   const pathname = rawPathname || "/";
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { toggleSidebar } = useSidebar();
-
   const breadcrumbItems = getBreadcrumbItems(pathname);
 
   return (
     <header className="sticky top-0 z-50 flex justify-between items-center w-full px-4 sm:px-6 h-16 bg-background border-b border-border">
-      {/* Left: Sidebar Toggle & Breadcrumb */}
+      {/* Left: Breadcrumb */}
       <div className="flex items-center gap-3 sm:gap-4 flex-1 overflow-hidden">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleSidebar}
-          className="text-muted-foreground hover:text-foreground h-9 w-9 cursor-pointer shrink-0"
-          title="Toggle Sidebar"
-        >
-          <PanelLeft className="w-5 h-5" />
-        </Button>
-
-        {/* Mobile nav sheet */}
-        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden text-muted-foreground hover:text-foreground h-9 w-9 shrink-0">
-              <Menu className="w-5 h-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="bg-card border-border w-64 flex flex-col pt-8">
-            <h2 className="text-lg font-bold text-foreground mb-6 px-4">
-              Bren Raphael&apos;s
-            </h2>
-            <nav className="flex-1 flex flex-col gap-1 px-2">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      isActive
-                        ? "bg-muted text-foreground font-semibold"
-                        : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                );
-              })}
-            </nav>
-          </SheetContent>
-        </Sheet>
-
-        {/* Breadcrumb */}
         <Breadcrumb className="overflow-hidden">
           <BreadcrumbList className="flex-nowrap whitespace-nowrap text-sm sm:text-base font-semibold">
             {breadcrumbItems.map((item, index) => (

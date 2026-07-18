@@ -48,8 +48,8 @@ export function TicketCreateSheet({ onCreateTicket, nextId }: TicketCreateSheetP
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button className="flex items-center gap-2 self-start sm:self-center">
-          <Plus className="w-4 h-4" />
+        <Button className="self-start sm:self-center">
+          <Plus />
           Create Task
         </Button>
       </SheetTrigger>

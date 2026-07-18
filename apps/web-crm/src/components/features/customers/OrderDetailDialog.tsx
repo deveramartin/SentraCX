@@ -28,24 +28,24 @@ export function OrderDetailDialog({
       <DialogContent className="max-w-md w-[95vw] sm:w-full">
         <DialogHeader>
           <div className="flex items-center justify-between gap-4 pr-6">
-            <DialogTitle className="text-lg font-bold">
+            <DialogTitle className="text-headline-md font-bold">
               Order {order.orderNumber}
             </DialogTitle>
-            <Badge variant="outline" className="text-xs uppercase">
+            <Badge variant="outline" className="text-label-sm uppercase">
               {order.status}
             </Badge>
           </div>
         </DialogHeader>
 
-        <div className="space-y-4 pt-2">
-          <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
-            <span className="text-sm text-muted-foreground font-medium">Total Amount</span>
-            <span className="text-xl font-bold text-foreground">
+        <div className="space-y-md pt-xs">
+          <div className="flex items-center justify-between p-md bg-muted/30 rounded-lg border border-border">
+            <span className="text-body-sm text-muted-foreground font-medium">Total Amount</span>
+            <span className="text-headline-md font-bold text-foreground">
               ${order.totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
           </div>
 
-          <div className="text-xs text-muted-foreground">
+          <div className="text-label-sm text-muted-foreground">
             Ordered At: <strong className="text-foreground font-semibold">{new Date(order.orderedAt).toLocaleString()}</strong>
           </div>
         </div>

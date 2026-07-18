@@ -95,23 +95,23 @@ export function CustomerFormSheet({
   return (
     <Sheet open={open} onOpenChange={(val) => { if (!val) resetForm(); onOpenChange(val); }}>
       <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto p-6">
-        <SheetHeader className="pb-4">
-          <SheetTitle className="text-xl font-bold">Add Customer Profile</SheetTitle>
-          <SheetDescription className="text-sm text-muted-foreground">
+        <SheetHeader className="pb-md">
+          <SheetTitle className="text-headline-md font-bold">Add Customer Profile</SheetTitle>
+          <SheetDescription className="text-body-sm text-muted-foreground">
             Create a new customer profile in the CRM database.
           </SheetDescription>
         </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+        <form onSubmit={handleSubmit} className="space-y-md mt-xs">
           {formError && (
-            <div className="p-3 text-xs text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
+            <div className="p-sm text-body-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
               {formError}
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="space-y-1">
-              <Label htmlFor="firstName" className="text-xs font-semibold">First Name *</Label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-sm">
+            <div className="space-y-xs">
+              <Label htmlFor="firstName" className="text-label-sm font-semibold">First Name *</Label>
               <Input
                 id="firstName"
                 placeholder="e.g. Olivia"
@@ -120,8 +120,8 @@ export function CustomerFormSheet({
                 disabled={isSubmitting}
               />
             </div>
-            <div className="space-y-1">
-              <Label htmlFor="lastName" className="text-xs font-semibold">Last Name *</Label>
+            <div className="space-y-xs">
+              <Label htmlFor="lastName" className="text-label-sm font-semibold">Last Name *</Label>
               <Input
                 id="lastName"
                 placeholder="e.g. Vance"
@@ -132,8 +132,8 @@ export function CustomerFormSheet({
             </div>
           </div>
 
-          <div className="space-y-1">
-            <Label htmlFor="email" className="text-xs font-semibold">Email Address *</Label>
+          <div className="space-y-xs">
+            <Label htmlFor="email" className="text-label-sm font-semibold">Email Address *</Label>
             <Input
               id="email"
               type="email"
@@ -144,8 +144,8 @@ export function CustomerFormSheet({
             />
           </div>
 
-          <div className="space-y-1">
-            <Label htmlFor="phone" className="text-xs font-semibold">Phone Number</Label>
+          <div className="space-y-xs">
+            <Label htmlFor="phone" className="text-label-sm font-semibold">Phone Number</Label>
             <Input
               id="phone"
               type="tel"
@@ -156,8 +156,8 @@ export function CustomerFormSheet({
             />
           </div>
 
-          <div className="space-y-1">
-            <Label htmlFor="type" className="text-xs font-semibold">Customer Type *</Label>
+          <div className="space-y-xs">
+            <Label htmlFor="type" className="text-label-sm font-semibold">Customer Type *</Label>
             <Select
               value={customerType}
               onValueChange={(val) => setCustomerType(val as CustomerType)}
@@ -173,7 +173,7 @@ export function CustomerFormSheet({
             </Select>
           </div>
 
-          <div className="pt-4 flex flex-col sm:flex-row gap-2">
+          <div className="pt-md flex flex-col sm:flex-row gap-sm">
             <Button
               type="button"
               variant="outline"

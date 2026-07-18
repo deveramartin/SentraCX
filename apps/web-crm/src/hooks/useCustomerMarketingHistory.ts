@@ -18,7 +18,7 @@ export function useCustomerMarketingHistory({
   const [interactions, setInteractions] = useState<MarketingInteraction[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => Boolean(customerId));
   const [error, setError] = useState<string | null>(null);
 
   const fetchInteractions = useCallback(async () => {
@@ -38,8 +38,28 @@ export function useCustomerMarketingHistory({
   }, [customerId, page, pageSize]);
 
   useEffect(() => {
-    fetchInteractions();
-  }, [fetchInteractions]);
+    if (!customerId) return;
+    let isMounted = true;
+    crmClient.marketingInteractions.listByCustomer(customerId, page, pageSize)
+      .then((data) => {
+        if (isMounted) {
+          setInteractions(data.items || []);
+          setTotalCount(data.totalCount || 0);
+          setTotalPages(data.totalPages || 1);
+          setError(null);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (isMounted) {
+          setError(err instanceof Error ? err.message : "Failed to load marketing history.");
+          setIsLoading(false);
+        }
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, [customerId, page, pageSize]);
 
   return {
     interactions,

@@ -26,24 +26,24 @@ export function CustomerOverviewTab({
   const recentInteractions = interactions.slice(0, 5);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-lg">
       {/* Basic Attributes Grid - Mobile First */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-muted/40 p-4 sm:p-6 rounded-xl border border-border">
-        <div className="space-y-1">
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Email</span>
-          <p className="text-sm font-medium text-foreground truncate">{customer.email}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-md bg-muted/40 p-lg rounded-xl border border-border">
+        <div className="space-y-xs">
+          <span className="text-label-sm font-semibold text-muted-foreground uppercase tracking-wider block">Email</span>
+          <p className="text-body-sm font-medium text-foreground truncate">{customer.email}</p>
         </div>
-        <div className="space-y-1">
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Phone</span>
-          <p className="text-sm font-medium text-foreground">{customer.phoneNumber || "—"}</p>
+        <div className="space-y-xs">
+          <span className="text-label-sm font-semibold text-muted-foreground uppercase tracking-wider block">Phone</span>
+          <p className="text-body-sm font-medium text-foreground">{customer.phoneNumber || "—"}</p>
         </div>
-        <div className="space-y-1">
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Customer Type</span>
-          <p className="text-sm font-medium text-foreground">{customer.customerType}</p>
+        <div className="space-y-xs">
+          <span className="text-label-sm font-semibold text-muted-foreground uppercase tracking-wider block">Customer Type</span>
+          <p className="text-body-sm font-medium text-foreground">{customer.customerType}</p>
         </div>
-        <div className="space-y-1">
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Account Created</span>
-          <p className="text-sm font-medium text-foreground">
+        <div className="space-y-xs">
+          <span className="text-label-sm font-semibold text-muted-foreground uppercase tracking-wider block">Account Created</span>
+          <p className="text-body-sm font-medium text-foreground">
             {new Date(customer.createdAt).toLocaleDateString()}
           </p>
         </div>
@@ -59,30 +59,30 @@ export function CustomerOverviewTab({
       />
 
       {/* Recent Orders Preview */}
-      <div className="space-y-3">
+      <div className="space-y-sm">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold text-foreground">Recent Orders</h3>
+          <h3 className="text-label-md font-bold text-foreground">Recent Orders</h3>
           <Button
             variant="link"
             size="sm"
             onClick={() => onSelectTab("orders")}
-            className="text-xs p-0 h-auto font-semibold"
+            className="text-label-sm p-0 h-auto font-semibold"
           >
             View all ({orders.length})
           </Button>
         </div>
         {recentOrders.length === 0 ? (
-          <p className="text-xs text-muted-foreground italic">No recent orders recorded.</p>
+          <p className="text-body-sm text-muted-foreground italic">No recent orders recorded.</p>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-xs">
             {recentOrders.map((o) => (
               <div
                 key={o.id}
-                className="flex items-center justify-between p-3 bg-background border border-border rounded-lg text-xs sm:text-sm"
+                className="flex items-center justify-between p-sm bg-background border border-border rounded-lg text-body-sm"
               >
                 <span className="font-semibold text-foreground">{o.orderNumber}</span>
                 <span className="font-medium">${o.totalAmount.toLocaleString()}</span>
-                <Badge variant="outline" className="text-[10px]">
+                <Badge variant="outline" className="text-label-sm">
                   {o.status}
                 </Badge>
               </div>
@@ -92,29 +92,29 @@ export function CustomerOverviewTab({
       </div>
 
       {/* Recent Marketing Preview */}
-      <div className="space-y-3">
+      <div className="space-y-sm">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold text-foreground">Recent Marketing Interactions</h3>
+          <h3 className="text-label-md font-bold text-foreground">Recent Marketing Interactions</h3>
           <Button
             variant="link"
             size="sm"
             onClick={() => onSelectTab("marketing")}
-            className="text-xs p-0 h-auto font-semibold"
+            className="text-label-sm p-0 h-auto font-semibold"
           >
             View all
           </Button>
         </div>
         {recentInteractions.length === 0 ? (
-          <p className="text-xs text-muted-foreground italic">No recent marketing interactions.</p>
+          <p className="text-body-sm text-muted-foreground italic">No recent marketing interactions.</p>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-xs">
             {recentInteractions.map((m) => (
               <div
                 key={m.id}
-                className="flex items-center justify-between p-3 bg-background border border-border rounded-lg text-xs sm:text-sm"
+                className="flex items-center justify-between p-sm bg-background border border-border rounded-lg text-body-sm"
               >
-                <span className="font-semibold text-foreground truncate pr-2">{m.title}</span>
-                <Badge variant="outline" className="text-[10px] shrink-0">
+                <span className="font-semibold text-foreground truncate pr-sm">{m.title}</span>
+                <Badge variant="outline" className="text-label-sm shrink-0">
                   {m.channel}
                 </Badge>
               </div>

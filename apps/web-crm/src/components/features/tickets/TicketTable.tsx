@@ -45,22 +45,22 @@ export function TicketTable({
   const getStatusIcon = (status: SupportTicket["status"]) => {
     switch (status) {
       case "Open":
-        return <Circle className="w-4 h-4 text-red-500 shrink-0" />;
+        return <Circle className="w-4 h-4 text-destructive shrink-0" />;
       case "In Progress":
-        return <Clock className="w-4 h-4 text-sky-500 shrink-0" />;
+        return <Clock className="w-4 h-4 text-info shrink-0" />;
       case "Resolved":
-        return <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />;
+        return <CheckCircle2 className="w-4 h-4 text-success shrink-0" />;
     }
   };
 
   const getPriorityIcon = (priority: SupportTicket["priority"]) => {
     switch (priority) {
       case "High":
-        return <ArrowUp className="w-4 h-4 text-red-600 shrink-0" />;
+        return <ArrowUp className="w-4 h-4 text-destructive shrink-0" />;
       case "Medium":
-        return <ArrowRight className="w-4 h-4 text-amber-500 shrink-0" />;
+        return <ArrowRight className="w-4 h-4 text-warning shrink-0" />;
       case "Low":
-        return <ArrowDown className="w-4 h-4 text-zinc-500 shrink-0" />;
+        return <ArrowDown className="w-4 h-4 text-muted-foreground shrink-0" />;
     }
   };
 
@@ -110,9 +110,9 @@ export function TicketTable({
                         className="w-4 h-4 accent-primary rounded border-input cursor-pointer"
                       />
                     </td>
-                    <td className="py-md px-md font-mono text-xs font-medium text-muted-foreground">{t.id}</td>
+                    <td className="py-md px-md font-mono text-label-sm font-medium text-muted-foreground">{t.id}</td>
                     <td className="py-md px-md flex items-center gap-xs">
-                      <Badge variant="outline" className="mr-sm font-semibold bg-muted/20 border-border text-[11px] py-0 px-2 rounded-md shrink-0 shadow-none text-foreground">
+                      <Badge variant="outline" className="mr-sm font-semibold bg-muted/20 border-border text-label-sm py-0 px-2 rounded-md shrink-0 shadow-none text-foreground">
                         {t.customer}
                       </Badge>
                       <span className="font-semibold text-foreground truncate max-w-sm md:max-w-md">{t.issue}</span>
@@ -120,13 +120,13 @@ export function TicketTable({
                     <td className="py-md px-md">
                       <div className="flex items-center gap-sm">
                         {getStatusIcon(t.status)}
-                        <span className="text-xs font-semibold text-foreground">{t.status}</span>
+                        <span className="text-label-sm font-semibold text-foreground">{t.status}</span>
                       </div>
                     </td>
                     <td className="py-md px-md">
                       <div className="flex items-center gap-sm">
                         {getPriorityIcon(t.priority)}
-                        <span className="text-xs text-muted-foreground">{t.priority}</span>
+                        <span className="text-label-sm text-muted-foreground">{t.priority}</span>
                       </div>
                     </td>
                     <td className="py-md pr-md text-right">
@@ -137,23 +137,23 @@ export function TicketTable({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="bg-popover border-border w-40" align="end">
-                          <DropdownMenuLabel className="text-xs text-muted-foreground font-semibold">Row Actions</DropdownMenuLabel>
+                          <DropdownMenuLabel className="text-label-sm text-muted-foreground font-semibold">Row Actions</DropdownMenuLabel>
                           <DropdownMenuSeparator className="bg-border" />
                           <DropdownMenuItem
-                            className="cursor-pointer text-xs font-medium hover:bg-accent"
+                            className="cursor-pointer text-label-sm font-medium hover:bg-accent"
                             onClick={() => onCycleStatus(t.id)}
                           >
                             Cycle Status
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            className="cursor-pointer text-xs font-medium hover:bg-accent"
+                            className="cursor-pointer text-label-sm font-medium hover:bg-accent"
                             onClick={() => onShowToast(`Ticket ID ${t.id} copied to clipboard!`)}
                           >
                             Copy ID
                           </DropdownMenuItem>
                           <DropdownMenuSeparator className="bg-border" />
                           <DropdownMenuItem
-                            className="cursor-pointer text-xs font-medium hover:bg-destructive/10 text-destructive"
+                            className="cursor-pointer text-label-sm font-medium hover:bg-destructive/10 text-destructive"
                             onClick={() => onDeleteTicket(t.id)}
                           >
                             Delete Task

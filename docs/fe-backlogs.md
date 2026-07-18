@@ -9,7 +9,7 @@ Each item maps to its BRD requirement(s) where applicable, so tasks can be trace
 ### CRM-001 — Customer Profiles (Contacts & Leads)
 *Maps to: BR-CRM-01*
 
-- [ ] Customer module with separate tabs for **contacts** and **leads**
+- [ ] Customer module with separate tabs for **contacts** and **leads
 - [ ] Contact/lead list view showing name, email, phone (optional), customer type, created at
 - [ ] "Add new customer contact/lead" form: first name, last name, email, phone (optional), customer type
 - [ ] Delete customer contact/lead action (with confirmation)

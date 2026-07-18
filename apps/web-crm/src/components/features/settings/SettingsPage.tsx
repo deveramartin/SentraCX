@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Settings, Save, Shield, Bell, Network } from "lucide-react";
+import { Save, Shield, Bell, Network } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,7 +58,7 @@ export function SettingsPage() {
             onClick={handleSave}
             className="self-start md:self-center"
           >
-            <Save className="w-4 h-4 mr-1" />
+            <Save />
             Save Changes
           </Button>
         </div>
@@ -115,7 +115,7 @@ export function SettingsPage() {
               <div className="flex items-center justify-between py-xs">
                 <div>
                   <h4 className="text-body-sm font-bold text-foreground">Priority Email Alerts</h4>
-                  <p className="text-xs text-muted-foreground">Dispatched when churn risk predictions cross 60% limit.</p>
+                  <p className="text-body-sm text-muted-foreground">Dispatched when churn risk predictions cross 60% limit.</p>
                 </div>
                 <button
                   type="button"
@@ -133,7 +133,7 @@ export function SettingsPage() {
               <div className="flex items-center justify-between py-xs border-t border-border pt-lg">
                 <div>
                   <h4 className="text-body-sm font-bold text-foreground">Weekly AI Forecasts</h4>
-                  <p className="text-xs text-muted-foreground">Receive weekly updates on customer lifetime predictions.</p>
+                  <p className="text-body-sm text-muted-foreground">Receive weekly updates on customer lifetime predictions.</p>
                 </div>
                 <button
                   type="button"

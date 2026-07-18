@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export default function SignInPage() {
   return (
-    <Suspense fallback={<div style={{ padding: 40, fontFamily: "sans-serif" }}>Loading...</div>}>
+    <Suspense fallback={<div className="p-xl font-sans text-body-md text-muted-foreground">Loading...</div>}>
       <RedirectToLogin />
     </Suspense>
   );
