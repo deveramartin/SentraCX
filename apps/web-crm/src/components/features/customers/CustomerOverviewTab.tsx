@@ -6,6 +6,7 @@ import { CustomerNotesEditor } from "./CustomerNotesEditor";
 import { useCustomerOrders } from "@/hooks/useCustomerOrders";
 import { useCustomerMarketingHistory } from "@/hooks/useCustomerMarketingHistory";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface CustomerOverviewTabProps {
   customer: Customer;
@@ -61,12 +62,14 @@ export function CustomerOverviewTab({
       <div className="space-y-sm">
         <div className="flex items-center justify-between">
           <h3 className="text-label-md font-bold text-primary">Recent Orders</h3>
-          <button
+          <Button
+            variant="link"
+            size="sm"
             onClick={() => onSelectTab("orders")}
-            className="text-xs text-primary font-semibold hover:underline"
+            className="text-xs p-0 h-auto font-semibold text-primary"
           >
             View all ({orders.length})
-          </button>
+          </Button>
         </div>
         {recentOrders.length === 0 ? (
           <p className="text-xs text-muted-foreground italic">No recent orders recorded.</p>
@@ -92,12 +95,14 @@ export function CustomerOverviewTab({
       <div className="space-y-sm">
         <div className="flex items-center justify-between">
           <h3 className="text-label-md font-bold text-primary">Recent Marketing Interactions</h3>
-          <button
+          <Button
+            variant="link"
+            size="sm"
             onClick={() => onSelectTab("marketing")}
-            className="text-xs text-primary font-semibold hover:underline"
+            className="text-xs p-0 h-auto font-semibold text-primary"
           >
             View all
-          </button>
+          </Button>
         </div>
         {recentInteractions.length === 0 ? (
           <p className="text-xs text-muted-foreground italic">No recent marketing interactions.</p>
