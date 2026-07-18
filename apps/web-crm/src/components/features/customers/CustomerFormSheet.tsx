@@ -63,7 +63,7 @@ export function CustomerFormSheet({
     });
 
     if (!validation.success) {
-      const firstError = validation.error.errors[0]?.message || "Validation failed.";
+      const firstError = validation.error.issues[0]?.message || "Validation failed.";
       setFormError(firstError);
       return;
     }
