@@ -12,6 +12,7 @@ import {
   MoreVertical,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSidebar } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +24,7 @@ import {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { open } = useSidebar();
 
   const navItems = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -33,8 +35,10 @@ export function Sidebar() {
     { name: "Settings", href: "/settings", icon: Settings },
   ];
 
+  if (!open) return null;
+
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 flex flex-col py-6 border-r border-border bg-sidebar text-sidebar-foreground z-[60] hidden md:flex">
+    <aside className="fixed left-0 top-0 h-full w-64 flex flex-col py-6 border-r border-border bg-sidebar text-sidebar-foreground z-[60] transition-all duration-300 shadow-lg md:shadow-none">
       {/* Brand Header */}
       <div className="px-6 mb-6">
         <h1 className="text-xl font-bold tracking-tight text-sidebar-foreground">Bren Raphael's</h1>

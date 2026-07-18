@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Search, Bell, HelpCircle, User, LogOut, Settings } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Menu, Bell, HelpCircle, User, LogOut, Settings, PanelLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSidebar } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +25,7 @@ import {
 export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { toggleSidebar } = useSidebar();
 
   const navItems = [
     { name: "Dashboard", href: "/" },
@@ -44,13 +45,24 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 flex justify-between items-center w-full px-6 h-16 bg-background border-b border-border">
-      {/* Left: Mobile trigger, Global search, System nav */}
-      <div className="flex items-center gap-6 flex-1">
+    <header className="sticky top-0 z-50 flex justify-between items-center w-full px-4 sm:px-6 h-16 bg-background border-b border-border">
+      {/* Left: Sidebar Toggle Button (outside sidebar) & System Nav */}
+      <div className="flex items-center gap-3 sm:gap-6 flex-1">
+        {/* Sidebar Toggle Button (outside sidebar) */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSidebar}
+          className="text-muted-foreground hover:text-foreground h-9 w-9 cursor-pointer"
+          title="Toggle Sidebar"
+        >
+          <PanelLeft className="w-5 h-5" />
+        </Button>
+
         {/* Mobile menu trigger */}
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden -ml-2 text-muted-foreground hover:text-foreground">
+            <Button variant="ghost" size="icon" className="md:hidden text-muted-foreground hover:text-foreground h-9 w-9">
               <Menu className="w-5 h-5" />
             </Button>
           </SheetTrigger>
@@ -79,16 +91,6 @@ export function Header() {
             </nav>
           </SheetContent>
         </Sheet>
-
-        {/* Global Search Bar */}
-        <div className="hidden sm:flex items-center bg-muted/50 rounded-full px-3 py-1 w-full max-w-md border border-input focus-within:border-ring transition-all">
-          <Search className="text-muted-foreground w-4 h-4 mr-2 shrink-0" />
-          <Input
-            className="bg-transparent border-none shadow-none focus-visible:ring-0 text-xs w-full placeholder:text-muted-foreground text-foreground h-7 px-0 py-0"
-            placeholder="Global search..."
-            type="text"
-          />
-        </div>
 
         {/* System Navigation Links */}
         <nav className="hidden lg:flex items-center gap-4 ml-2">
