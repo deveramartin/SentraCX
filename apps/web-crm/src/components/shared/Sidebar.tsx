@@ -10,6 +10,13 @@ import {
   Megaphone,
   Settings,
   MoreVertical,
+  ChevronsUpDown,
+  Check,
+  Building2,
+  ShoppingCart,
+  Users2,
+  CreditCard,
+  Truck,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -35,14 +42,86 @@ export function Sidebar() {
     { name: "Settings", href: "/settings", icon: Settings },
   ];
 
+  const systems = [
+    {
+      fullName: "Customer Relationship Management",
+      desc: "Customer profiles, tickets & marketing",
+      icon: Building2,
+      active: true,
+    },
+    {
+      fullName: "E-Commerce Storefront",
+      desc: "Online orders & products",
+      icon: ShoppingCart,
+      active: false,
+    },
+    {
+      fullName: "Human Resource Management",
+      desc: "Staff directory & payroll",
+      icon: Users2,
+      active: false,
+    },
+    {
+      fullName: "Point of Sale",
+      desc: "Retail & register checkout",
+      icon: CreditCard,
+      active: false,
+    },
+    {
+      fullName: "Supply Chain Management",
+      desc: "Inventory & logistics",
+      icon: Truck,
+      active: false,
+    },
+  ];
+
   if (!open) return null;
 
   return (
     <aside className="fixed left-0 top-0 h-full w-64 flex flex-col py-6 border-r border-border bg-sidebar text-sidebar-foreground z-[60] transition-all duration-300 shadow-lg md:shadow-none">
-      {/* Brand Header */}
-      <div className="px-6 mb-6">
-        <h1 className="text-xl font-bold tracking-tight text-sidebar-foreground">Bren Raphael's</h1>
-        <p className="text-xs text-muted-foreground">Enterprise Portal</p>
+      {/* Borderless Large Logo & Version Switcher Header */}
+      <div className="px-4 mb-6">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="flex items-center justify-between p-2 rounded-lg hover:bg-sidebar-accent cursor-pointer transition-colors group">
+              <div className="flex flex-col min-w-0 pr-2">
+                <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-sidebar-foreground truncate">
+                  Bren Raphael's
+                </h1>
+                <p className="text-xs font-semibold text-muted-foreground truncate mt-0.5">
+                  Customer Relationship Management
+                </p>
+              </div>
+              <ChevronsUpDown className="w-4 h-4 text-muted-foreground shrink-0 group-hover:text-sidebar-foreground transition-colors" />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-64 bg-popover border-border text-popover-foreground" align="start" side="bottom">
+            <DropdownMenuLabel className="text-xs text-muted-foreground font-semibold">
+              Select Enterprise Module
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator className="bg-border" />
+            {systems.map((sys) => {
+              const SysIcon = sys.icon;
+              return (
+                <DropdownMenuItem
+                  key={sys.fullName}
+                  className="cursor-pointer text-xs flex items-center justify-between py-2.5 px-3 hover:bg-accent font-medium"
+                >
+                  <div className="flex items-center gap-2.5 overflow-hidden">
+                    <SysIcon className="w-4 h-4 text-muted-foreground shrink-0" />
+                    <div className="flex flex-col overflow-hidden">
+                      <span className={`font-semibold truncate ${sys.active ? "text-foreground font-bold" : ""}`}>
+                        {sys.fullName}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground truncate">{sys.desc}</span>
+                    </div>
+                  </div>
+                  {sys.active && <Check className="w-4 h-4 text-primary shrink-0 ml-2" />}
+                </DropdownMenuItem>
+              );
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Navigation Links */}
