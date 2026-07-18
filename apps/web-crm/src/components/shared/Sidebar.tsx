@@ -182,20 +182,23 @@ export function Sidebar() {
       <div className="px-4 mt-auto pt-4 border-t border-border">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-sidebar-accent transition-colors cursor-pointer group">
-              <Avatar className="w-9 h-9 border border-border shrink-0">
-                <AvatarImage
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmN3cisO6-__3amuuQs9HUIpCz4TETRbyjrnu6EVNy2ZR5yYtQH2H1K4r--KKrPb2XfLrYtuNnfV6VwnXGG_ypUNFqWjm8EIzXq34nPGsMFNniMF6D0O4IeXnEpLuhpSqO1kEoYwFIPtY49IzTbJ6E6af-bEr_rrvZDB6_DPRpobOCqDHjwT-QItw70F98rUOwgt-ocSgDmReBZ57Oi3D4YhaostxGM1OkePOcgArmsDcEPH9VzaSpEw"
-                  alt={currentAccount.name}
-                  className="object-cover"
-                />
-                <AvatarFallback className="text-xs bg-primary text-primary-foreground font-bold">
-                  BR
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1 overflow-hidden">
-                <p className="text-xs font-bold truncate text-sidebar-foreground">{currentAccount.name}</p>
-                <p className="text-[11px] text-muted-foreground truncate">{currentAccount.role}</p>
+            <div className="flex items-center gap-3.5 p-2 rounded-xl hover:bg-sidebar-accent transition-colors cursor-pointer group">
+              <div className="relative shrink-0">
+                <Avatar className="w-11 h-11 border-2 border-border shadow-sm">
+                  <AvatarImage
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmN3cisO6-__3amuuQs9HUIpCz4TETRbyjrnu6EVNy2ZR5yYtQH2H1K4r--KKrPb2XfLrYtuNnfV6VwnXGG_ypUNFqWjm8EIzXq34nPGsMFNniMF6D0O4IeXnEpLuhpSqO1kEoYwFIPtY49IzTbJ6E6af-bEr_rrvZDB6_DPRpobOCqDHjwT-QItw70F98rUOwgt-ocSgDmReBZ57Oi3D4YhaostxGM1OkePOcgArmsDcEPH9VzaSpEw"
+                    alt={currentAccount.name}
+                    className="object-cover"
+                  />
+                  <AvatarFallback className="text-sm bg-primary text-primary-foreground font-bold">
+                    BR
+                  </AvatarFallback>
+                </Avatar>
+                <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-sidebar" title="Online" />
+              </div>
+              <div className="flex-1 overflow-hidden space-y-0.5">
+                <p className="text-sm font-bold truncate text-sidebar-foreground leading-tight">{currentAccount.name}</p>
+                <p className="text-xs font-medium text-muted-foreground truncate leading-tight">{currentAccount.role}</p>
               </div>
               <MoreVertical className="w-4 h-4 text-muted-foreground shrink-0 group-hover:text-sidebar-foreground transition-colors" />
             </div>
