@@ -4,20 +4,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
-  Users,
-  MessageSquare,
-  Ticket,
-  Megaphone,
-  Settings,
   MoreVertical,
   ChevronsUpDown,
   Check,
-  Building2,
-  ShoppingCart,
-  Users2,
-  CreditCard,
-  Truck,
   User,
   Shield,
   Activity,
@@ -36,74 +25,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { navItems, systems, accounts } from "./SidebarNav";
 
 export function Sidebar() {
   const pathname = usePathname();
   const { open } = useSidebar();
   const [activeAccount, setActiveAccount] = useState("admin");
-
-  const navItems = [
-    { name: "Dashboard", href: "/", icon: LayoutDashboard },
-    { name: "Customers", href: "/customers", icon: Users },
-    { name: "Conversations", href: "/conversations", icon: MessageSquare },
-    { name: "Tickets", href: "/tickets", icon: Ticket },
-    { name: "Campaigns", href: "/campaigns", icon: Megaphone },
-    { name: "Settings", href: "/settings", icon: Settings },
-  ];
-
-  const systems = [
-    {
-      fullName: "Customer Relationship Management",
-      desc: "Customer profiles, tickets & marketing",
-      icon: Building2,
-      active: true,
-    },
-    {
-      fullName: "E-Commerce Storefront",
-      desc: "Online orders & products",
-      icon: ShoppingCart,
-      active: false,
-    },
-    {
-      fullName: "Human Resource Management",
-      desc: "Staff directory & payroll",
-      icon: Users2,
-      active: false,
-    },
-    {
-      fullName: "Point of Sale",
-      desc: "Retail & register checkout",
-      icon: CreditCard,
-      active: false,
-    },
-    {
-      fullName: "Supply Chain Management",
-      desc: "Inventory & logistics",
-      icon: Truck,
-      active: false,
-    },
-  ];
-
-  const accounts = [
-    {
-      id: "admin",
-      name: "Bren Raphael",
-      role: "Administrator",
-      email: "bren@sentracx.com",
-    },
-    {
-      id: "support",
-      name: "Support Lead Account",
-      role: "Support Manager",
-      email: "support.lead@sentracx.com",
-    },
-    {
-      id: "sales",
-      name: "Sales Ops Account",
-      role: "Sales Lead",
-      email: "sales.ops@sentracx.com",
-    },
-  ];
 
   const currentAccount = accounts.find((a) => a.id === activeAccount) || accounts[0];
 
@@ -111,14 +38,14 @@ export function Sidebar() {
 
   return (
     <aside className="fixed left-0 top-0 h-full w-64 flex flex-col py-6 border-r border-border bg-sidebar text-sidebar-foreground z-[60] transition-all duration-300 shadow-lg md:shadow-none">
-      {/* Borderless Large Logo & Version Switcher Header */}
+      {/* Logo & System Switcher */}
       <div className="px-4 mb-6">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="flex items-center justify-between p-2 rounded-lg hover:bg-sidebar-accent cursor-pointer transition-colors group">
               <div className="flex flex-col min-w-0 pr-2">
                 <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-sidebar-foreground truncate">
-                  Bren Raphael's
+                  Bren Raphael&apos;s
                 </h1>
                 <p className="text-xs font-semibold text-muted-foreground truncate mt-0.5">
                   Customer Relationship Management
@@ -178,18 +105,13 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Sidebar Footer / Prettier Interactive Profile Switcher */}
+      {/* Profile Switcher Footer */}
       <div className="px-4 mt-auto pt-4 border-t border-border">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="flex items-center gap-3.5 p-2 rounded-xl hover:bg-sidebar-accent transition-colors cursor-pointer group">
               <div className="relative shrink-0">
                 <Avatar className="w-11 h-11 border-2 border-border shadow-sm">
-                  <AvatarImage
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmN3cisO6-__3amuuQs9HUIpCz4TETRbyjrnu6EVNy2ZR5yYtQH2H1K4r--KKrPb2XfLrYtuNnfV6VwnXGG_ypUNFqWjm8EIzXq34nPGsMFNniMF6D0O4IeXnEpLuhpSqO1kEoYwFIPtY49IzTbJ6E6af-bEr_rrvZDB6_DPRpobOCqDHjwT-QItw70F98rUOwgt-ocSgDmReBZ57Oi3D4YhaostxGM1OkePOcgArmsDcEPH9VzaSpEw"
-                    alt={currentAccount.name}
-                    className="object-cover"
-                  />
                   <AvatarFallback className="text-sm bg-primary text-primary-foreground font-bold">
                     BR
                   </AvatarFallback>
@@ -205,17 +127,9 @@ export function Sidebar() {
           </DropdownMenuTrigger>
 
           <DropdownMenuContent className="w-64 bg-popover border-border text-popover-foreground z-[999] shadow-xl p-2" side="top" align="start">
-            {/* User Details Box */}
             <div className="p-3 bg-muted/40 rounded-lg border border-border mb-2 flex items-center gap-3">
               <Avatar className="w-10 h-10 border border-border shrink-0">
-                <AvatarImage
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmN3cisO6-__3amuuQs9HUIpCz4TETRbyjrnu6EVNy2ZR5yYtQH2H1K4r--KKrPb2XfLrYtuNnfV6VwnXGG_ypUNFqWjm8EIzXq34nPGsMFNniMF6D0O4IeXnEpLuhpSqO1kEoYwFIPtY49IzTbJ6E6af-bEr_rrvZDB6_DPRpobOCqDHjwT-QItw70F98rUOwgt-ocSgDmReBZ57Oi3D4YhaostxGM1OkePOcgArmsDcEPH9VzaSpEw"
-                  alt={currentAccount.name}
-                  className="object-cover"
-                />
-                <AvatarFallback className="text-xs bg-primary text-primary-foreground font-bold">
-                  BR
-                </AvatarFallback>
+                <AvatarFallback className="text-xs bg-primary text-primary-foreground font-bold">BR</AvatarFallback>
               </Avatar>
               <div className="flex flex-col min-w-0 overflow-hidden">
                 <span className="text-xs font-bold text-foreground truncate">{currentAccount.name}</span>
@@ -226,7 +140,6 @@ export function Sidebar() {
               </div>
             </div>
 
-            {/* Account / Role Switcher Section */}
             <DropdownMenuLabel className="text-[11px] text-muted-foreground font-semibold px-2 py-1 flex items-center gap-1">
               <Sparkles className="w-3 h-3" /> Switch Role / Account
             </DropdownMenuLabel>
@@ -253,7 +166,6 @@ export function Sidebar() {
 
             <DropdownMenuSeparator className="bg-border" />
 
-            {/* Profile Action Items */}
             <DropdownMenuItem className="cursor-pointer text-xs font-medium gap-2 p-2 hover:bg-accent">
               <User className="w-3.5 h-3.5 text-muted-foreground" />
               <span>Profile Settings</span>

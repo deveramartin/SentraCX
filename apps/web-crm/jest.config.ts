@@ -11,7 +11,10 @@ const config: Config = {
   transform: {
     "^.+\\.(t|j)sx?$": ["babel-jest", { configFile: "./babel.config.test.js" }],
   },
-  testMatch: ["<rootDir>/src/**/*.test.ts", "<rootDir>/src/**/*.test.tsx"],
+  testMatch: [
+    "<rootDir>/src/__tests__/**/*.test.ts",
+    "<rootDir>/src/__tests__/**/*.test.tsx",
+  ],
   coverageDirectory: "coverage",
   collectCoverageFrom: [
     "src/**/*.{ts,tsx}",
@@ -19,6 +22,7 @@ const config: Config = {
     "!src/app/**",
     "!src/styles/**",
     "!src/__mocks__/**",
+    "!src/__tests__/**",
   ],
 };
 

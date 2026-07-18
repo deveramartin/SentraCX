@@ -1,4 +1,4 @@
-import { RedirectToLogin } from "@/components/RedirectToLogin";
+import { RedirectToLogin } from "@/components/shared/RedirectToLogin";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
