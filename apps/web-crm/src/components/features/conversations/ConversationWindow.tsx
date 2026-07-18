@@ -91,11 +91,7 @@ export function ConversationWindow({
           onChange={(e) => onTypedMessageChange(e.target.value)}
           className="flex-1 bg-surface-container-low border-outline-variant focus:border-primary text-body-sm"
         />
-        <Button
-          type="submit"
-          size="icon"
-          className="bg-primary hover:bg-neutral-800 text-on-primary cursor-pointer"
-        >
+        <Button type="submit" size="icon">
           <Send className="w-4 h-4" />
         </Button>
       </form>

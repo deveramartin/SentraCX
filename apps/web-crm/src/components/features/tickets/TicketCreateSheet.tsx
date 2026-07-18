@@ -48,7 +48,7 @@ export function TicketCreateSheet({ onCreateTicket, nextId }: TicketCreateSheetP
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button className="flex items-center gap-sm px-md py-sm bg-primary text-primary-foreground hover:bg-neutral-800 transition-colors font-medium rounded-lg text-label-md cursor-pointer self-start sm:self-center shadow-sm">
+        <Button className="flex items-center gap-2 self-start sm:self-center">
           <Plus className="w-4 h-4" />
           Create Task
         </Button>
@@ -96,7 +96,7 @@ export function TicketCreateSheet({ onCreateTicket, nextId }: TicketCreateSheetP
             </div>
           </div>
           <div className="pt-xl">
-            <Button type="submit" className="w-full bg-primary hover:bg-neutral-800 text-primary-foreground">
+            <Button type="submit" className="w-full">
               Create Task
             </Button>
           </div>

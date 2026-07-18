@@ -47,17 +47,17 @@ export function CampaignTable({
 
           <div className="flex items-center gap-xs border border-outline-variant rounded-lg p-0.5 bg-surface-container shrink-0">
             {["All", "Active", "Scheduled", "Completed"].map((status) => (
-              <button
+              <Button
                 key={status}
+                size="sm"
+                variant={statusFilter === status ? "secondary" : "ghost"}
                 onClick={() => onStatusFilterChange(status)}
-                className={`px-sm py-1 rounded-md text-xs font-medium transition-all cursor-pointer ${
-                  statusFilter === status
-                    ? "bg-surface-container-lowest text-primary font-bold shadow-sm"
-                    : "text-on-surface-variant hover:text-primary"
+                className={`h-7 px-3 text-xs font-semibold ${
+                  statusFilter === status ? "shadow-sm font-bold" : "text-muted-foreground"
                 }`}
               >
                 {status}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

@@ -71,7 +71,9 @@ export function CustomerContextPanel({ activeChat, onUseTemplate }: CustomerCont
           "{smartReply}"
         </p>
         <Button
-          className="w-full text-[10px] py-1 h-7 bg-white text-black hover:bg-neutral-200 mt-xs cursor-pointer font-bold"
+          variant="secondary"
+          size="sm"
+          className="w-full text-xs font-bold mt-xs"
           onClick={() => onUseTemplate(smartReply)}
         >
           Use Template

@@ -56,9 +56,9 @@ export function SettingsPage() {
           
           <Button 
             onClick={handleSave}
-            className="flex items-center justify-center gap-sm bg-primary text-primary-foreground hover:bg-neutral-800 transition-colors font-medium rounded-lg text-label-md cursor-pointer py-2 px-4 self-start md:self-center"
+            className="self-start md:self-center"
           >
-            <Save className="w-4 h-4" />
+            <Save className="w-4 h-4 mr-1" />
             Save Changes
           </Button>
         </div>

@@ -49,7 +49,7 @@ export function CampaignLaunchSheet({ onLaunchCampaign, nextIdNum }: CampaignLau
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button className="flex items-center gap-sm px-md py-sm bg-primary text-on-primary hover:bg-neutral-800 transition-colors font-medium rounded-lg text-label-md cursor-pointer self-start sm:self-center">
+        <Button className="flex items-center gap-2 self-start sm:self-center">
           <Plus className="w-4 h-4" />
           New Campaign
         </Button>
@@ -98,7 +98,7 @@ export function CampaignLaunchSheet({ onLaunchCampaign, nextIdNum }: CampaignLau
             </div>
           </div>
           <div className="pt-xl">
-            <Button type="submit" className="w-full bg-primary hover:bg-neutral-800 text-on-primary">
+            <Button type="submit" className="w-full">
               Deploy Campaign
             </Button>
           </div>

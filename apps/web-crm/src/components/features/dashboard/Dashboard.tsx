@@ -45,13 +45,12 @@ export function Dashboard() {
           <h2 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h2>
         </div>
         <div className="flex items-center gap-sm">
-          <Button variant="outline" size="sm" className="h-9 flex items-center gap-xs text-xs font-semibold cursor-pointer">
+          <Button variant="outline" size="sm">
             <Clock className="w-3.5 h-3.5 mr-1" />
             Jan 01, 2026 - Jun 30, 2026
           </Button>
           <Button
             size="sm"
-            className="h-9 bg-primary text-primary-foreground hover:bg-neutral-800 transition-colors font-medium rounded-lg text-xs cursor-pointer px-4"
             onClick={() => showToast("Downloading CSV reports...")}
           >
             Download Report

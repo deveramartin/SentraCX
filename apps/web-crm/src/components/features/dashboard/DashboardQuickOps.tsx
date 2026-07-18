@@ -60,8 +60,8 @@ export function DashboardQuickOps({ onCreateTicket, onShowToast }: DashboardQuic
       <div className="flex flex-wrap items-center gap-sm">
         <Sheet open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <SheetTrigger asChild>
-            <Button className="bg-primary text-primary-foreground hover:bg-neutral-800 transition-colors font-medium rounded-lg text-label-md cursor-pointer py-2 px-4">
-              <Plus className="w-4 h-4 mr-sm" />
+            <Button>
+              <Plus className="w-4 h-4 mr-1" />
               Create New Ticket
             </Button>
           </SheetTrigger>
@@ -108,7 +108,7 @@ export function DashboardQuickOps({ onCreateTicket, onShowToast }: DashboardQuic
                 </div>
               </div>
               <div className="pt-xl">
-                <Button type="submit" className="w-full bg-primary hover:bg-neutral-800 text-primary-foreground">
+                <Button type="submit" className="w-full">
                   Submit Ticket
                 </Button>
               </div>
@@ -118,7 +118,6 @@ export function DashboardQuickOps({ onCreateTicket, onShowToast }: DashboardQuic
 
         <Button
           variant="outline"
-          className="border border-border text-foreground hover:bg-muted transition-colors font-medium rounded-lg text-label-md cursor-pointer"
           onClick={() => onShowToast("Marketing Campaign launched successfully!")}
         >
           Launch Campaign
@@ -126,7 +125,6 @@ export function DashboardQuickOps({ onCreateTicket, onShowToast }: DashboardQuic
 
         <Button
           variant="ghost"
-          className="text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors font-medium rounded-lg text-label-md cursor-pointer"
           onClick={() => onShowToast("SSO Configuration settings fetched.")}
         >
           Configure SSO Gateway
