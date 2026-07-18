@@ -9,7 +9,7 @@ import {
   Ticket,
   Megaphone,
   Settings,
-  MoreVertical
+  MoreVertical,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -20,17 +20,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Sidebar as ShadcnSidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarGroup,
-  SidebarGroupContent,
-} from "@/components/ui/sidebar";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -45,77 +34,68 @@ export function Sidebar() {
   ];
 
   return (
-    <ShadcnSidebar className="border-r border-sidebar-border bg-sidebar">
+    <aside className="fixed left-0 top-0 h-full w-64 flex flex-col py-6 border-r border-border bg-sidebar text-sidebar-foreground z-[60] hidden md:flex">
       {/* Brand Header */}
-      <SidebarHeader className="p-4 border-b border-sidebar-border">
-        <div className="flex flex-col gap-xs px-2">
-          <h2 className="text-sm font-bold tracking-tight text-sidebar-foreground">Bren Raphael's</h2>
-          <p className="text-[11px] text-muted-foreground">Enterprise Portal</p>
-        </div>
-      </SidebarHeader>
-      
+      <div className="px-6 mb-6">
+        <h1 className="text-xl font-bold tracking-tight text-sidebar-foreground">Bren Raphael's</h1>
+        <p className="text-xs text-muted-foreground">Enterprise Portal</p>
+      </div>
+
       {/* Navigation Links */}
-      <SidebarContent className="py-2">
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname === item.href;
-                return (
-                  <SidebarMenuItem key={item.name}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive}
-                      tooltip={item.name}
-                      className="cursor-pointer font-medium text-xs h-9"
-                    >
-                      <Link href={item.href} className="flex items-center gap-sm">
-                        <Icon className="w-4 h-4 shrink-0" />
-                        <span>{item.name}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+      <nav className="flex-1 px-4 overflow-y-auto space-y-1">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                isActive
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
+                  : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground font-medium"
+              }`}
+            >
+              <Icon className="w-4 h-4 shrink-0" />
+              <span>{item.name}</span>
+            </Link>
+          );
+        })}
+      </nav>
 
       {/* Sidebar Footer/Avatar */}
-      <SidebarFooter className="p-4 border-t border-sidebar-border mt-auto">
+      <div className="px-4 mt-auto pt-4 border-t border-border">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <SidebarMenuButton className="h-12 w-full justify-start gap-md cursor-pointer hover:bg-sidebar-accent p-1">
-              <Avatar className="w-8 h-8">
-                <AvatarImage 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmN3cisO6-__3amuuQs9HUIpCz4TETRbyjrnu6EVNy2ZR5yYtQH2H1K4r--KKrPb2XfLrYtuNnfV6VwnXGG_ypUNFqWjm8EIzXq34nPGsMFNniMF6D0O4IeXnEpLuhpSqO1kEoYwFIPtY49IzTbJ6E6af-bEr_rrvZDB6_DPRpobOCqDHjwT-QItw70F98rUOwgt-ocSgDmReBZ57Oi3D4YhaostxGM1OkePOcgArmsDcEPH9VzaSpEw" 
+            <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-sidebar-accent transition-colors cursor-pointer">
+              <Avatar className="w-9 h-9 border border-border">
+                <AvatarImage
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmN3cisO6-__3amuuQs9HUIpCz4TETRbyjrnu6EVNy2ZR5yYtQH2H1K4r--KKrPb2XfLrYtuNnfV6VwnXGG_ypUNFqWjm8EIzXq34nPGsMFNniMF6D0O4IeXnEpLuhpSqO1kEoYwFIPtY49IzTbJ6E6af-bEr_rrvZDB6_DPRpobOCqDHjwT-QItw70F98rUOwgt-ocSgDmReBZ57Oi3D4YhaostxGM1OkePOcgArmsDcEPH9VzaSpEw"
                   alt="Bren Raphael"
                   className="object-cover"
                 />
-                <AvatarFallback className="text-[10px] bg-secondary text-secondary-foreground font-bold">BR</AvatarFallback>
+                <AvatarFallback className="text-xs bg-secondary text-secondary-foreground font-bold">BR</AvatarFallback>
               </Avatar>
-              <div className="flex-1 text-left overflow-hidden">
-                <p className="text-xs font-semibold truncate text-sidebar-foreground leading-none">Bren Raphael</p>
-                <p className="text-[10px] text-muted-foreground truncate mt-1">Administrator</p>
+              <div className="flex-1 overflow-hidden">
+                <p className="text-xs font-bold truncate text-sidebar-foreground">Bren Raphael</p>
+                <p className="text-[11px] text-muted-foreground truncate">Administrator</p>
               </div>
               <MoreVertical className="w-4 h-4 text-muted-foreground shrink-0" />
-            </SidebarMenuButton>
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56 bg-popover border-border text-popover-foreground" align="end" side="top">
             <DropdownMenuLabel className="text-xs text-muted-foreground font-semibold">My Account</DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-border" />
-            <DropdownMenuItem className="cursor-pointer text-xs hover:bg-accent font-medium">Profile Settings</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-xs hover:bg-accent font-medium">Security Options</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-xs hover:bg-accent font-medium">Activity Logs</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer text-xs font-medium">Profile Settings</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer text-xs font-medium">Security Options</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer text-xs font-medium">Activity Logs</DropdownMenuItem>
             <DropdownMenuSeparator className="bg-border" />
-            <DropdownMenuItem className="cursor-pointer text-xs hover:bg-destructive/10 text-destructive hover:text-destructive font-medium">
+            <DropdownMenuItem className="cursor-pointer text-xs text-destructive hover:text-destructive font-medium">
               Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </SidebarFooter>
-    </ShadcnSidebar>
+      </div>
+    </aside>
   );
 }
