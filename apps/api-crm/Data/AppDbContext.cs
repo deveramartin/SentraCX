@@ -8,6 +8,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<User> Users => Set<User>();
     public DbSet<CustomerProfile> CustomerProfiles => Set<CustomerProfile>();
     public DbSet<OrderHistory> OrderHistories => Set<OrderHistory>();
+    public DbSet<MarketingInteraction> MarketingInteractions => Set<MarketingInteraction>();
     public DbSet<Ticket> Tickets => Set<Ticket>();
     public DbSet<Message> Messages => Set<Message>();
 

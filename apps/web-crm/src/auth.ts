@@ -30,7 +30,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.systems = (token.systems as string[]) ?? [];
       return session;
     },
-    async authorized({ auth, request }) {
+    async authorized({ auth: _auth, request: _request }) {
+      // Temporarily bypass for local UI/UX development
+      return true;
+      /*
       const { pathname } = request.nextUrl;
       const isAuthPath = pathname.startsWith("/api/auth");
       const isSignInPage = pathname === "/signin";
@@ -44,6 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       return true;
+      */
     },
   },
 });

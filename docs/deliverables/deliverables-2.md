@@ -1,0 +1,288 @@
+# PROJECT MANAGEMENT
+
+## WEEK 3 DELIVERABLES
+**SentraCX Analytics & Predictive Enhancement**
+
+---
+
+## DELIVERABLE 2: DATA EXTRACTION SCRIPT
+
+### 2.1 README.md
+
+```markdown
+# SentraCX Data Extraction & Feature Engineering
+
+## Overview
+Unlike traditional batch data extraction (e.g., nightly cron jobs), the SentraCX architecture mandates strict microservice boundaries. The AI-Analytics service does **not** directly query the CRM PostgreSQL database. 
+
+Instead, data extraction and synchronization are performed synchronously via the `CustomerInsightsService`. This service fetches real-time customer and order data from the CRM REST API, builds machine learning feature vectors, runs the predictive models (Churn, CLV, NBA), and then persists the extraction logs into MongoDB.
+
+### Architecture & Data Flow
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant AI as AI-Analytics (FastAPI)
+    participant CRM as CRM API (.NET)
+    participant ML as ML Models
+    participant Redis as Redis Cache
+    participant Mongo as MongoDB
+    
+    Client->>AI: GET /api/v1/customers/{id}/insights
+    AI->>Redis: Check Cache
+    alt Cache Hit
+        Redis-->>AI: Return Cached Insights
+        AI-->>Client: Return JSON (Cached)
+    else Cache Miss
+        AI->>CRM: Fetch Customer Data & Orders (Read-Only)
+        CRM-->>AI: Return CRM Data
+        AI->>AI: Transform & Build Feature Vector
+        AI->>ML: Run Predict (Churn, CLV, NBA)
+        ML-->>AI: Return Predictions
+        AI->>Redis: Cache Result (24h TTL)
+        AI->>Mongo: Log Feature Vector (Historical)
+        AI-->>Client: Return JSON (Computed)
+    end
+```
+
+## Features
+- **Strict Microservice Isolation**: Fetches source data strictly via CRM REST API (`CrmClient`).
+- **Feature Engineering**: Calculates account age, order frequency, order value, and ticket counts on-the-fly.
+- **AI Predictions**: Executes `churn_model`, `clv_model`, and `nba_model` using the extracted features.
+- **Polyglot Persistence**: Caches output in **Redis** and logs features into **MongoDB**.
+
+## Setup Instructions
+
+### 1. Create Required Directories
+Create the necessary directories for MongoDB data and logs:
+```bash
+mkdir -p ~/.local/share/mongodb/data
+mkdir -p ~/.local/share/mongodb/log
+```
+
+### 2. Create Virtual Environment
+Create and activate an isolated Python environment for the extraction service:
+```bash
+cd apps/api-ai-analytics
+python -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Install Dependencies
+Install the required Python packages:
+```bash
+pip install -e ".[dev]"
+```
+
+### 4. Configure
+Set up the environment variables from the template:
+```bash
+cp .env.example .env.local
+```
+Edit `.env.local` to specify your `CRM_API_BASE_URL`, `MONGO_URI`, and `REDIS_URL`.
+
+### 5. Create Read-Only Access
+To ensure strict security and microservice isolation, configure the `CRM_SERVICE_TOKEN` in `.env.local`. This token provides the AI-Analytics service with **read-only** scope when accessing the CRM REST API, preventing accidental modifications to the CRM PostgreSQL database during extraction.
+
+## Usage (API Endpoint)
+This extraction is triggered via the FastApi endpoint:
+`GET /api/v1/customers/{customer_id}/insights`
+
+**Example Response:**
+```json
+{
+  "customer_id": "cust_12345",
+  "churn_score": 0.15,
+  "clv_prediction": 1250.50,
+  "next_best_action": {
+    "action": "send_discount",
+    "priority": "high",
+    "reasoning": "High CLV with recent drop in frequency."
+  },
+  "computed_at": "2026-07-17T12:00:00Z",
+  "cached": false
+}
+```
+
+
+---
+
+### 2.2 Source Code (`customer_insights_service.py`)
+
+This is the exact code from our codebase (`apps/api-ai-analytics/app/services/customer_insights_service.py`) that performs the data extraction, transformation, and AI processing:
+
+```python
+"""Customer Insights service — orchestrates scoring pipeline."""
+
+from datetime import datetime, timezone
+
+from app.lib.crm_client import CrmClient
+from app.ml import churn_model, clv_model, nba_model
+from app.repositories.mongo.customer_feature_repository import (
+    CustomerFeatureRepository,
+)
+from app.repositories.redis.customer_cache_repository import (
+    CustomerCacheRepository,
+)
+from app.schemas.customer_schemas import (
+    CustomerFeatures,
+    CustomerInsightsResponse,
+    NextBestAction,
+)
+
+
+class CustomerNotFoundError(Exception):
+    """Raised when customer does not exist in CRM."""
+
+
+class CrmUnavailableError(Exception):
+    """Raised when CRM API is unreachable."""
+
+
+class CustomerInsightsService:
+    """Orchestrates churn, CLV, and NBA scoring for a customer."""
+
+    def __init__(
+        self,
+        crm_client: CrmClient,
+        cache_repo: CustomerCacheRepository,
+        feature_repo: CustomerFeatureRepository,
+    ) -> None:
+        self._crm = crm_client
+        self._cache = cache_repo
+        self._features = feature_repo
+
+    async def get_insights(
+        self, customer_id: str
+    ) -> CustomerInsightsResponse:
+        """Get customer insights, using cache when available."""
+        # 1. Check cache
+        cached = await self._cache.get_insights(customer_id)
+        if cached:
+            return CustomerInsightsResponse(
+                customer_id=customer_id,
+                churn_score=cached["churn_score"],
+                clv_prediction=cached["clv_prediction"],
+                next_best_action=NextBestAction(**cached["next_best_action"]),
+                computed_at=cached["computed_at"],
+                cached=True,
+            )
+
+        # 2. Fetch from CRM (Data Extraction)
+        customer = await self._crm.get_customer(customer_id)
+        if customer is None:
+            raise CustomerNotFoundError(
+                f"Customer {customer_id} not found"
+            )
+
+        orders = await self._crm.get_customer_orders(customer_id)
+
+        # 3. Build feature vector (Data Transformation)
+        features = self._build_features(customer_id, customer, orders)
+
+        # 4. Run ML models
+        churn_score = churn_model.predict(features.model_dump())
+        clv_prediction = clv_model.predict(features.model_dump())
+
+        nba_input = features.model_dump()
+        nba_input["churn_score"] = churn_score
+        nba_input["clv_prediction"] = clv_prediction
+        nba_result = nba_model.predict(nba_input)
+
+        computed_at = datetime.now(timezone.utc)
+
+        # 5. Build response
+        response = CustomerInsightsResponse(
+            customer_id=customer_id,
+            churn_score=churn_score,
+            clv_prediction=clv_prediction,
+            next_best_action=NextBestAction(**nba_result),
+            computed_at=computed_at,
+            cached=False,
+        )
+
+        # 6. Cache result (Redis)
+        await self._cache.set_insights(
+            customer_id, response.model_dump(mode="json")
+        )
+
+        # 7. Log features to MongoDB
+        await self._features.save_feature_log(
+            customer_id, features.model_dump()
+        )
+
+        return response
+
+    def _build_features(
+        self, customer_id: str, customer: dict, orders: list[dict]
+    ) -> CustomerFeatures:
+        """Build ML feature vector from CRM data."""
+        now = datetime.now(timezone.utc)
+
+        # Account age
+        created_at = customer.get("createdAt") or customer.get("created_at")
+        account_age_days = 0
+        if created_at:
+            try:
+                created = datetime.fromisoformat(str(created_at).replace("Z", "+00:00"))
+                account_age_days = (now - created).days
+            except (ValueError, TypeError):
+                pass
+
+        # Order statistics
+        total_orders = len(orders)
+        total_order_value = 0.0
+        last_order_date = None
+
+        for order in orders:
+            total_value = order.get("totalAmount") or order.get("total") or 0
+            total_order_value += float(total_value)
+            order_date_str = order.get("orderDate") or order.get("createdAt")
+            if order_date_str:
+                try:
+                    order_date = datetime.fromisoformat(
+                        str(order_date_str).replace("Z", "+00:00")
+                    )
+                    if last_order_date is None or order_date > last_order_date:
+                        last_order_date = order_date
+                except (ValueError, TypeError):
+                    pass
+
+        days_since_last_order = 0
+        if last_order_date:
+            days_since_last_order = (now - last_order_date).days
+
+        average_order_value = (
+            total_order_value / total_orders if total_orders > 0 else 0.0
+        )
+
+        # Order frequency per month
+        order_frequency_per_month = 0.0
+        if account_age_days > 0:
+            months = max(account_age_days / 30.0, 1.0)
+            order_frequency_per_month = total_orders / months
+
+        # Simplified trend (no historical comparison yet)
+        order_frequency_trend = 0.0
+        if total_orders >= 3 and days_since_last_order > 60:
+            order_frequency_trend = -0.3
+        elif total_orders >= 3 and days_since_last_order < 30:
+            order_frequency_trend = 0.2
+
+        # Ticket count (from customer profile if available)
+        ticket_count = customer.get("ticketCount") or customer.get(
+            "ticket_count_last_90d", 0
+        )
+
+        return CustomerFeatures(
+            customer_id=customer_id,
+            days_since_last_order=days_since_last_order,
+            order_frequency_trend=order_frequency_trend,
+            ticket_count_last_90d=int(ticket_count),
+            account_age_days=account_age_days,
+            total_orders=total_orders,
+            total_order_value=total_order_value,
+            average_order_value=average_order_value,
+            order_frequency_per_month=round(order_frequency_per_month, 2),
+        )
+```

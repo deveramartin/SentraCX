@@ -19,9 +19,9 @@ SentraCX is a monorepo containing three core applications:
 
 | App | Description | Port | Tech Stack |
 |-----|-------------|------|------------|
-| **web-crm** | CRM web frontend | `3005` | Next.js 16, React 19, Tailwind CSS, shadcn/ui |
-| **api-crm** | CRM backend API | `5005` | .NET 10, Entity Framework Core |
-| **api-ai-analytics** | AI & analytics service | `4005` | FastAPI, Pydantic, MongoDB |
+| **web-crm** | CRM web frontend | `3005` | Next.js 16, React 19, Tailwind CSS v4, shadcn/ui |
+| **api-crm** | CRM backend API | `5005` | .NET 10, Entity Framework Core, PostgreSQL |
+| **api-ai-analytics** | AI & analytics service | `4005` | FastAPI, Pydantic v2, MongoDB, Redis, Groq |
 
 ## Prerequisites
 
@@ -33,6 +33,7 @@ To run the application locally for testing or development, you will need the fol
 - [Python](https://www.python.org/) 3.12+
 - [PostgreSQL](https://www.postgresql.org/) v15+ (for api-crm)
 - [MongoDB](https://www.mongodb.com/) 7+ (for api-ai-analytics)
+- [Redis](https://redis.io/) (for api-crm SignalR backplane and api-ai-analytics cache)
 
 ### Linux only: Fix inotify limits
 
@@ -65,7 +66,8 @@ Follow these steps to set up the repository for development or testing.
 
    ```bash
    cp apps/web-crm/.env.example apps/web-crm/.env.local
-   cp apps/api-crm/appsettings.Development.json apps/api-crm/appsettings.Local.json
+   cp apps/api-crm/.env.example apps/api-crm/.env
+   cp apps/api-ai-analytics/.env.example apps/api-ai-analytics/.env.local
    ```
 
 4. **Trust the HTTPS development certificate** (one-time)
@@ -82,7 +84,21 @@ Follow these steps to set up the repository for development or testing.
 
    This persists across reboots — no need to repeat unless the certificate expires (1 year).
 
-5. **Run all services**
+5. **Start databases** (required for api-ai-analytics)
+
+   ```bash
+   # Redis (macOS via Homebrew)
+   brew services start redis
+
+   # MongoDB (Linux tarball install)
+   mongod --dbpath ~/.local/share/mongodb/data \
+          --logpath ~/.local/share/mongodb/log/mongod.log \
+          --fork --port 27017
+   ```
+
+   PostgreSQL must also be running for api-crm.
+
+6. **Run all services**
 
    Start the entire platform in development mode:
 
@@ -90,11 +106,11 @@ Follow these steps to set up the repository for development or testing.
    pnpm dev
    ```
 
-6. **Access the Application**
+7. **Access the Application**
 
    Once the services have successfully started, you can access the platform at:
-   - **Web CRM Frontend**: [http://localhost:3005](http://localhost:3005)
-   - **API CRM Backend**: [http://localhost:5005](http://localhost:5005)
+   - **Web CRM Frontend**: [https://localhost:3005](https://localhost:3005)
+   - **API CRM Backend**: [https://localhost:5005](https://localhost:5005)
    - **AI Analytics Service**: [http://localhost:4005](http://localhost:4005)
 
 ## Scripts
@@ -135,8 +151,8 @@ All scripts are run from the monorepo root with `pnpm <script>`.
 | `pnpm lint` | Lint all workspaces |
 | `pnpm lint:web` | Lint web-crm |
 | `pnpm test` | Run all test suites |
-| `pnpm test:api` | Run api-crm tests |
-| `pnpm test:ai` | Run api-ai-analytics tests |
+| `pnpm test:api` | Run api-crm tests (dotnet test) |
+| `pnpm test:ai` | Run api-ai-analytics tests (pytest) |
 | `pnpm migrate` | Run database migrations (wraps `scripts/migrate-crm.sh`) |
 | `pnpm clean` | Remove all build artifacts & node_modules |
 
@@ -204,20 +220,27 @@ Manage EF Core migrations for the api-crm PostgreSQL database.
 ```
 SentraCX/
 ├── apps/
-│   ├── web-crm/              # Next.js frontend (port 3005)
-│   ├── api-crm/              # .NET Web API (port 5005)
+│   ├── web-crm/              # Next.js 16 frontend (port 3005)
+│   │   └── src/              # All source code lives here
+│   ├── api-crm/              # .NET 10 Web API (port 5005)
 │   └── api-ai-analytics/     # FastAPI service (port 4005)
 ├── packages/
 │   ├── ui/                   # Shared UI components
 │   ├── config/               # Shared configuration
 │   └── types/                # Shared TypeScript types
-├── docs/                     # Documentation
+├── docs/
+│   ├── architecture/         # Data model docs + Mermaid diagrams
+│   ├── api/                  # API endpoint documentation
+│   ├── plans/implementations/# Feature implementation plans
+│   ├── fix-reports/          # Bug fix reports
+│   └── implementation-reports/ # Feature completion reports
+├── .design-ref/              # UI/UX design reference material
 ├── .github/workflows/        # CI build verification
+├── scripts/                  # One-time setup and migration scripts
 ├── pnpm-workspace.yaml       # Workspace configuration
 ├── turbo.json                # Turborepo pipeline config
 └── package.json              # Root scripts
 ```
-
 
 ## License
 

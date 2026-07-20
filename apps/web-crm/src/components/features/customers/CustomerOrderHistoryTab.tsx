@@ -1,0 +1,96 @@
+"use client";
+
+import React, { useState } from "react";
+import { useCustomerOrders } from "@/hooks/useCustomerOrders";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { OrderHistory } from "@/types/customer";
+import { OrderDetailDialog } from "./OrderDetailDialog";
+
+interface CustomerOrderHistoryTabProps {
+  customerId: string;
+}
+
+export function CustomerOrderHistoryTab({ customerId }: CustomerOrderHistoryTabProps) {
+  const [selectedOrder, setSelectedOrder] = useState<OrderHistory | null>(null);
+  const { orders, isLoading, error } = useCustomerOrders(customerId);
+
+  if (isLoading) {
+    return (
+      <div className="space-y-2 py-4">
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} className="h-10 w-full rounded-md" />
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-md text-body-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
+        {error}
+      </div>
+    );
+  }
+
+  if (orders.length === 0) {
+    return (
+      <div className="py-12 text-center text-muted-foreground">
+        <p className="text-body-sm font-medium">No orders found for this customer.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-md">
+      <div className="w-full overflow-x-auto border rounded-md border-border">
+        <Table className="min-w-[500px] w-full text-left text-body-sm">
+          <TableHeader>
+            <TableRow className="border-b border-border">
+              <TableHead>Order Number</TableHead>
+              <TableHead>Total Amount</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Ordered At</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody className="divide-y divide-border">
+            {orders.map((item) => (
+              <TableRow
+                key={item.id}
+                onClick={() => setSelectedOrder(item)}
+                className="hover:bg-muted/50 cursor-pointer transition-colors"
+              >
+                <TableCell className="font-semibold text-foreground">{item.orderNumber}</TableCell>
+                <TableCell className="font-medium text-foreground">
+                  ${item.totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline" className="text-label-sm">
+                    {item.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-label-sm text-muted-foreground font-mono">
+                  {new Date(item.orderedAt).toLocaleString()}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <OrderDetailDialog
+        order={selectedOrder}
+        open={selectedOrder !== null}
+        onOpenChange={(open) => { if (!open) setSelectedOrder(null); }}
+      />
+    </div>
+  );
+}
