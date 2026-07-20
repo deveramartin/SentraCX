@@ -14,6 +14,9 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { HeaderNotifications } from "./HeaderNotifications";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator"
+
 
 function getBreadcrumbItems(pathname: string) {
   const segments = pathname.split("/").filter(Boolean);
@@ -51,8 +54,10 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 flex justify-between items-center w-full px-4 sm:px-6 h-16 bg-background border-b border-border">
-      {/* Left: Breadcrumb */}
+      {/* Left: Sidebar Toggle & Breadcrumb */}
       <div className="flex items-center gap-3 sm:gap-4 flex-1 overflow-hidden">
+        <SidebarTrigger className="h-9 w-9 shrink-0  hover:bg-accent text-foreground transition-all cursor-pointer" />
+        <Separator orientation="vertical" className="h-5" /> 
         <Breadcrumb className="overflow-hidden">
           <BreadcrumbList className="flex-nowrap whitespace-nowrap text-sm sm:text-base font-semibold">
             {breadcrumbItems.map((item, index) => (

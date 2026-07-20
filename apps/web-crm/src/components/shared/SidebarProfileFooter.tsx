@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { MoreVertical, Check, User, Shield, Activity, LogOut, Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +25,7 @@ export function SidebarProfileFooter({ activeAccount, onSelectAccount }: Sidebar
   const currentAccount: Account = accounts.find((a) => a.id === activeAccount) || accounts[0];
 
   return (
-    <div className="px-4 mt-auto pt-4 border-t border-border">
+    <div className="w-full">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex items-center gap-3.5 p-2 rounded-xl hover:bg-sidebar-accent transition-colors cursor-pointer group">
@@ -84,9 +85,11 @@ export function SidebarProfileFooter({ activeAccount, onSelectAccount }: Sidebar
 
           <DropdownMenuSeparator className="bg-border" />
 
-          <DropdownMenuItem className="cursor-pointer text-xs font-medium gap-2 p-2 hover:bg-accent">
-            <User className="w-3.5 h-3.5 text-muted-foreground" />
-            <span>Profile Settings</span>
+          <DropdownMenuItem asChild className="cursor-pointer text-xs font-medium gap-2 p-2 hover:bg-accent">
+            <Link href="/settings">
+              <User className="w-3.5 h-3.5 text-muted-foreground" />
+              <span>Profile Settings</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer text-xs font-medium gap-2 p-2 hover:bg-accent">
             <Shield className="w-3.5 h-3.5 text-muted-foreground" />

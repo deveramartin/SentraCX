@@ -33,14 +33,23 @@ export interface AccountItem {
   email: string;
 }
 
-export const navItems: NavItem[] = [
+export type Account = AccountItem;
+
+export const mainNavItems: NavItem[] = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "Customers", href: "/customers", icon: Users },
   { name: "Conversations", href: "/conversations", icon: MessageSquare },
   { name: "Tickets", href: "/tickets", icon: Ticket },
   { name: "Campaigns", href: "/campaigns", icon: Megaphone },
-  { name: "Settings", href: "/settings", icon: Settings },
 ];
+
+export const settingsNavItem: NavItem = {
+  name: "Settings",
+  href: "/settings",
+  icon: Settings,
+};
+
+export const navItems: NavItem[] = [...mainNavItems, settingsNavItem];
 
 export const systems: SystemItem[] = [
   {
