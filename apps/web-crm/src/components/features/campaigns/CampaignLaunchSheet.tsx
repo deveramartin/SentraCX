@@ -2,16 +2,26 @@
 
 import React, { useState } from "react";
 import { Plus } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import type { Campaign } from "./types";
 
 interface CampaignLaunchSheetProps {
@@ -19,91 +29,134 @@ interface CampaignLaunchSheetProps {
   nextIdNum: number;
 }
 
+interface CampaignFormValues {
+  name: string;
+  budget: number;
+  status: Campaign["status"];
+}
+
 export function CampaignLaunchSheet({ onLaunchCampaign, nextIdNum }: CampaignLaunchSheetProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [newName, setNewName] = useState("");
-  const [newBudget, setNewBudget] = useState(5000);
-  const [newStatus, setNewStatus] = useState<Campaign["status"]>("Scheduled");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newName) return;
+  const form = useForm<CampaignFormValues>({
+    defaultValues: {
+      name: "",
+      budget: 5000,
+      status: "Scheduled",
+    },
+  });
+
+  const onSubmit = (values: CampaignFormValues) => {
+    if (!values.name.trim()) return;
 
     const newCamp: Campaign = {
       id: `CMP-${String(nextIdNum).padStart(3, "0")}`,
-      name: newName,
-      status: newStatus,
-      budget: Number(newBudget) || 0,
+      name: values.name.trim(),
+      status: values.status,
+      budget: Number(values.budget) || 0,
       spent: 0,
       conversion: 0,
       clicks: 0,
     };
 
     onLaunchCampaign(newCamp);
-    setNewName("");
-    setNewBudget(5000);
-    setNewStatus("Scheduled");
+    form.reset();
     setIsOpen(false);
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild>
+    <Dialog open={isOpen} onOpenChange={(val) => { if (!val) form.reset(); setIsOpen(val); }}>
+      <DialogTrigger asChild>
         <Button className="self-start sm:self-center">
           <Plus />
           New Campaign
         </Button>
-      </SheetTrigger>
-      <SheetContent className="bg-card border-border w-[400px] sm:w-[540px]">
-        <SheetHeader className="pb-lg">
-          <SheetTitle className="text-headline-md font-bold text-foreground">Launch Campaign</SheetTitle>
-          <SheetDescription className="text-body-sm text-muted-foreground">
+      </DialogTrigger>
+      <DialogContent className="w-[100vw] sm:max-w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
+        <DialogHeader className="space-y-1.5 text-left">
+          <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight">Launch Campaign</DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
             Configure parameters for your marketing dispatch.
-          </SheetDescription>
-        </SheetHeader>
-        <form onSubmit={handleSubmit} className="space-y-lg mt-lg">
-          <div className="space-y-xs">
-            <label className="text-label-sm font-semibold text-foreground block">Campaign Name</label>
-            <Input
-              placeholder="e.g. Q4 Black Friday Promo"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              className="bg-background border-border text-body-sm"
+          </DialogDescription>
+        </DialogHeader>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-2">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Campaign Name *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. Q4 Black Friday Promo" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="space-y-xs">
-            <label className="text-label-sm font-semibold text-foreground block">Allocated Budget ($)</label>
-            <Input
-              type="number"
-              placeholder="e.g. 10000"
-              value={newBudget}
-              onChange={(e) => setNewBudget(Number(e.target.value))}
-              className="bg-background border-border text-body-sm"
+
+            <FormField
+              control={form.control}
+              name="budget"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Allocated Budget ($)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="e.g. 10000"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="space-y-xs">
-            <label className="text-label-sm font-semibold text-foreground block">Launch Strategy</label>
-            <div className="flex gap-sm">
-              {(["Active", "Scheduled"] as const).map((s) => (
-                <Button
-                  type="button"
-                  key={s}
-                  variant={newStatus === s ? "default" : "outline"}
-                  className="flex-1"
-                  onClick={() => setNewStatus(s)}
-                >
-                  {s === "Active" ? "Dispatch Now" : "Schedule"}
-                </Button>
-              ))}
-            </div>
-          </div>
-          <div className="pt-xl">
-            <Button type="submit" className="w-full">
-              Deploy Campaign
-            </Button>
-          </div>
-        </form>
-      </SheetContent>
-    </Sheet>
+
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Launch Strategy</FormLabel>
+                  <FormControl>
+                    <div className="flex flex-wrap sm:flex-nowrap gap-2">
+                      {(["Active", "Scheduled"] as const).map((s) => (
+                        <Button
+                          type="button"
+                          key={s}
+                          variant={field.value === s ? "default" : "outline"}
+                          className="flex-1 min-w-[120px]"
+                          onClick={() => field.onChange(s)}
+                        >
+                          {s === "Active" ? "Dispatch Now" : "Schedule"}
+                        </Button>
+                      ))}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <DialogFooter className="pt-4 flex flex-col-reverse sm:flex-row justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsOpen(false)}
+                className="w-full sm:w-auto"
+              >
+                Cancel
+              </Button>
+              <Button type="submit" className="w-full sm:w-auto">
+                Deploy Campaign
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

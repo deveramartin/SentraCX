@@ -47,7 +47,7 @@ export function ConversationWindow({
             </p>
           </div>
         </div>
-        <Badge className="bg-muted text-foreground hover:bg-muted border-none shadow-none text-label-sm font-bold py-1 px-3">
+        <Badge variant="secondary" className="text-label-sm font-bold py-1 px-3">
           SSO Linked
         </Badge>
       </div>
