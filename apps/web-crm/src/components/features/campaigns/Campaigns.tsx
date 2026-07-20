@@ -60,7 +60,7 @@ export function Campaigns() {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md">
         <div className="space-y-sm">
-          <h1 className="text-display-sm font-bold tracking-tight text-foreground">Marketing Campaigns</h1>
+          <h1 className="text-headline-md font-bold tracking-tight text-foreground">Marketing Campaigns</h1>
           <p className="text-body-md text-muted-foreground">
             Create email marketing outreaches, track clicks, and audit conversion metrics.
           </p>

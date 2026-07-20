@@ -42,7 +42,7 @@ export function Dashboard() {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md border-b border-border pb-lg">
         <div className="space-y-sm">
-          <h2 className="text-headline-md font-bold tracking-tight text-foreground">Dashboard</h2>
+          <h1 className="text-headline-md font-bold tracking-tight text-foreground">Dashboard</h1>
         </div>
         <div className="flex items-center gap-sm">
           <Button variant="outline" size="sm">

@@ -40,7 +40,7 @@ export function SettingsPage() {
 
       {/* Header Banner */}
       <div className="space-y-sm">
-        <h1 className="text-display-sm font-bold tracking-tight text-foreground">System Settings</h1>
+        <h1 className="text-headline-md font-bold tracking-tight text-foreground">System Settings</h1>
         <p className="text-body-md text-muted-foreground">
           Configure general preferences, alert triggers, and backend microservice bindings.
         </p>

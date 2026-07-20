@@ -96,7 +96,7 @@ export function Tickets() {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md">
         <div className="space-y-sm">
-          <h2 className="text-headline-md font-bold tracking-tight text-foreground">Welcome back!</h2>
+          <h1 className="text-headline-md font-bold tracking-tight text-foreground">Tickets</h1>
           <p className="text-body-md text-muted-foreground">
             Here&apos;s a list of your support tickets and tasks for this month.
           </p>
