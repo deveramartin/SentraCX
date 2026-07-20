@@ -12,9 +12,9 @@ public class CustomerService(
     IUserRepository userRepo) : ICustomerService
 {
     public async Task<PaginatedResponseDto<CustomerListResponseDto>> GetAllAsync(
-        int page, int pageSize)
+        int page, int pageSize, string? customerType = null, string? searchTerm = null)
     {
-        var (items, totalCount) = await customerRepo.GetAllAsync(page, pageSize);
+        var (items, totalCount) = await customerRepo.GetAllAsync(page, pageSize, customerType, searchTerm);
 
         return new PaginatedResponseDto<CustomerListResponseDto>
         {
@@ -51,6 +51,7 @@ public class CustomerService(
             UserId = user.Id,
             PhoneNumber = dto.PhoneNumber,
             CustomerType = dto.CustomerType,
+            Address = dto.Address,
             Status = "Active",
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
@@ -78,6 +79,12 @@ public class CustomerService(
     {
         var profile = await customerRepo.GetByIdAsync(id);
         if (profile is null) return false;
+
+        // Enforce that a lead's type is always fixed to "Lead" and cannot be changed
+        if (profile.CustomerType.Equals("Lead", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
 
         profile.CustomerType = dto.CustomerType;
         profile.UpdatedAt = DateTime.UtcNow;

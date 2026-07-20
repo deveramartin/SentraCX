@@ -9,6 +9,7 @@ public class CustomerProfile
     public string Status { get; set; } = "Active";
     public string? Notes { get; set; }
     public string? ProfileImage { get; set; }
+    public string? Address { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
