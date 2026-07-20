@@ -5,7 +5,7 @@ namespace Crm.Api.Interfaces.Services;
 
 public interface ICustomerService
 {
-    Task<PaginatedResponseDto<CustomerListResponseDto>> GetAllAsync(int page, int pageSize);
+    Task<PaginatedResponseDto<CustomerListResponseDto>> GetAllAsync(int page, int pageSize, string? customerType = null, string? searchTerm = null);
     Task<CustomerResponseDto?> GetByIdAsync(Guid id);
     Task<CustomerResponseDto> CreateAsync(CreateCustomerRequestDto dto);
     Task<bool> UpdateStatusAsync(Guid id, UpdateCustomerStatusRequestDto dto);

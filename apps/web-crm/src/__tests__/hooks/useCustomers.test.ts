@@ -71,33 +71,29 @@ describe("useCustomers", () => {
     expect(result.current.customers).toEqual([]);
   });
 
-  it("filters customers by display name search term", async () => {
+  it("calls crmClient.customers.list with correct search parameter", async () => {
     (crmClient.customers.list as jest.Mock).mockResolvedValue(mockResponse);
+    renderHook(() => useCustomers({ search: "alice" }));
+
+    await waitFor(() =>
+      expect(crmClient.customers.list).toHaveBeenCalledWith(1, 20, undefined, "alice")
+    );
+  });
+
+  it("returns backend data as is when loaded", async () => {
+    const mockFilteredResponse = {
+      items: [mockCustomers[0]],
+      totalCount: 1,
+      totalPages: 1,
+      page: 1,
+      pageSize: 20,
+    };
+    (crmClient.customers.list as jest.Mock).mockResolvedValue(mockFilteredResponse);
     const { result } = renderHook(() => useCustomers({ search: "alice" }));
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-    expect(result.current.customers).toHaveLength(1);
-    expect(result.current.customers[0].displayName).toBe("Alice Johnson");
-  });
-
-  it("filters customers by email search term", async () => {
-    (crmClient.customers.list as jest.Mock).mockResolvedValue(mockResponse);
-    const { result } = renderHook(() => useCustomers({ search: "bob@corp" }));
-
-    await waitFor(() => expect(result.current.isLoading).toBe(false));
-
-    expect(result.current.customers).toHaveLength(1);
-    expect(result.current.customers[0].email).toBe("bob@corp.com");
-  });
-
-  it("returns all customers when search is empty", async () => {
-    (crmClient.customers.list as jest.Mock).mockResolvedValue(mockResponse);
-    const { result } = renderHook(() => useCustomers({ search: "" }));
-
-    await waitFor(() => expect(result.current.isLoading).toBe(false));
-
-    expect(result.current.customers).toHaveLength(2);
+    expect(result.current.customers).toEqual([mockCustomers[0]]);
   });
 
   it("calls crmClient.customers.list with correct page and pageSize", async () => {
@@ -105,7 +101,16 @@ describe("useCustomers", () => {
     renderHook(() => useCustomers({ page: 3, pageSize: 10 }));
 
     await waitFor(() =>
-      expect(crmClient.customers.list).toHaveBeenCalledWith(3, 10)
+      expect(crmClient.customers.list).toHaveBeenCalledWith(3, 10, undefined, "")
+    );
+  });
+
+  it("calls crmClient.customers.list with correct customerType filter", async () => {
+    (crmClient.customers.list as jest.Mock).mockResolvedValue(mockResponse);
+    renderHook(() => useCustomers({ page: 1, pageSize: 20, customerType: "Lead" }));
+
+    await waitFor(() =>
+      expect(crmClient.customers.list).toHaveBeenCalledWith(1, 20, "Lead", "")
     );
   });
 

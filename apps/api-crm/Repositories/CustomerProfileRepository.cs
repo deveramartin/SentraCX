@@ -8,12 +8,33 @@ namespace Crm.Api.Repositories;
 public class CustomerProfileRepository(AppDbContext context) : ICustomerProfileRepository
 {
     public async Task<(List<CustomerProfile> Items, int TotalCount)> GetAllAsync(
-        int page, int pageSize)
+        int page, int pageSize, string? customerType = null, string? searchTerm = null)
     {
         var query = context.CustomerProfiles
             .Include(cp => cp.User)
-            .Where(cp => !cp.User.IsDeleted)
-            .OrderByDescending(cp => cp.CreatedAt);
+            .Where(cp => !cp.User.IsDeleted);
+
+        if (!string.IsNullOrEmpty(customerType))
+        {
+            if (customerType.Equals("Contact", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(cp => cp.CustomerType != "Lead");
+            }
+            else
+            {
+                query = query.Where(cp => cp.CustomerType == customerType);
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var term = searchTerm.Trim();
+            query = query.Where(cp =>
+                EF.Functions.ILike(cp.User.DisplayName, $"%{term}%") ||
+                EF.Functions.ILike(cp.User.Email, $"%{term}%"));
+        }
+
+        query = query.OrderByDescending(cp => cp.CreatedAt);
 
         var totalCount = await query.CountAsync();
         var items = await query

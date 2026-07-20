@@ -20,6 +20,7 @@ public static class CustomerMapper
             Status = profile.Status,
             Notes = profile.Notes,
             ProfileImage = profile.ProfileImage,
+            Address = profile.Address,
             CreatedAt = profile.CreatedAt,
             UpdatedAt = profile.UpdatedAt
         };
@@ -33,7 +34,9 @@ public static class CustomerMapper
             DisplayName = profile.User.DisplayName,
             Email = profile.User.Email,
             CustomerType = profile.CustomerType,
-            Status = profile.Status
+            Status = profile.Status,
+            PhoneNumber = profile.PhoneNumber,
+            CreatedAt = profile.CreatedAt
         };
     }
 }

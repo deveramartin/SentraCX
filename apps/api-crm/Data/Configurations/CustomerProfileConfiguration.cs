@@ -23,6 +23,7 @@ public class CustomerProfileConfiguration : IEntityTypeConfiguration<CustomerPro
             .HasDefaultValue("Active");
         builder.Property(cp => cp.Notes).HasColumnType("text");
         builder.Property(cp => cp.ProfileImage).HasMaxLength(500);
+        builder.Property(cp => cp.Address).HasMaxLength(500);
 
         builder.Property(cp => cp.CreatedAt).HasDefaultValueSql("now()");
         builder.Property(cp => cp.UpdatedAt).HasDefaultValueSql("now()");

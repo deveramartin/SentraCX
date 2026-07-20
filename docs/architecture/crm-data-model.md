@@ -23,10 +23,11 @@ Extended CRM-specific details for external customers. Core identity details (nam
 - `id` (PK): UUID
 - `userId` (FK): String (One-to-One with User)
 - `phoneNumber`: String (Nullable)
-- `customerType`: Enum (Regular, InstitutionalBuyer)
+- `customerType`: Enum (Regular, InstitutionalBuyer, VIP, Lead)
 - `status`: Enum (Active, Inactive, Suspended)
 - `notes`: Text (Nullable)
 - `profileImage`: String (URL, Nullable)
+- `address`: String (Nullable)
 - `createdAt`: DateTime
 - `updatedAt`: DateTime
 
@@ -181,9 +182,10 @@ erDiagram
         uuid id PK
         string userId FK
         string phoneNumber
-        string customerType
+        string customerType "Regular, InstitutionalBuyer, VIP, Lead"
         string status
         text notes
+        string address
     }
 
     CAMPAIGN {

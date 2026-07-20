@@ -48,7 +48,7 @@ export function DeleteCustomerDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="max-w-md w-[95vw] sm:w-full">
+      <AlertDialogContent className="w-[90vw] max-w-[90vw] sm:max-w-[80vw] md:max-w-[700px] lg:max-w-[900px] max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Customer Record</AlertDialogTitle>
           <AlertDialogDescription className="text-muted-foreground">
@@ -63,7 +63,8 @@ export function DeleteCustomerDialog({
           <AlertDialogAction
             onClick={handleDelete}
             disabled={isDeleting}
-            className="w-full sm:w-auto bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            variant="destructive"
+            className="w-full sm:w-auto"
           >
             {isDeleting ? "Deleting..." : "Delete Customer"}
           </AlertDialogAction>

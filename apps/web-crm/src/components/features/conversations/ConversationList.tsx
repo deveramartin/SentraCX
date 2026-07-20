@@ -20,7 +20,7 @@ export function ConversationList({ chats, activeChatId, onSelectChat }: Conversa
           <MessageSquare className="w-5 h-5" />
           Conversations
         </h2>
-        <Badge className="bg-primary text-primary-foreground border-none shadow-none">
+        <Badge variant="notification">
           {chats.filter((c) => c.unread).length} Unread
         </Badge>
       </div>

@@ -5,6 +5,7 @@ import { Search, Plus, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCustomers } from "@/hooks/useCustomers";
 import { CustomerListItem } from "@/types/customer";
 import { CustomerTable } from "./CustomerTable";
@@ -14,14 +15,29 @@ import { DeleteCustomerDialog } from "./DeleteCustomerDialog";
 export function CustomerProfiles() {
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<CustomerListItem | null>(null);
+  const [activeTab, setActiveTab] = useState<"contacts" | "leads">("contacts");
+
+  React.useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 400);
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
 
   const { customers, totalCount, totalPages, isLoading, error, refetch } = useCustomers({
     page,
     pageSize: 20,
-    search: searchQuery,
+    search: debouncedSearch,
+    customerType: activeTab === "contacts" ? "Contact" : "Lead",
   });
+
+  const handleTabChange = (val: string) => {
+    setActiveTab(val as "contacts" | "leads");
+    setPage(1);
+  };
 
   return (
     <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-2xl max-w-7xl mx-auto">
@@ -51,7 +67,7 @@ export function CustomerProfiles() {
           </CardHeader>
           <CardContent className="p-lg pt-0">
             <span className="text-display-sm font-bold text-foreground">{totalCount}</span>
-            <p className="text-body-sm text-muted-foreground mt-sm">Registered CRM accounts</p>
+            <p className="text-body-sm text-muted-foreground mt-sm">Registered accounts</p>
           </CardContent>
         </Card>
       </div>
@@ -66,29 +82,32 @@ export function CustomerProfiles() {
         </div>
       )}
 
+      {/* Tabs */}
+      <Tabs defaultValue="contacts" value={activeTab} onValueChange={handleTabChange} className="w-full">
+        <TabsList className="bg-muted p-0.5 rounded-lg border border-border">
+          <TabsTrigger value="contacts" className="px-lg py-sm text-label-sm font-medium">Contacts</TabsTrigger>
+          <TabsTrigger value="leads" className="px-lg py-sm text-label-sm font-medium">Leads</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
       {/* Main Customers Table Card */}
       <Card className="shadow-none border-border flex flex-col">
         <CardHeader className="pb-md p-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md">
-          <CardTitle className="text-title-lg font-bold">Customer Registry</CardTitle>
-          <div className="relative w-full sm:max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <Input
-              className="pl-9 h-9 text-body-sm"
-              placeholder="Search by name or email..."
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setPage(1);
-              }}
-            />
-          </div>
+          <CardTitle className="text-title-lg font-bold">
+            {activeTab === "contacts" ? "Contact Registry" : "Lead Registry"}
+          </CardTitle>
         </CardHeader>
 
-        <CardContent className="p-lg pt-0 overflow-x-auto">
+        <CardContent className="py-md pt-0 overflow-x-auto">
           <CustomerTable
             customers={customers}
             isLoading={isLoading}
             onDeleteClick={(cust) => setDeleteTarget(cust)}
+            searchQuery={searchQuery}
+            onSearchChange={(val) => {
+              setSearchQuery(val);
+              setPage(1);
+            }}
           />
 
           {/* Pagination Controls */}

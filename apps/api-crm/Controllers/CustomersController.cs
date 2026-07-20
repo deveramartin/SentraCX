@@ -13,9 +13,11 @@ public class CustomersController(ICustomerService customerService) : ControllerB
     [HttpGet]
     public async Task<IActionResult> GetAll(
         [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20)
+        [FromQuery] int pageSize = 20,
+        [FromQuery] string? customerType = null,
+        [FromQuery] string? searchTerm = null)
     {
-        var result = await customerService.GetAllAsync(page, pageSize);
+        var result = await customerService.GetAllAsync(page, pageSize, customerType, searchTerm);
         return Ok(result);
     }
 

@@ -7,4 +7,6 @@ public class CustomerListResponseDto
     public string Email { get; set; } = string.Empty;
     public string CustomerType { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
+    public string? PhoneNumber { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

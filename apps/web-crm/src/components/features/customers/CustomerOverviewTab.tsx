@@ -19,7 +19,8 @@ export function CustomerOverviewTab({
   onCustomerUpdated,
   onSelectTab,
 }: CustomerOverviewTabProps) {
-  const { orders } = useCustomerOrders(customer.id);
+  const isLead = customer.customerType === "Lead";
+  const { orders } = useCustomerOrders(isLead ? "" : customer.id);
   const { interactions } = useCustomerMarketingHistory({ customerId: customer.id, page: 1, pageSize: 5 });
 
   const recentOrders = orders.slice(0, 5);
@@ -36,6 +37,10 @@ export function CustomerOverviewTab({
         <div className="space-y-xs">
           <span className="text-label-sm font-semibold text-muted-foreground uppercase tracking-wider block">Phone</span>
           <p className="text-body-sm font-medium text-foreground">{customer.phoneNumber || "—"}</p>
+        </div>
+        <div className="space-y-xs">
+          <span className="text-label-sm font-semibold text-muted-foreground uppercase tracking-wider block">Address</span>
+          <p className="text-body-sm font-medium text-foreground">{customer.address || "—"}</p>
         </div>
         <div className="space-y-xs">
           <span className="text-label-sm font-semibold text-muted-foreground uppercase tracking-wider block">Customer Type</span>
@@ -59,47 +64,49 @@ export function CustomerOverviewTab({
       />
 
       {/* Recent Orders Preview */}
-      <div className="space-y-sm">
-        <div className="flex items-center justify-between">
-          <h3 className="text-label-md font-bold text-foreground">Recent Orders</h3>
-          <Button
-            variant="link"
-            size="sm"
-            onClick={() => onSelectTab("orders")}
-            className="text-label-sm p-0 h-auto font-semibold"
-          >
-            View all ({orders.length})
-          </Button>
-        </div>
-        {recentOrders.length === 0 ? (
-          <p className="text-body-sm text-muted-foreground italic">No recent orders recorded.</p>
-        ) : (
-          <div className="space-y-xs">
-            {recentOrders.map((o) => (
-              <div
-                key={o.id}
-                className="flex items-center justify-between p-sm bg-background border border-border rounded-lg text-body-sm"
-              >
-                <span className="font-semibold text-foreground">{o.orderNumber}</span>
-                <span className="font-medium">${o.totalAmount.toLocaleString()}</span>
-                <Badge variant="outline" className="text-label-sm">
-                  {o.status}
-                </Badge>
-              </div>
-            ))}
+      {!isLead && (
+        <div className="space-y-sm">
+          <div className="flex items-center justify-between">
+            <h3 className="text-label-md font-bold text-foreground">Recent Orders</h3>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onSelectTab("orders")}
+              className="text-label-sm h-8 font-semibold"
+            >
+              View all ({orders.length})
+            </Button>
           </div>
-        )}
-      </div>
+          {recentOrders.length === 0 ? (
+            <p className="text-body-sm text-muted-foreground italic">No recent orders recorded.</p>
+          ) : (
+            <div className="space-y-xs">
+              {recentOrders.map((o) => (
+                <div
+                  key={o.id}
+                  className="flex items-center justify-between p-sm bg-background border border-border rounded-lg text-body-sm"
+                >
+                  <span className="font-semibold text-foreground">{o.orderNumber}</span>
+                  <span className="font-medium">${o.totalAmount.toLocaleString()}</span>
+                  <Badge variant="outline" className="text-label-sm">
+                    {o.status}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Recent Marketing Preview */}
       <div className="space-y-sm">
         <div className="flex items-center justify-between">
           <h3 className="text-label-md font-bold text-foreground">Recent Marketing Interactions</h3>
           <Button
-            variant="link"
+            variant="ghost"
             size="sm"
             onClick={() => onSelectTab("marketing")}
-            className="text-label-sm p-0 h-auto font-semibold"
+            className="text-label-sm h-8 font-semibold"
           >
             View all
           </Button>

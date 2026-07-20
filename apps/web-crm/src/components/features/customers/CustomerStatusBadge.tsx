@@ -7,14 +7,14 @@ interface CustomerStatusBadgeProps {
 }
 
 export function CustomerStatusBadge({ status }: CustomerStatusBadgeProps) {
-  const getVariant = (): "default" | "secondary" | "outline" | "destructive" => {
+  const getVariant = (): "default" | "secondary" | "outline" | "destructive" | "success" | "warning" | "info" => {
     switch (status) {
       case "Active":
-        return "default";
+        return "success";
       case "Inactive":
         return "secondary";
       case "Suspended":
-        return "outline";
+        return "destructive";
       default:
         return "secondary";
     }
