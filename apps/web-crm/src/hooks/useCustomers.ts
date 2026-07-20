@@ -8,9 +8,10 @@ interface UseCustomersOptions {
   page?: number;
   pageSize?: number;
   search?: string;
+  customerType?: string;
 }
 
-export function useCustomers({ page = 1, pageSize = 20, search = "" }: UseCustomersOptions = {}) {
+export function useCustomers({ page = 1, pageSize = 20, search = "", customerType }: UseCustomersOptions = {}) {
   const [customers, setCustomers] = useState<CustomerListItem[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -21,44 +22,25 @@ export function useCustomers({ page = 1, pageSize = 20, search = "" }: UseCustom
     setIsLoading(true);
     setError(null);
     try {
-      const data = await crmClient.customers.list(page, pageSize);
-      let items = data.items || [];
-
-      if (search.trim()) {
-        const query = search.toLowerCase().trim();
-        items = items.filter(
-          (c) =>
-            c.displayName.toLowerCase().includes(query) ||
-            c.email.toLowerCase().includes(query)
-        );
-      }
-
-      setCustomers(items);
-      setTotalCount(data.totalCount || items.length);
+      const data = await crmClient.customers.list(page, pageSize, customerType, search);
+      setCustomers(data.items || []);
+      setTotalCount(data.totalCount || 0);
       setTotalPages(data.totalPages || 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load customers.");
     } finally {
       setIsLoading(false);
     }
-  }, [page, pageSize, search]);
+  }, [page, pageSize, search, customerType]);
 
   useEffect(() => {
     let isMounted = true;
-    crmClient.customers.list(page, pageSize)
+    setIsLoading(true);
+    crmClient.customers.list(page, pageSize, customerType, search)
       .then((data) => {
         if (isMounted) {
-          let items = data.items || [];
-          if (search.trim()) {
-            const query = search.toLowerCase().trim();
-            items = items.filter(
-              (c) =>
-                c.displayName.toLowerCase().includes(query) ||
-                c.email.toLowerCase().includes(query)
-            );
-          }
-          setCustomers(items);
-          setTotalCount(data.totalCount || items.length);
+          setCustomers(data.items || []);
+          setTotalCount(data.totalCount || 0);
           setTotalPages(data.totalPages || 1);
           setError(null);
           setIsLoading(false);
@@ -73,7 +55,7 @@ export function useCustomers({ page = 1, pageSize = 20, search = "" }: UseCustom
     return () => {
       isMounted = false;
     };
-  }, [page, pageSize, search]);
+  }, [page, pageSize, search, customerType]);
 
   return {
     customers,

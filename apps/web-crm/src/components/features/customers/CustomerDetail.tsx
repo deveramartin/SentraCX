@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CustomerStatusControl } from "./CustomerStatusControl";
+import { CustomerStatusBadge } from "./CustomerStatusBadge";
 import { CustomerTypeControl } from "./CustomerTypeControl";
 import { CustomerOverviewTab } from "./CustomerOverviewTab";
 import { CustomerMarketingHistoryTab } from "./CustomerMarketingHistoryTab";
@@ -21,6 +21,14 @@ interface CustomerDetailProps {
 export function CustomerDetail({ customerId }: CustomerDetailProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const { customer, isLoading, error, refetch, setCustomer } = useCustomer(customerId);
+
+  const isLead = customer?.customerType === "Lead";
+
+  React.useEffect(() => {
+    if (isLead && activeTab === "orders") {
+      setActiveTab("overview");
+    }
+  }, [isLead, activeTab]);
 
   if (isLoading) {
     return (
@@ -88,11 +96,10 @@ export function CustomerDetail({ customerId }: CustomerDetailProps) {
 
         {/* Dynamic Controls - Stacked on mobile */}
         <div className="flex flex-wrap items-center gap-sm border-t sm:border-t-0 pt-sm sm:pt-0 border-border">
-          <CustomerStatusControl
-            customerId={customer.id}
-            currentStatus={customer.status}
-            onUpdated={(status) => setCustomer({ ...customer, status })}
-          />
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <span className="text-label-sm font-semibold text-muted-foreground whitespace-nowrap">Status:</span>
+            <CustomerStatusBadge status={customer.status} />
+          </div>
           <CustomerTypeControl
             customerId={customer.id}
             currentType={customer.customerType}
@@ -104,16 +111,18 @@ export function CustomerDetail({ customerId }: CustomerDetailProps) {
       {/* Three Tabs View */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-md">
         <div className="w-full overflow-x-auto pb-1">
-          <TabsList className="w-full sm:w-auto grid grid-cols-3 sm:inline-flex h-9 p-1">
+          <TabsList className={`w-full sm:w-auto grid ${isLead ? "grid-cols-2" : "grid-cols-3"} sm:inline-flex h-9 p-1`}>
             <TabsTrigger value="overview" className="text-label-sm font-semibold">
               Overview
             </TabsTrigger>
             <TabsTrigger value="marketing" className="text-label-sm font-semibold">
               Marketing History
             </TabsTrigger>
-            <TabsTrigger value="orders" className="text-label-sm font-semibold">
-              Order History
-            </TabsTrigger>
+            {!isLead && (
+              <TabsTrigger value="orders" className="text-label-sm font-semibold">
+                Order History
+              </TabsTrigger>
+            )}
           </TabsList>
         </div>
 
@@ -129,9 +138,11 @@ export function CustomerDetail({ customerId }: CustomerDetailProps) {
           <CustomerMarketingHistoryTab customerId={customer.id} />
         </TabsContent>
 
-        <TabsContent value="orders" className="p-lg bg-card border border-border rounded-xl">
-          <CustomerOrderHistoryTab customerId={customer.id} />
-        </TabsContent>
+        {!isLead && (
+          <TabsContent value="orders" className="p-lg bg-card border border-border rounded-xl">
+            <CustomerOrderHistoryTab customerId={customer.id} />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );

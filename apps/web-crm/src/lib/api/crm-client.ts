@@ -44,10 +44,16 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const crmClient = {
   customers: {
-    list: (page = 1, pageSize = 20) =>
-      request<PaginatedResponse<CustomerListItem>>(
-        `/api/v1/customers?page=${page}&pageSize=${pageSize}`
-      ),
+    list: (page = 1, pageSize = 20, customerType?: string, search?: string) => {
+      let url = `/api/v1/customers?page=${page}&pageSize=${pageSize}`;
+      if (customerType) {
+        url += `&customerType=${encodeURIComponent(customerType)}`;
+      }
+      if (search) {
+        url += `&searchTerm=${encodeURIComponent(search)}`;
+      }
+      return request<PaginatedResponse<CustomerListItem>>(url);
+    },
     getById: (id: string) =>
       request<Customer>(`/api/v1/customers/${id}`),
     create: (body: CreateCustomerInput) =>

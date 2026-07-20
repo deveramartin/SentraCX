@@ -1,4 +1,4 @@
-export type CustomerType = "Regular" | "InstitutionalBuyer";
+export type CustomerType = "Regular" | "InstitutionalBuyer" | "VIP" | "Lead";
 export type CustomerStatus = "Active" | "Inactive" | "Suspended";
 
 export interface CustomerListItem {
@@ -7,6 +7,7 @@ export interface CustomerListItem {
   email: string;
   customerType: CustomerType;
   status: CustomerStatus;
+  phoneNumber?: string | null;
   createdAt: string;
 }
 
@@ -22,6 +23,7 @@ export interface Customer {
   status: CustomerStatus;
   notes?: string | null;
   profileImage?: string | null;
+  address?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -57,6 +59,7 @@ export interface CreateCustomerInput {
   email: string;
   phoneNumber?: string;
   customerType: CustomerType;
+  address?: string;
 }
 
 export interface UpdateCustomerStatusInput {
