@@ -30,10 +30,9 @@ namespace Crm.Api.Data.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("gen_random_uuid()");
 
-                    b.Property<string>("Channel")
+                    b.PrimitiveCollection<List<string>>("Channels")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text[]");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -65,9 +64,8 @@ namespace Crm.Api.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<string>("TemplateId")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                    b.Property<Guid?>("TemplateId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -78,7 +76,24 @@ namespace Crm.Api.Data.Migrations
 
                     b.HasIndex("CreatedById");
 
+                    b.HasIndex("TemplateId");
+
                     b.ToTable("campaigns", (string)null);
+                });
+
+            modelBuilder.Entity("Crm.Api.Models.CampaignPromotion", b =>
+                {
+                    b.Property<Guid>("CampaignId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PromotionId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CampaignId", "PromotionId");
+
+                    b.HasIndex("PromotionId");
+
+                    b.ToTable("campaign_promotions", (string)null);
                 });
 
             modelBuilder.Entity("Crm.Api.Models.CampaignSchedule", b =>
@@ -299,6 +314,98 @@ namespace Crm.Api.Data.Migrations
                     b.ToTable("order_histories", (string)null);
                 });
 
+            modelBuilder.Entity("Crm.Api.Models.Promotion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal?>("DiscountValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("PromotionType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasDefaultValue("Draft");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("VoucherCode")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("promotions", (string)null);
+                });
+
+            modelBuilder.Entity("Crm.Api.Models.Template", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("Channel")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasDefaultValue("Email");
+
+                    b.Property<string>("ContentHtml")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("ThumbnailUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("templates", (string)null);
+                });
+
             modelBuilder.Entity("Crm.Api.Models.Ticket", b =>
                 {
                     b.Property<Guid>("Id")
@@ -414,7 +521,33 @@ namespace Crm.Api.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Crm.Api.Models.Template", "Template")
+                        .WithMany("Campaigns")
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("CreatedBy");
+
+                    b.Navigation("Template");
+                });
+
+            modelBuilder.Entity("Crm.Api.Models.CampaignPromotion", b =>
+                {
+                    b.HasOne("Crm.Api.Models.Campaign", "Campaign")
+                        .WithMany("CampaignPromotions")
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Crm.Api.Models.Promotion", "Promotion")
+                        .WithMany("CampaignPromotions")
+                        .HasForeignKey("PromotionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Campaign");
+
+                    b.Navigation("Promotion");
                 });
 
             modelBuilder.Entity("Crm.Api.Models.CampaignSchedule", b =>
@@ -507,6 +640,8 @@ namespace Crm.Api.Data.Migrations
 
             modelBuilder.Entity("Crm.Api.Models.Campaign", b =>
                 {
+                    b.Navigation("CampaignPromotions");
+
                     b.Navigation("CampaignSchedule");
 
                     b.Navigation("MarketingInteractions");
@@ -517,6 +652,16 @@ namespace Crm.Api.Data.Migrations
                     b.Navigation("OrderHistories");
 
                     b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("Crm.Api.Models.Promotion", b =>
+                {
+                    b.Navigation("CampaignPromotions");
+                });
+
+            modelBuilder.Entity("Crm.Api.Models.Template", b =>
+                {
+                    b.Navigation("Campaigns");
                 });
 
             modelBuilder.Entity("Crm.Api.Models.Ticket", b =>

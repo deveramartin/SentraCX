@@ -1,6 +1,8 @@
+using Crm.Api.BackgroundJobs;
 using Crm.Api.Data;
 using Crm.Api.Helpers;
 using Crm.Api.Hubs;
+using Crm.Api.Interfaces;
 using Crm.Api.Interfaces.Repositories;
 using Crm.Api.Interfaces.Services;
 using Crm.Api.Middleware;
@@ -47,6 +49,17 @@ var redisPort = Environment.GetEnvironmentVariable("REDIS_PORT") ?? "6379";
 builder.Services.AddSignalR()
     .AddStackExchangeRedis($"{redisHost}:{redisPort}");
 
+// File storage provider
+var storageProvider = Environment.GetEnvironmentVariable("FILE_STORAGE_PROVIDER") ?? "Local";
+if (storageProvider.Equals("S3", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddScoped<IFileStorageService, AwsS3FileStorageService>();
+}
+else
+{
+    builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+}
+
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICustomerProfileRepository, CustomerProfileRepository>();
@@ -54,6 +67,9 @@ builder.Services.AddScoped<IOrderHistoryRepository, OrderHistoryRepository>();
 builder.Services.AddScoped<IMarketingInteractionRepository, MarketingInteractionRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
+builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
+builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
 
 // Services
 builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -61,6 +77,13 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IMarketingInteractionService, MarketingInteractionService>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<ICampaignService, CampaignService>();
+builder.Services.AddScoped<ITemplateService, TemplateService>();
+builder.Services.AddScoped<IPromotionService, PromotionService>();
+
+// Background Jobs
+builder.Services.AddHostedService<CampaignStatusJob>();
+builder.Services.AddHostedService<PromotionStatusJob>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -101,6 +124,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseCors();
 app.UseAuthentication();
 app.UseMiddleware<JitProvisioningMiddleware>();

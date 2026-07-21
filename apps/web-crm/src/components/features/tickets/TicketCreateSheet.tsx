@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -22,60 +23,72 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import type { SupportTicket } from "./types";
+import { crmClient } from "@/lib/api/crm-client";
+import { CreateTicketInput } from "@/types/ticket";
 
 interface TicketCreateSheetProps {
-  onCreateTicket: (ticket: SupportTicket) => void;
-  nextId: number;
+  customerId?: string;
+  onSuccess: () => void;
+  onShowToast: (msg: string) => void;
 }
 
-interface TicketFormValues {
-  customer: string;
-  issue: string;
-  priority: "High" | "Medium" | "Low";
-}
-
-export function TicketCreateSheet({ onCreateTicket, nextId }: TicketCreateSheetProps) {
+export function TicketCreateSheet({ customerId = "00000000-0000-0000-0000-000000000001", onSuccess, onShowToast }: TicketCreateSheetProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const form = useForm<TicketFormValues>({
+  const form = useForm<CreateTicketInput>({
     defaultValues: {
-      customer: "",
-      issue: "",
-      priority: "Medium",
+      title: "",
+      description: "",
+      imageUrl: "",
     },
   });
 
-  const onSubmit = (values: TicketFormValues) => {
-    if (!values.customer.trim() || !values.issue.trim()) return;
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const res = await crmClient.upload.uploadFile(file, "tickets");
+      form.setValue("imageUrl", res.url);
+      onShowToast("Attachment uploaded successfully.");
+    } catch {
+      onShowToast("Failed to upload attachment.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
-    const ticket: SupportTicket = {
-      id: `TCK-${nextId}`,
-      customer: values.customer.trim(),
-      issue: values.issue.trim(),
-      priority: values.priority,
-      status: "Open",
-      time: "Just now",
-    };
+  const onSubmit = async (values: CreateTicketInput) => {
+    if (!values.title.trim() || !values.description.trim()) {
+      onShowToast("Please fill in title and description.");
+      return;
+    }
 
-    onCreateTicket(ticket);
-    form.reset();
-    setIsOpen(false);
+    try {
+      const ticket = await crmClient.tickets.create(values, customerId);
+      onShowToast(`Ticket ${ticket.title} created successfully!`);
+      form.reset();
+      setIsOpen(false);
+      onSuccess();
+    } catch (err) {
+      onShowToast(err instanceof Error ? err.message : "Failed to create ticket");
+    }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={(val) => { if (!val) form.reset(); setIsOpen(val); }}>
       <DialogTrigger asChild>
         <Button className="self-start sm:self-center">
-          <Plus />
-          Create Task
+          <Plus className="w-4 h-4 mr-2" />
+          Create Ticket
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[100vw] sm:max-w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
+      <DialogContent className="w-[90vw] max-w-[90vw] sm:max-w-[80vw] md:max-w-[700px] lg:max-w-[900px] max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
         <DialogHeader className="space-y-1.5 text-left">
           <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight">Create Support Ticket</DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">
-            Log a new support query into the CRM task queue.
+            Log a new support query into the CRM ticket queue.
           </DialogDescription>
         </DialogHeader>
 
@@ -83,24 +96,10 @@ export function TicketCreateSheet({ onCreateTicket, nextId }: TicketCreateSheetP
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-2">
             <FormField
               control={form.control}
-              name="customer"
+              name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Customer Name *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. Jackson Reed" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="issue"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Support Query *</FormLabel>
+                  <FormLabel>Ticket Title *</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g. Account lockout during checkout" {...field} />
                   </FormControl>
@@ -111,29 +110,25 @@ export function TicketCreateSheet({ onCreateTicket, nextId }: TicketCreateSheetP
 
             <FormField
               control={form.control}
-              name="priority"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Severity Priority</FormLabel>
+                  <FormLabel>Description *</FormLabel>
                   <FormControl>
-                    <div className="flex flex-wrap sm:flex-nowrap gap-2">
-                      {(["High", "Medium", "Low"] as const).map((p) => (
-                        <Button
-                          type="button"
-                          key={p}
-                          variant={field.value === p ? "default" : "outline"}
-                          className="flex-1 min-w-[80px]"
-                          onClick={() => field.onChange(p)}
-                        >
-                          {p}
-                        </Button>
-                      ))}
-                    </div>
+                    <Textarea rows={3} placeholder="Detailed explanation of the issue..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            <div className="space-y-1">
+              <FormLabel>Attachment Image (Optional)</FormLabel>
+              <div className="flex items-center gap-2">
+                <Input type="file" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
+                {isUploading && <Loader2 className="w-4 h-4 animate-spin shrink-0" />}
+              </div>
+            </div>
 
             <DialogFooter className="pt-4 flex flex-col-reverse sm:flex-row justify-end gap-2">
               <Button
@@ -145,7 +140,7 @@ export function TicketCreateSheet({ onCreateTicket, nextId }: TicketCreateSheetP
                 Cancel
               </Button>
               <Button type="submit" className="w-full sm:w-auto">
-                Create Task
+                Submit Ticket
               </Button>
             </DialogFooter>
           </form>

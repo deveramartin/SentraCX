@@ -16,9 +16,8 @@ public class CampaignConfiguration : IEntityTypeConfiguration<Campaign>
         builder.Property(c => c.Title).IsRequired().HasMaxLength(200);
         builder.Property(c => c.Subject).IsRequired().HasMaxLength(200);
         builder.Property(c => c.Description).IsRequired().HasColumnType("text");
-        builder.Property(c => c.Channel).IsRequired().HasMaxLength(50);
+        builder.Property(c => c.Channels).IsRequired();
         builder.Property(c => c.Status).IsRequired().HasMaxLength(50).HasDefaultValue("Draft");
-        builder.Property(c => c.TemplateId).HasMaxLength(128);
         builder.Property(c => c.ImageUrl).HasMaxLength(500);
 
         builder.Property(c => c.CreatedById).IsRequired().HasMaxLength(128);
@@ -28,6 +27,11 @@ public class CampaignConfiguration : IEntityTypeConfiguration<Campaign>
             .WithMany(u => u.Campaigns)
             .HasForeignKey(c => c.CreatedById)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(c => c.Template)
+            .WithMany(t => t.Campaigns)
+            .HasForeignKey(c => c.TemplateId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasMany(c => c.MarketingInteractions)
             .WithOne(mi => mi.Campaign)

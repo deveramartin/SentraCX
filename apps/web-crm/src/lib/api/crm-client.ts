@@ -9,17 +9,39 @@ import {
   OrderHistory,
   PaginatedResponse,
 } from "@/types/customer";
+import {
+  Campaign,
+  CampaignListItem,
+  CreateCampaignInput,
+  UpdateCampaignInput,
+  Template,
+} from "@/types/campaign";
+import {
+  Promotion,
+  PromotionListItem,
+  CreatePromotionInput,
+  UpdatePromotionInput,
+} from "@/types/promotion";
+import {
+  Ticket,
+  TicketListItem,
+  CreateTicketInput,
+  PaginatedTicketResponse,
+} from "@/types/ticket";
 
 const CRM_BASE = process.env.NEXT_PUBLIC_CRM_API_URL ?? "https://localhost:7001";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const url = `${CRM_BASE}${path}`;
+  const headers: Record<string, string> = { ...init?.headers as Record<string, string> };
+
+  if (!(init?.body instanceof FormData)) {
+    headers["Content-Type"] = "application/json";
+  }
+
   const response = await fetch(url, {
     ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...init?.headers,
-    },
+    headers,
   });
 
   if (!response.ok) {
@@ -90,5 +112,122 @@ export const crmClient = {
       request<PaginatedResponse<MarketingInteraction>>(
         `/api/v1/customers/${customerId}/marketing-interactions?page=${page}&pageSize=${pageSize}`
       ),
+  },
+  campaigns: {
+    list: (status?: string) => {
+      let url = `/api/v1/campaigns`;
+      if (status && status !== "All") {
+        url += `?status=${encodeURIComponent(status)}`;
+      }
+      return request<CampaignListItem[]>(url);
+    },
+    getById: (id: string) =>
+      request<Campaign>(`/api/v1/campaigns/${id}`),
+    create: (body: CreateCampaignInput) =>
+      request<Campaign>(`/api/v1/campaigns`, {
+        method: "POST",
+        body: JSON.stringify(body),
+      }),
+    update: (id: string, body: UpdateCampaignInput) =>
+      request<void>(`/api/v1/campaigns/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+      }),
+    updateStatus: (id: string, status: string) =>
+      request<void>(`/api/v1/campaigns/${id}/status?status=${encodeURIComponent(status)}`, {
+        method: "PUT",
+      }),
+    attachPromotions: (id: string, promotionIds: string[]) =>
+      request<void>(`/api/v1/campaigns/${id}/promotions`, {
+        method: "POST",
+        body: JSON.stringify({ promotionIds }),
+      }),
+    delete: (id: string) =>
+      request<void>(`/api/v1/campaigns/${id}`, {
+        method: "DELETE",
+      }),
+  },
+  promotions: {
+    list: (status?: string) => {
+      let url = `/api/v1/promotions`;
+      if (status && status !== "All") {
+        url += `?status=${encodeURIComponent(status)}`;
+      }
+      return request<PromotionListItem[]>(url);
+    },
+    getById: (id: string) =>
+      request<Promotion>(`/api/v1/promotions/${id}`),
+    create: (body: CreatePromotionInput) =>
+      request<Promotion>(`/api/v1/promotions`, {
+        method: "POST",
+        body: JSON.stringify(body),
+      }),
+    update: (id: string, body: UpdatePromotionInput) =>
+      request<void>(`/api/v1/promotions/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(body),
+      }),
+    updateStatus: (id: string, status: string) =>
+      request<void>(`/api/v1/promotions/${id}/status`, {
+        method: "PUT",
+        body: JSON.stringify({ status }),
+      }),
+    cancel: (id: string) =>
+      request<void>(`/api/v1/promotions/${id}/cancel`, {
+        method: "DELETE",
+      }),
+  },
+  templates: {
+    list: (channel?: string) => {
+      let url = `/api/v1/templates`;
+      if (channel) {
+        url += `?channel=${encodeURIComponent(channel)}`;
+      }
+      return request<Template[]>(url);
+    },
+    getById: (id: string) =>
+      request<Template>(`/api/v1/templates/${id}`),
+  },
+  tickets: {
+    list: (page = 1, pageSize = 20, status?: string, customerId?: string) => {
+      let url = `/api/v1/tickets?page=${page}&pageSize=${pageSize}`;
+      if (status && status !== "All") {
+        url += `&status=${encodeURIComponent(status)}`;
+      }
+      if (customerId) {
+        url += `&customerId=${encodeURIComponent(customerId)}`;
+      }
+      return request<PaginatedTicketResponse>(url);
+    },
+    getById: (id: string) =>
+      request<Ticket>(`/api/v1/tickets/${id}`),
+    create: (body: CreateTicketInput, customerId: string) =>
+      request<Ticket>(`/api/v1/tickets?customerId=${encodeURIComponent(customerId)}`, {
+        method: "POST",
+        body: JSON.stringify(body),
+      }),
+    claim: (id: string, staffUserId: string) =>
+      request<void>(`/api/v1/tickets/${id}/claim?staffUserId=${encodeURIComponent(staffUserId)}`, {
+        method: "PUT",
+      }),
+    updateStatus: (id: string, status: string) =>
+      request<void>(`/api/v1/tickets/${id}/status`, {
+        method: "PUT",
+        body: JSON.stringify({ status }),
+      }),
+    cancel: (id: string) =>
+      request<void>(`/api/v1/tickets/${id}`, {
+        method: "DELETE",
+      }),
+  },
+  upload: {
+    uploadFile: async (file: File, folder = "general"): Promise<{ url: string }> => {
+      const formData = new FormData();
+      formData.append("file", file);
+      return request<{ url: string }>(`/api/v1/upload?folder=${encodeURIComponent(folder)}`, {
+        method: "POST",
+        body: formData,
+      });
+    },
   },
 };
