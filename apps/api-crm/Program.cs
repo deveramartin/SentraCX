@@ -1,3 +1,4 @@
+using Crm.Api.BackgroundJobs;
 using Crm.Api.Data;
 using Crm.Api.Helpers;
 using Crm.Api.Hubs;
@@ -79,6 +80,10 @@ builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<ICampaignService, CampaignService>();
 builder.Services.AddScoped<ITemplateService, TemplateService>();
 builder.Services.AddScoped<IPromotionService, PromotionService>();
+
+// Background Jobs
+builder.Services.AddHostedService<CampaignStatusJob>();
+builder.Services.AddHostedService<PromotionStatusJob>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
