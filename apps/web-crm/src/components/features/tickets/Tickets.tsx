@@ -1,90 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { TicketFilters } from "./TicketFilters";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useTickets } from "@/hooks/useTickets";
 import { TicketCreateSheet } from "./TicketCreateSheet";
 import { TicketTable } from "./TicketTable";
-import type { SupportTicket } from "./types";
 
 export function Tickets() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [priorityFilter, setPriorityFilter] = useState<string>("All");
-  const [statusFilter, setStatusFilter] = useState<string>("All");
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("Unclaimed");
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
-  const [tickets, setTickets] = useState<SupportTicket[]>([
-    { id: "TCK-1024", customer: "Olivia Vance", issue: "API Integration Error", priority: "High", status: "Open", time: "10 mins ago" },
-    { id: "TCK-1023", customer: "Jackson Reed", issue: "Billing Query & Refund", priority: "Medium", status: "In Progress", time: "45 mins ago" },
-    { id: "TCK-1022", customer: "Amara Okoro", issue: "Account Lockout", priority: "High", status: "Open", time: "1 hour ago" },
-    { id: "TCK-1021", customer: "Liam Anderson", issue: "Feature Request: Export PDF", priority: "Low", status: "Resolved", time: "3 hours ago" },
-    { id: "TCK-1020", customer: "Sophia Martinez", issue: "Email configuration latency", priority: "Medium", status: "Resolved", time: "1 day ago" },
-  ]);
+  const { data, isLoading, refetch } = useTickets(1, 50, activeTab);
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3000);
   };
-
-  const handleCreateTicket = (newTicket: SupportTicket) => {
-    setTickets([newTicket, ...tickets]);
-    showToast(`Ticket ${newTicket.id} created successfully!`);
-  };
-
-  const handleDeleteTicket = (id: string) => {
-    setTickets((prev) => prev.filter((t) => t.id !== id));
-    setSelectedIds((prev) => prev.filter((item) => item !== id));
-    showToast(`Ticket ${id} deleted.`);
-  };
-
-  const handleCycleStatus = (ticketId: string) => {
-    const statusCycle: Record<SupportTicket["status"], SupportTicket["status"]> = {
-      Open: "In Progress",
-      "In Progress": "Resolved",
-      Resolved: "Open",
-    };
-
-    setTickets((prev) =>
-      prev.map((t) => (t.id === ticketId ? { ...t, status: statusCycle[t.status] } : t))
-    );
-    showToast(`Ticket ${ticketId} status updated.`);
-  };
-
-  const filteredTickets = tickets.filter((t) => {
-    const matchesSearch =
-      t.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.issue.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.id.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesPriority = priorityFilter === "All" || t.priority === priorityFilter;
-    const matchesStatus = statusFilter === "All" || t.status === statusFilter;
-    return matchesSearch && matchesPriority && matchesStatus;
-  });
-
-  const handleToggleSelectAll = () => {
-    if (selectedIds.length === filteredTickets.length) {
-      setSelectedIds([]);
-    } else {
-      setSelectedIds(filteredTickets.map((t) => t.id));
-    }
-  };
-
-  const handleToggleSelectRow = (id: string) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds((prev) => prev.filter((item) => item !== id));
-    } else {
-      setSelectedIds((prev) => [...prev, id]);
-    }
-  };
-
-  const handleResetFilters = () => {
-    setSearchQuery("");
-    setPriorityFilter("All");
-    setStatusFilter("All");
-  };
-
-  const nextIdNum = Math.max(...tickets.map((t) => parseInt(t.id.split("-")[1]))) + 1;
-  const isFiltered = searchQuery !== "" || priorityFilter !== "All" || statusFilter !== "All";
 
   return (
     <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-2xl">
@@ -96,37 +27,36 @@ export function Tickets() {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md">
         <div className="space-y-sm">
-          <h1 className="text-headline-md font-bold tracking-tight text-foreground">Tickets</h1>
+          <h1 className="text-headline-md font-bold tracking-tight text-foreground">Support Tickets (Staff View)</h1>
           <p className="text-body-md text-muted-foreground">
-            Here&apos;s a list of your support tickets and tasks for this month.
+            Claim available customer inquiries, track progress, and mark tasks as completed.
           </p>
         </div>
-        <TicketCreateSheet onCreateTicket={handleCreateTicket} nextId={nextIdNum} />
+        <TicketCreateSheet onSuccess={refetch} onShowToast={showToast} />
       </div>
 
-      <Card className="bg-card border-border rounded-xl flex flex-col shadow-none border-none">
-        <CardContent className="p-0 space-y-md">
-          <TicketFilters
-            searchQuery={searchQuery}
-            priorityFilter={priorityFilter}
-            statusFilter={statusFilter}
-            isFiltered={isFiltered}
-            onSearchChange={setSearchQuery}
-            onPriorityChange={setPriorityFilter}
-            onStatusChange={setStatusFilter}
-            onReset={handleResetFilters}
-          />
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-md">
+        <TabsList className="w-full sm:w-auto overflow-x-auto justify-start border-b border-border bg-transparent p-0">
+          <TabsTrigger value="Unclaimed" className="px-lg py-sm font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
+            Available (Unclaimed)
+          </TabsTrigger>
+          <TabsTrigger value="Claimed" className="px-lg py-sm font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
+            Claimed
+          </TabsTrigger>
+          <TabsTrigger value="Completed" className="px-lg py-sm font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
+            Completed
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value={activeTab} className="p-0 m-0">
           <TicketTable
-            tickets={filteredTickets}
-            selectedIds={selectedIds}
-            onToggleSelectAll={handleToggleSelectAll}
-            onToggleSelectRow={handleToggleSelectRow}
-            onCycleStatus={handleCycleStatus}
-            onDeleteTicket={handleDeleteTicket}
+            tickets={data?.items ?? []}
+            isLoading={isLoading}
+            onRefresh={refetch}
             onShowToast={showToast}
           />
-        </CardContent>
-      </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
