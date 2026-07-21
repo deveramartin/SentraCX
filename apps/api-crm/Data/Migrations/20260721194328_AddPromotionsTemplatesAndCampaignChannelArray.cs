@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -15,6 +15,8 @@ namespace Crm.Api.Data.Migrations
             migrationBuilder.DropColumn(
                 name: "Channel",
                 table: "campaigns");
+
+            migrationBuilder.Sql("ALTER TABLE campaigns ALTER COLUMN \"TemplateId\" TYPE uuid USING NULL;");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "TemplateId",
