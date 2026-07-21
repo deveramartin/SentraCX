@@ -29,32 +29,32 @@ Each item maps to its BRD requirement(s) where applicable, so tasks can be trace
 ### CRM-002 — Campaigns
 *Maps to: BR-CRM-05, BR-CRM-06*
 
-- [ ] Design `campaign` data model: title, subject, description, channel (email, in-app), schedule type (send now, scheduled, recurring), recurring days (mon/tue/wed), images (optional), template reference, status (draft, active, ended)
-- [ ] CRUD endpoints for campaigns
-- [ ] Endpoints to list campaigns filtered by status: active (campaign list tab), draft, history (ended)
-- [ ] Endpoint to fetch single campaign details
-- [ ] Scheduling logic to send campaigns immediately, on a schedule, or recurring on specified weekdays
-- [ ] Background job to auto-stop a campaign once its end date/schedule has elapsed
-- [ ] Draft save/update logic (partial campaign data allowed while in draft state)
-- [ ] Template storage and retrieval endpoints
-- [ ] Endpoint to record which marketing channel(s) were used per campaign (FR-CRM-06.2)
+- [x] Design `campaign` data model: title, subject, description, channels (email, in-app, facebook, twitter, instagram), schedule type (send now, scheduled, recurring), recurring days (mon/tue/wed), images (optional), template reference, status (draft, active, ended)
+- [x] CRUD endpoints for campaigns
+- [x] Endpoints to list campaigns filtered by status: active (campaign list tab), draft, history (ended)
+- [x] Endpoint to fetch single campaign details
+- [x] Scheduling logic to send campaigns immediately, on a schedule, or recurring on specified weekdays
+- [x] Background job to auto-stop a campaign once its end date/schedule has elapsed
+- [x] Draft save/update logic (partial campaign data allowed while in draft state)
+- [x] Template storage and retrieval endpoints
+- [x] Endpoint to record which marketing channel(s) were used per campaign (FR-CRM-06.2)
 
 ### CRM-003 — Promotions
 *Maps to: BR-CRM-05*
 
-- [ ] Design `promotion` data model: title, description, promotion type (discount, voucher, free shipping, buy-one-get-one, cashback), discount value, voucher code, start date, end date, status (draft, active, cancelled, accomplished)
-- [ ] CRUD endpoints for promotions
-- [ ] Endpoints to list promotions by status: all/active, drafted, cancelled, accomplished
-- [ ] Endpoint to fetch single promotion details
-- [ ] Endpoint to draft a promotion (partial/incomplete data allowed)
-- [ ] Endpoint to edit/update a drafted promotion
-- [ ] Endpoint to stop/cancel an active promotion
-- [ ] Background job or logic to auto-mark a promotion as "accomplished" once its end date passes
-- [ ] Field validation per promotion type (e.g., discount value required for discount type, voucher code required for voucher type)
+- [x] Design `promotion` data model: title, description, promotion type (discount, voucher, free shipping, buy-one-get-one, cashback), discount value, voucher code, start date, end date, status (draft, active, cancelled, accomplished)
+- [x] CRUD endpoints for promotions
+- [x] Endpoints to list promotions by status: all/active, drafted, cancelled, accomplished
+- [x] Endpoint to fetch single promotion details
+- [x] Endpoint to draft a promotion (partial/incomplete data allowed)
+- [x] Endpoint to edit/update a drafted promotion
+- [x] Endpoint to stop/cancel an active promotion
+- [x] Background job or logic to auto-mark a promotion as "accomplished" once its end date passes
+- [x] Field validation per promotion type (e.g., discount value required for discount type, voucher code required for voucher type)
 
 ### CRM-004 — Campaign–Promotion Linking
-- [ ] Many-to-many relationship between `campaign` and `promotion`
-- [ ] Endpoint to attach/select multiple promotions under a single campaign
+- [x] Many-to-many relationship between `campaign` and `promotion`
+- [x] Endpoint to attach/select multiple promotions under a single campaign
 
 ### CRM-005 — Tickets (Staff/Manager view)
 *Maps to: BR-CRM-02*
