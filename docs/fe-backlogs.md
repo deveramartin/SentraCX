@@ -9,17 +9,17 @@ Each item maps to its BRD requirement(s) where applicable, so tasks can be trace
 ### CRM-001 — Customer Profiles (Contacts & Leads)
 *Maps to: BR-CRM-01*
 
-- [ ] Customer module with separate tabs for **contacts** and **leads
-- [ ] Contact/lead list view showing name, email, phone (optional), customer type, created at
-- [ ] "Add new customer contact/lead" form: first name, last name, email, phone (optional), customer type
-- [ ] Delete customer contact/lead action (with confirmation)
-- [ ] Customer detail page, opened by clicking a customer's name, with three tabs: **Overview**, **Marketing History**, **Order History**
-- [ ] Overview tab: display name, email, address (optional), created at, status, customer type, profile (optional), plus the 5 most recent order history and marketing history items
-- [ ] Status control on the detail page: active / inactive / suspended
-- [ ] Customer type control: vip / regular / institutional buyer — disabled/locked for leads (always shows "lead")
-- [ ] Optional notes field/section on the customer profile
-- [ ] Marketing History tab: paginated list; clicking an item opens details (title, description, channel, interaction type, sent at)
-- [ ] Order History tab: paginated list; clicking an item opens order details — **hide this tab entirely for leads**, show only for customer contacts
+- [x] Customer module with separate tabs for **contacts** and **leads**
+- [x] Contact/lead list view showing name, email, phone (optional), customer type, created at
+- [x] "Add new customer contact/lead" form: first name, last name, email, phone (optional), customer type
+- [x] Delete customer contact/lead action (with confirmation)
+- [x] Customer detail page, opened by clicking a customer's name, with three tabs: **Overview**, **Marketing History**, **Order History**
+- [x] Overview tab: display name, email, address (optional), created at, status, customer type, profile (optional), plus the 5 most recent order history and marketing history items
+- [x] Status control on the detail page: active / inactive / suspended
+- [x] Customer type control: vip / regular / institutional buyer — disabled/locked for leads (always shows "lead")
+- [x] Optional notes field/section on the customer profile
+- [x] Marketing History tab: paginated list; clicking an item opens details (title, description, channel, interaction type, sent at)
+- [x] Order History tab: paginated list; clicking an item opens order details — **hide this tab entirely for leads**, show only for customer contacts
 - [ ] ~~Email button on profile redirecting to campaign~~ — marked **Discarded** in source, confirm before building
 
 ---
