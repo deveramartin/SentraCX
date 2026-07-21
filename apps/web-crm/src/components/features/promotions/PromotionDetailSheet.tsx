@@ -39,7 +39,7 @@ export function PromotionDetailSheet({ promotionId, onClose, onRefresh, onShowTo
 
   return (
     <Dialog open={!!promotionId} onOpenChange={(open) => { if (!open) onClose(); }}>
-      <DialogContent className="w-[100vw] sm:max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg">
+      <DialogContent className="w-[90vw] max-w-[90vw] sm:max-w-[80vw] md:max-w-[700px] lg:max-w-[900px] max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
         <DialogHeader className="text-left space-y-1">
           <DialogTitle className="text-xl font-bold">{promotion?.title ?? "Promotion Details"}</DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground">

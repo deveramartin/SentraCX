@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { CampaignListItem } from "@/types/campaign";
 import { CampaignChannelBadge } from "./CampaignChannelBadge";
+import { CampaignStatusBadge } from "./CampaignStatusBadge";
 import { CampaignDetailSheet } from "./CampaignDetailSheet";
 
 interface CampaignTableProps {
@@ -68,9 +68,7 @@ export function CampaignTable({ campaigns, isLoading, onRefresh, onShowToast }: 
                     </div>
                   </td>
                   <td className="py-md px-lg">
-                    <Badge variant={c.status === "Active" ? "default" : c.status === "Draft" ? "outline" : "secondary"}>
-                      {c.status}
-                    </Badge>
+                    <CampaignStatusBadge status={c.status} />
                   </td>
                   <td className="py-md px-lg text-muted-foreground text-xs">
                     {new Date(c.createdAt).toLocaleDateString()}

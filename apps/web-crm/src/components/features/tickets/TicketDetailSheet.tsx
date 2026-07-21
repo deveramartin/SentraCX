@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,6 +13,7 @@ import {
 import { useTicket } from "@/hooks/useTicket";
 import { crmClient } from "@/lib/api/crm-client";
 import { MessageSquare } from "lucide-react";
+import { TicketStatusBadge } from "./TicketStatusBadge";
 
 interface TicketDetailSheetProps {
   ticketId: string | null;
@@ -23,7 +23,7 @@ interface TicketDetailSheetProps {
   onShowToast: (msg: string) => void;
 }
 
-export function TicketDetailSheet({ ticketId, staffUserId = "usr-staff-default", onClose, onRefresh, onShowToast }: TicketDetailSheetProps) {
+export function TicketDetailSheet({ ticketId, staffUserId = "user-001", onClose, onRefresh, onShowToast }: TicketDetailSheetProps) {
   const { data: ticket, isLoading } = useTicket(ticketId);
 
   if (!ticketId) return null;
@@ -77,9 +77,7 @@ export function TicketDetailSheet({ ticketId, staffUserId = "usr-staff-default",
           <div className="space-y-4 py-2 text-sm">
             <div className="flex items-center justify-between border-b border-border pb-2">
               <span className="text-muted-foreground font-medium">Status</span>
-              <Badge variant={ticket.status === "Completed" ? "secondary" : ticket.status === "Claimed" ? "default" : "outline"}>
-                {ticket.status}
-              </Badge>
+              <TicketStatusBadge status={ticket.status} />
             </div>
 
             <div className="space-y-1">

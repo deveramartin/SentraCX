@@ -1,27 +1,27 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { CustomerStatus } from "@/types/customer";
+import { CampaignStatus } from "@/types/campaign";
 
-interface CustomerStatusBadgeProps {
-  status: CustomerStatus;
+interface CampaignStatusBadgeProps {
+  status: CampaignStatus;
 }
 
-export function CustomerStatusBadge({ status }: CustomerStatusBadgeProps) {
+export function CampaignStatusBadge({ status }: CampaignStatusBadgeProps) {
   const getStyle = () => {
     switch (status) {
       case "Active":
         return "bg-badge-success text-badge-success-foreground border-transparent";
-      case "Inactive":
+      case "Draft":
+        return "bg-badge-warning text-badge-warning-foreground border-transparent";
+      case "Ended":
         return "bg-muted text-muted-foreground border-transparent";
-      case "Suspended":
-        return "bg-badge-destructive text-badge-destructive-foreground border-transparent";
       default:
         return "bg-muted text-muted-foreground border-transparent";
     }
   };
 
   return (
-    <Badge className={`text-label-sm font-medium border-none shadow-none ${getStyle()}`}>
+    <Badge className={`text-xs font-medium border-none shadow-none ${getStyle()}`}>
       {status}
     </Badge>
   );

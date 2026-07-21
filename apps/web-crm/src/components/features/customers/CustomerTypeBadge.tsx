@@ -8,29 +8,29 @@ interface CustomerTypeBadgeProps {
 
 export function CustomerTypeBadge({ customerType }: CustomerTypeBadgeProps) {
   let label = "Regular";
-  let variant: "default" | "secondary" | "outline" | "destructive" | "info" | "warning" | "success" | "notification" = "secondary";
+  let styleClass = "bg-badge-info text-badge-info-foreground border-transparent";
 
   switch (customerType) {
     case "InstitutionalBuyer":
       label = "Institutional Buyer";
-      variant = "info";
+      styleClass = "bg-badge-indigo text-badge-indigo-foreground border-transparent";
       break;
     case "VIP":
       label = "VIP";
-      variant = "warning";
+      styleClass = "bg-badge-purple text-badge-purple-foreground border-transparent";
       break;
     case "Lead":
       label = "Lead";
-      variant = "default";
+      styleClass = "bg-badge-warning text-badge-warning-foreground border-transparent";
       break;
     default:
       label = "Regular";
-      variant = "secondary";
+      styleClass = "bg-badge-info text-badge-info-foreground border-transparent";
       break;
   }
 
   return (
-    <Badge variant={variant} className="text-label-sm font-medium">
+    <Badge className={`text-label-sm font-medium border-none shadow-none ${styleClass}`}>
       {label}
     </Badge>
   );

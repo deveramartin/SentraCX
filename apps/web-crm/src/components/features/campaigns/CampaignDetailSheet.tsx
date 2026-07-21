@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,6 +12,7 @@ import {
 import { useCampaign } from "@/hooks/useCampaign";
 import { crmClient } from "@/lib/api/crm-client";
 import { CampaignChannelBadge } from "./CampaignChannelBadge";
+import { CampaignStatusBadge } from "./CampaignStatusBadge";
 
 interface CampaignDetailSheetProps {
   campaignId: string | null;
@@ -53,9 +53,7 @@ export function CampaignDetailSheet({ campaignId, onClose, onRefresh, onShowToas
           <div className="space-y-4 py-2 text-sm">
             <div className="flex items-center justify-between border-b border-border pb-2">
               <span className="text-muted-foreground font-medium">Status</span>
-              <Badge variant={campaign.status === "Active" ? "default" : "secondary"}>
-                {campaign.status}
-              </Badge>
+              <CampaignStatusBadge status={campaign.status} />
             </div>
 
             <div className="space-y-1">
@@ -97,9 +95,9 @@ export function CampaignDetailSheet({ campaignId, onClose, onRefresh, onShowToas
                 <span className="text-muted-foreground font-medium block">Attached Promotions</span>
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {campaign.promotions.map((p) => (
-                    <Badge key={p.id} variant="outline" className="text-xs">
+                    <span key={p.id} className="text-xs bg-badge-info text-badge-info-foreground px-2 py-0.5 rounded font-medium">
                       {p.title} ({p.promotionType})
-                    </Badge>
+                    </span>
                   ))}
                 </div>
               </div>

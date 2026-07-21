@@ -25,7 +25,7 @@ public class CampaignsController(ICampaignService campaignService) : ControllerB
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromBody] CreateCampaignRequestDto dto,
-        [FromQuery] string createdById = "usr-staff-default")
+        [FromQuery] string createdById = "user-001")
     {
         var result = await campaignService.CreateAsync(dto, createdById);
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);

@@ -8,26 +8,46 @@ interface CampaignChannelBadgeProps {
 }
 
 export function CampaignChannelBadge({ channel }: CampaignChannelBadgeProps) {
-  const getIcon = () => {
+  const getStyle = () => {
     switch (channel) {
       case "Email":
-        return <Mail className="w-3 h-3 mr-1" />;
+        return {
+          icon: <Mail className="w-3 h-3 mr-1 shrink-0" />,
+          className: "bg-badge-info text-badge-info-foreground border-transparent font-medium",
+        };
       case "InApp":
-        return <BellRing className="w-3 h-3 mr-1" />;
+        return {
+          icon: <BellRing className="w-3 h-3 mr-1 shrink-0" />,
+          className: "bg-badge-warning text-badge-warning-foreground border-transparent font-medium",
+        };
       case "Facebook":
-        return <Share2 className="w-3 h-3 mr-1" />;
+        return {
+          icon: <Share2 className="w-3 h-3 mr-1 shrink-0" />,
+          className: "bg-badge-indigo text-badge-indigo-foreground border-transparent font-medium",
+        };
       case "Twitter":
-        return <Send className="w-3 h-3 mr-1" />;
+        return {
+          icon: <Send className="w-3 h-3 mr-1 shrink-0" />,
+          className: "bg-badge-teal text-badge-teal-foreground border-transparent font-medium",
+        };
       case "Instagram":
-        return <Camera className="w-3 h-3 mr-1" />;
+        return {
+          icon: <Camera className="w-3 h-3 mr-1 shrink-0" />,
+          className: "bg-badge-purple text-badge-purple-foreground border-transparent font-medium",
+        };
       default:
-        return null;
+        return {
+          icon: null,
+          className: "bg-muted text-muted-foreground border-transparent font-medium",
+        };
     }
   };
 
+  const { icon, className } = getStyle();
+
   return (
-    <Badge variant="outline" className="text-xs py-0.5 px-2 font-normal flex items-center inline-flex">
-      {getIcon()}
+    <Badge className={`text-xs py-0.5 px-2 flex items-center inline-flex border-none shadow-none ${className}`}>
+      {icon}
       {channel}
     </Badge>
   );

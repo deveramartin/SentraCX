@@ -1,20 +1,23 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { PromotionStatus } from "@/types/promotion";
+import { TicketStatus } from "@/types/ticket";
 
-interface PromotionStatusBadgeProps {
-  status: PromotionStatus;
+interface TicketStatusBadgeProps {
+  status: TicketStatus | string;
 }
 
-export function PromotionStatusBadge({ status }: PromotionStatusBadgeProps) {
+export function TicketStatusBadge({ status }: TicketStatusBadgeProps) {
   const getStyle = () => {
     switch (status) {
-      case "Active":
-        return "bg-badge-success text-badge-success-foreground border-transparent";
-      case "Draft":
+      case "Unclaimed":
+      case "Pending":
         return "bg-badge-warning text-badge-warning-foreground border-transparent";
-      case "Accomplished":
+      case "Claimed":
+      case "Ongoing":
         return "bg-badge-info text-badge-info-foreground border-transparent";
+      case "Completed":
+        return "bg-badge-success text-badge-success-foreground border-transparent";
+      case "Canceled":
       case "Cancelled":
         return "bg-badge-destructive text-badge-destructive-foreground border-transparent";
       default:

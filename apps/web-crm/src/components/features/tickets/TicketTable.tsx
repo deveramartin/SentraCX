@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import { Search, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { TicketListItem } from "@/types/ticket";
+import { TicketStatusBadge } from "./TicketStatusBadge";
 import { TicketDetailSheet } from "./TicketDetailSheet";
 
 interface TicketTableProps {
@@ -63,9 +63,7 @@ export function TicketTable({ tickets, isLoading, onRefresh, onShowToast }: Tick
                   <td className="py-md px-lg font-medium text-foreground">{t.title}</td>
                   <td className="py-md px-lg text-foreground">{t.customerName}</td>
                   <td className="py-md px-lg">
-                    <Badge variant={t.status === "Completed" ? "secondary" : t.status === "Claimed" ? "default" : "outline"}>
-                      {t.status}
-                    </Badge>
+                    <TicketStatusBadge status={t.status} />
                   </td>
                   <td className="py-md px-lg text-muted-foreground text-xs">
                     {new Date(t.createdAt).toLocaleDateString()}

@@ -5,12 +5,12 @@ import Link from "next/link";
 import { MessageSquare, XCircle, Eye } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useTickets } from "@/hooks/useTickets";
 import { crmClient } from "@/lib/api/crm-client";
 import { TicketCreateSheet } from "./TicketCreateSheet";
 import { TicketDetailSheet } from "./TicketDetailSheet";
+import { TicketStatusBadge } from "./TicketStatusBadge";
 
 interface TicketsCustomerViewProps {
   customerId?: string;
@@ -95,9 +95,7 @@ export function TicketsCustomerView({ customerId }: TicketsCustomerViewProps) {
                       <tr key={t.id} className="hover:bg-muted/30 transition-colors">
                         <td className="py-md px-lg font-medium text-foreground">{t.title}</td>
                         <td className="py-md px-lg">
-                          <Badge variant={t.status === "Completed" ? "secondary" : t.status === "Canceled" ? "destructive" : "outline"}>
-                            {t.status}
-                          </Badge>
+                          <TicketStatusBadge status={t.status} />
                         </td>
                         <td className="py-md px-lg text-muted-foreground text-xs">
                           {new Date(t.createdAt).toLocaleDateString()}

@@ -32,6 +32,15 @@ public class CampaignRepository(AppDbContext dbContext) : ICampaignRepository
 
     public async Task<Campaign> AddAsync(Campaign campaign)
     {
+        if (!await dbContext.Users.AnyAsync(u => u.Id == campaign.CreatedById))
+        {
+            var fallbackUser = await dbContext.Users.FirstOrDefaultAsync();
+            if (fallbackUser != null)
+            {
+                campaign.CreatedById = fallbackUser.Id;
+            }
+        }
+
         dbContext.Campaigns.Add(campaign);
         await dbContext.SaveChangesAsync();
         return campaign;
