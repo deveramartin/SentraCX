@@ -113,7 +113,7 @@ export function CampaignFormSheet({ onSuccess, onShowToast }: CampaignFormSheetP
           Create Campaign
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[100vw] sm:max-w-xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
+      <DialogContent className="w-[90vw] max-w-[90vw] sm:max-w-[80vw] md:max-w-[700px] lg:max-w-[900px] max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
         <DialogHeader className="space-y-1.5 text-left">
           <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight">Create Campaign</DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">
