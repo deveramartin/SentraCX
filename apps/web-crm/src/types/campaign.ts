@@ -1,0 +1,69 @@
+import { PromotionListItem } from "./promotion";
+
+export type CampaignStatus = "Draft" | "Active" | "Ended";
+export type CampaignChannel = "Email" | "InApp" | "Facebook" | "Twitter" | "Instagram";
+export type ScheduleType = "SendNow" | "Scheduled" | "Recurring";
+export type RecurrenceDay = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
+
+export interface CampaignSchedule {
+  scheduleType: ScheduleType;
+  recurrenceDays?: RecurrenceDay[];
+  startDate?: string | null;
+  endDate?: string | null;
+}
+
+export interface CampaignListItem {
+  id: string;
+  title: string;
+  channels: CampaignChannel[];
+  status: CampaignStatus;
+  createdAt: string;
+}
+
+export interface Campaign extends CampaignListItem {
+  subject: string;
+  description: string;
+  templateId?: string | null;
+  imageUrl?: string | null;
+  createdById?: string;
+  schedule?: CampaignSchedule | null;
+  promotions?: PromotionListItem[];
+}
+
+export interface CreateCampaignInput {
+  title: string;
+  subject: string;
+  description: string;
+  channels: CampaignChannel[];
+  scheduleType: ScheduleType;
+  recurrenceDays?: RecurrenceDay[];
+  startDate?: string;
+  endDate?: string;
+  imageUrl?: string;
+  templateId?: string;
+  status?: CampaignStatus;
+}
+
+export interface UpdateCampaignInput {
+  title?: string;
+  subject?: string;
+  description?: string;
+  channels?: CampaignChannel[];
+  scheduleType?: ScheduleType;
+  recurrenceDays?: RecurrenceDay[];
+  startDate?: string;
+  endDate?: string;
+  imageUrl?: string;
+  templateId?: string;
+  status?: CampaignStatus;
+}
+
+export interface Template {
+  id: string;
+  name: string;
+  description?: string | null;
+  contentHtml: string;
+  thumbnailUrl?: string | null;
+  channel: string;
+  createdAt: string;
+}
