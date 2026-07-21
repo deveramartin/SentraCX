@@ -29,9 +29,19 @@ public class CustomerProfileRepository(AppDbContext context) : ICustomerProfileR
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             var term = searchTerm.Trim();
-            query = query.Where(cp =>
-                EF.Functions.ILike(cp.User.DisplayName, $"%{term}%") ||
-                EF.Functions.ILike(cp.User.Email, $"%{term}%"));
+            if (context.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory")
+            {
+                var termLower = term.ToLower();
+                query = query.Where(cp =>
+                    cp.User.DisplayName.ToLower().Contains(termLower) ||
+                    cp.User.Email.ToLower().Contains(termLower));
+            }
+            else
+            {
+                query = query.Where(cp =>
+                    EF.Functions.ILike(cp.User.DisplayName, $"%{term}%") ||
+                    EF.Functions.ILike(cp.User.Email, $"%{term}%"));
+            }
         }
 
         query = query.OrderByDescending(cp => cp.CreatedAt);
