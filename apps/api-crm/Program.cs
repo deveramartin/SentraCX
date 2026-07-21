@@ -1,6 +1,7 @@
 using Crm.Api.Data;
 using Crm.Api.Helpers;
 using Crm.Api.Hubs;
+using Crm.Api.Interfaces;
 using Crm.Api.Interfaces.Repositories;
 using Crm.Api.Interfaces.Services;
 using Crm.Api.Middleware;
@@ -46,6 +47,17 @@ var redisPort = Environment.GetEnvironmentVariable("REDIS_PORT") ?? "6379";
 
 builder.Services.AddSignalR()
     .AddStackExchangeRedis($"{redisHost}:{redisPort}");
+
+// File storage provider
+var storageProvider = Environment.GetEnvironmentVariable("FILE_STORAGE_PROVIDER") ?? "Local";
+if (storageProvider.Equals("S3", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddScoped<IFileStorageService, AwsS3FileStorageService>();
+}
+else
+{
+    builder.Services.AddScoped<IFileStorageService, LocalFileStorageService>();
+}
 
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -101,6 +113,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseCors();
 app.UseAuthentication();
 app.UseMiddleware<JitProvisioningMiddleware>();
