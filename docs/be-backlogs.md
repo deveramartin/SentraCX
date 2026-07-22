@@ -85,10 +85,10 @@ Each item maps to its BRD requirement(s) where applicable, so tasks can be trace
 ### CRM-007 — Conversations (Staff/Manager view)
 *Maps to: BR-CRM-03, BR-CRM-04*
 
-- [ ] Real-time messaging infrastructure (e.g., WebSocket/pub-sub channel per conversation)
+- [x] Real-time messaging infrastructure (e.g., WebSocket/pub-sub channel per conversation)
 - [x] Design `conversation` and `message` data models, linked to the originating ticket
 - [x] Endpoint/socket event to send a message
-- [ ] Endpoint/socket event to receive/stream messages in real time
+- [x] Endpoint/socket event to receive/stream messages in real time
 - [x] Endpoint to list active conversations for a user (sourced from claimed tickets)
 - [x] Endpoints to list conversations filtered by unread / read / all
 - [x] Endpoint to mark a message/conversation as read or unread
