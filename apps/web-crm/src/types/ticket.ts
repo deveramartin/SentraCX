@@ -1,12 +1,13 @@
-export type TicketStatus = "Unclaimed" | "Claimed" | "Ongoing" | "Completed" | "Canceled";
+export type TicketStatus = "Unclaimed" | "Claimed" | "Ongoing" | "Completed" | "Canceled" | string;
 
 export interface TicketListItem {
   id: string;
   title: string;
   status: TicketStatus;
   customerName: string;
-  createdAt: string;
+  unreadMessageCount?: number;
   assignedToName?: string | null;
+  createdAt: string;
 }
 
 export interface Ticket extends TicketListItem {

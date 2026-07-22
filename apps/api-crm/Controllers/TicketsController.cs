@@ -14,9 +14,12 @@ public class TicketsController(ITicketService ticketService) : ControllerBase
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20,
         [FromQuery] string? status = null,
-        [FromQuery] Guid? customerId = null)
+        [FromQuery] Guid? customerId = null,
+        // TODO (auth): Extract assignedToId from JWT claims (e.g. User.FindFirstValue("sub"))
+        //              when [Authorize] is re-enabled. Null = no filter (dev bypass mode).
+        [FromQuery] string? assignedToId = null)
     {
-        var result = await ticketService.GetAllAsync(page, pageSize, status, customerId);
+        var result = await ticketService.GetAllAsync(page, pageSize, status, customerId, assignedToId);
         return Ok(result);
     }
 
@@ -42,6 +45,13 @@ public class TicketsController(ITicketService ticketService) : ControllerBase
         [FromQuery] string staffUserId) // TODO: Extract from JWT claims when auth is re-enabled
     {
         var success = await ticketService.ClaimAsync(id, staffUserId);
+        return success ? NoContent() : NotFound();
+    }
+
+    [HttpPut("{id:guid}/unclaim")]
+    public async Task<IActionResult> Unclaim(Guid id)
+    {
+        var success = await ticketService.UnclaimAsync(id);
         return success ? NoContent() : NotFound();
     }
 

@@ -68,22 +68,22 @@ export function DashboardQuickOps({ onCreateTicket, onShowToast }: DashboardQuic
   };
 
   return (
-    <Card className="bg-card border-border rounded-xl flex flex-col md:flex-row justify-between items-center shadow-none p-lg gap-md border">
+    <Card className="bg-card border-border rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center shadow-none p-lg gap-md border">
       <div className="space-y-xs">
         <CardTitle className="text-title-lg font-bold text-foreground">Quick Operations</CardTitle>
         <p className="text-body-sm text-muted-foreground">
           Perform administrative tasks, launch campaigns, or trigger security portal updates.
         </p>
       </div>
-      <div className="flex flex-wrap items-center gap-sm">
+      <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-sm w-full md:w-auto">
         <Dialog open={isCreateOpen} onOpenChange={(val) => { if (!val) form.reset(); setIsCreateOpen(val); }}>
           <DialogTrigger asChild>
-            <Button>
+            <Button className="w-full sm:w-auto">
               <Plus />
               Create New Ticket
             </Button>
           </DialogTrigger>
-          <DialogContent className="w-[100vw] sm:max-w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
+          <DialogContent className="w-[90vw] max-w-[90vw] sm:max-w-[80vw] md:max-w-[700px] lg:max-w-[900px] max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
             <DialogHeader className="space-y-1.5 text-left">
               <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight">Create Support Ticket</DialogTitle>
               <DialogDescription className="text-sm text-muted-foreground">
@@ -128,13 +128,13 @@ export function DashboardQuickOps({ onCreateTicket, onShowToast }: DashboardQuic
                     <FormItem>
                       <FormLabel>Priority</FormLabel>
                       <FormControl>
-                        <div className="flex flex-wrap sm:flex-nowrap gap-2">
+                        <div className="grid grid-cols-3 gap-2">
                           {(["High", "Medium", "Low"] as const).map((p) => (
                             <Button
                               type="button"
                               key={p}
                               variant={field.value === p ? "default" : "outline"}
-                              className="flex-1 min-w-[80px]"
+                              className="w-full text-label-sm"
                               onClick={() => field.onChange(p)}
                             >
                               {p}
@@ -168,6 +168,7 @@ export function DashboardQuickOps({ onCreateTicket, onShowToast }: DashboardQuic
         <Button
           variant="outline"
           onClick={() => onShowToast("Marketing Campaign launched successfully!")}
+          className="w-full sm:w-auto"
         >
           Launch Campaign
         </Button>
@@ -175,6 +176,7 @@ export function DashboardQuickOps({ onCreateTicket, onShowToast }: DashboardQuic
         <Button
           variant="ghost"
           onClick={() => onShowToast("SSO Configuration settings fetched.")}
+          className="w-full sm:w-auto"
         >
           Configure SSO Gateway
         </Button>

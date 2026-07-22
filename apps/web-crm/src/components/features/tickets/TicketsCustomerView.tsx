@@ -2,9 +2,19 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { MessageSquare, XCircle, Eye } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { MessageSquare, XCircle, Eye, Search } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useTickets } from "@/hooks/useTickets";
 import { crmClient } from "@/lib/api/crm-client";
@@ -19,6 +29,7 @@ interface TicketsCustomerViewProps {
 export function TicketsCustomerView({ customerId }: TicketsCustomerViewProps) {
   const [activeTab, setActiveTab] = useState<string>("Pending");
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const apiStatus = activeTab === "Pending" ? "Unclaimed" : activeTab === "Ongoing" ? "Ongoing" : activeTab === "Completed" ? "Completed" : "Canceled";
@@ -38,6 +49,10 @@ export function TicketsCustomerView({ customerId }: TicketsCustomerViewProps) {
       showToast("Failed to cancel ticket.");
     }
   };
+
+  const filteredTickets = (data?.items ?? []).filter((t) =>
+    t.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-2xl">
@@ -74,52 +89,93 @@ export function TicketsCustomerView({ customerId }: TicketsCustomerViewProps) {
         </TabsList>
 
         <TabsContent value={activeTab} className="p-0 m-0">
-          <Card className="bg-card border-border rounded-xl flex flex-col shadow-none">
-            <CardContent className="p-0 overflow-x-auto">
-              {isLoading ? (
-                <div className="py-12 text-center text-body-sm text-muted-foreground">Loading tickets...</div>
-              ) : !data || data.items.length === 0 ? (
-                <div className="py-12 text-center text-body-sm text-muted-foreground">No tickets in this section.</div>
-              ) : (
-                <table className="w-full text-left text-body-sm border-collapse min-w-[600px]">
-                  <thead>
-                    <tr className="border-b border-border bg-muted/30 text-muted-foreground text-label-sm font-semibold">
-                      <th className="py-md px-lg">Title</th>
-                      <th className="py-md px-lg">Status</th>
-                      <th className="py-md px-lg">Created At</th>
-                      <th className="py-md px-lg text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border">
-                    {data.items.map((t) => (
-                      <tr key={t.id} className="hover:bg-muted/30 transition-colors">
-                        <td className="py-md px-lg font-medium text-foreground">{t.title}</td>
-                        <td className="py-md px-lg">
-                          <TicketStatusBadge status={t.status} />
-                        </td>
-                        <td className="py-md px-lg text-muted-foreground text-xs">
-                          {new Date(t.createdAt).toLocaleDateString()}
-                        </td>
-                        <td className="py-md px-lg text-right flex justify-end gap-1">
-                          <Button variant="ghost" size="sm" onClick={() => setSelectedTicketId(t.id)}>
-                            <Eye className="w-4 h-4 mr-1" /> View
-                          </Button>
-                          <Button variant="ghost" size="sm" asChild>
-                            <Link href={`/conversations?ticketId=${t.id}`}>
-                              <MessageSquare className="w-4 h-4 mr-1" /> Message
-                            </Link>
-                          </Button>
-                          {t.status !== "Completed" && t.status !== "Canceled" && (
-                            <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => handleCancelTicket(t.id)}>
-                              <XCircle className="w-4 h-4 mr-1" /> Cancel
-                            </Button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+          <Card className="shadow-none border-border flex flex-col">
+            <CardHeader className="pb-md p-lg flex flex-col sm:flex-row sm:items-center justify-around gap-md">
+              <CardTitle className="text-title-lg font-bold text-foreground">Inquiry History</CardTitle>
+            </CardHeader>
+            <CardContent className="py-md pt-0 overflow-x-auto">
+              <div className="w-full border rounded-md border-border overflow-hidden bg-card">
+                <div className="flex items-center justify-around gap-3 px-4 py-2 border-b border-border bg-muted/20">
+                  <Search className="w-4 h-4 text-muted-foreground shrink-0" />
+                  <Input
+                    className="border-0 shadow-none focus-visible:ring-0 bg-transparent h-8 p-0 text-body-sm flex-1"
+                    placeholder="Search tickets by title..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                <div className="w-full overflow-x-auto">
+                  {isLoading ? (
+                    <div className="space-y-2 py-4 px-4">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Skeleton key={i} className="h-12 w-full rounded-md" />
+                      ))}
+                    </div>
+                  ) : filteredTickets.length === 0 ? (
+                    <div className="py-12 text-center text-muted-foreground flex flex-col items-center justify-around">
+                      <p className="text-body-sm font-medium flex justify-around">No tickets found.</p>
+                      <p className="text-label-sm text-muted-foreground mt-xs flex justify-around">
+                        Try searching with a different keyword or create a new support inquiry.
+                      </p>
+                    </div>
+                  ) : (
+                    <Table className="min-w-[700px] w-full text-left text-body-sm">
+                      <TableHeader>
+                        <TableRow className="border-b border-border flex items-center justify-around w-full">
+                          <TableHead className="flex-1 flex items-center justify-around">
+                            <span className="flex items-center justify-around w-full">Title</span>
+                          </TableHead>
+                          <TableHead className="flex-1 flex items-center justify-around">
+                            <span className="flex items-center justify-around w-full">Status</span>
+                          </TableHead>
+                          <TableHead className="flex-1 flex items-center justify-around">
+                            <span className="flex items-center justify-around w-full">Created At</span>
+                          </TableHead>
+                          <TableHead className="flex-1 flex items-center justify-around text-right">
+                            <span className="flex items-center justify-around w-full">Actions</span>
+                          </TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody className="divide-y divide-border">
+                        {filteredTickets.map((t) => (
+                          <TableRow key={t.id} className="hover:bg-muted/50 transition-colors flex items-center justify-around w-full">
+                            <TableCell className="flex-1 font-semibold text-foreground flex items-center justify-around">
+                              <span className="flex items-center justify-around w-full">{t.title}</span>
+                            </TableCell>
+                            <TableCell className="flex-1 flex items-center justify-around">
+                              <span className="flex items-center justify-around w-full">
+                                <TicketStatusBadge status={t.status} />
+                              </span>
+                            </TableCell>
+                            <TableCell className="flex-1 text-muted-foreground text-body-sm flex items-center justify-around">
+                              <span className="flex items-center justify-around w-full">
+                                {new Date(t.createdAt).toLocaleDateString()}
+                              </span>
+                            </TableCell>
+                            <TableCell className="flex-1 text-right flex items-center justify-around">
+                              <span className="flex items-center justify-around w-full gap-1">
+                                <Button variant="ghost" size="sm" onClick={() => setSelectedTicketId(t.id)} className="text-muted-foreground hover:text-foreground">
+                                  <Eye className="w-4 h-4 mr-1" /> View
+                                </Button>
+                                <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
+                                  <Link href={`/conversations?ticketId=${t.id}`}>
+                                    <MessageSquare className="w-4 h-4 mr-1" /> Message
+                                  </Link>
+                                </Button>
+                                {t.status !== "Completed" && t.status !== "Canceled" && (
+                                  <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => handleCancelTicket(t.id)}>
+                                    <XCircle className="w-4 h-4 mr-1" /> Cancel
+                                  </Button>
+                                )}
+                              </span>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

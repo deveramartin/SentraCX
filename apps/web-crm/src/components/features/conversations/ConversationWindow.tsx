@@ -1,98 +1,190 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { Send } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import React, { useState, useEffect, useRef } from "react";
+import { Send, CheckCircle, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { Chat } from "./types";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Ticket } from "@/types/ticket";
+import { Message } from "@/types/message";
 
 interface ConversationWindowProps {
-  activeChat: Chat;
-  typedMessage: string;
-  onTypedMessageChange: (value: string) => void;
-  onSendMessage: (e: React.FormEvent) => void;
+  ticket: Ticket | null;
+  messages: Message[];
+  isLoading: boolean;
+  onSendMessage: (content: string) => void;
+  onComplete: (ticketId: string) => void;
+  onUnclaim: (ticketId: string) => void;
 }
 
 export function ConversationWindow({
-  activeChat,
-  typedMessage,
-  onTypedMessageChange,
+  ticket,
+  messages,
+  isLoading,
   onSendMessage,
+  onComplete,
+  onUnclaim,
 }: ConversationWindowProps) {
+  const [typedMessage, setTypedMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [activeChat.messages]);
+  }, [messages]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!typedMessage.trim() || !ticket) return;
+    onSendMessage(typedMessage);
+    setTypedMessage("");
+  };
+
+  if (!ticket) {
+    return (
+      <div className="flex-1 flex items-center justify-center h-full bg-background text-muted-foreground text-body-sm p-lg">
+        Select a conversation to start messaging
+      </div>
+    );
+  }
+
+  const customerInitials =
+    ticket.customerName
+      .split(" ")
+      .map((n) => n[0])
+      .filter(Boolean)
+      .join("")
+      .toUpperCase() || "C";
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-background">
-      {/* Chat window Header */}
-      <div className="p-md border-b border-border flex items-center justify-between bg-card">
-        <div className="flex items-center gap-md">
-          <Avatar className="h-9 w-9">
+    <div className="flex-1 flex flex-col h-full bg-background min-w-0">
+      {/* Header */}
+      <div className="p-md border-b border-border flex items-center justify-between bg-card gap-md">
+        <div className="flex items-center gap-md min-w-0">
+          <Avatar className="h-9 w-9 shrink-0">
             <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
-              {activeChat.customerName.split(" ").map((n) => n[0]).join("")}
+              {customerInitials}
             </AvatarFallback>
           </Avatar>
-          <div>
-            <h3 className="text-label-md font-bold text-foreground">
-              {activeChat.customerName}
+          <div className="min-w-0">
+            <h3 className="text-label-md font-bold text-foreground truncate">
+              {ticket.customerName}
             </h3>
-            <p className="text-label-sm text-success flex items-center gap-xs font-medium">
-              <span className="w-1.5 h-1.5 bg-success rounded-full animate-pulse"></span>
-              Active Support Channel
+            <p className="text-label-sm text-muted-foreground truncate">
+              {ticket.title}
             </p>
           </div>
         </div>
-        <Badge variant="secondary" className="text-label-sm font-bold py-1 px-3">
-          SSO Linked
-        </Badge>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-xs shrink-0">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onUnclaim(ticket.id)}
+            className="text-label-sm font-semibold gap-xs"
+          >
+            <Undo2 className="w-3.5 h-3.5" />
+            Unclaim
+          </Button>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button size="sm" className="bg-primary text-primary-foreground font-semibold text-label-sm gap-xs">
+                <CheckCircle className="w-3.5 h-3.5 text-primary-foreground" />
+                Complete
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="w-[90vw] max-w-[90vw] sm:max-w-[80vw] md:max-w-[700px] lg:max-w-[900px] max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Mark Conversation as Completed?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This ticket will be marked as resolved and closed. You can view completed tickets under closed filters.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction className="bg-primary text-primary-foreground font-semibold" onClick={() => onComplete(ticket.id)}>
+                  Mark Completed
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </div>
 
       {/* Message Thread */}
       <div className="flex-1 p-lg overflow-y-auto space-y-md">
-        {activeChat.messages.map((m, idx) => {
-          const isAgent = m.sender === "agent";
-          return (
-            <div key={idx} className={`flex ${isAgent ? "justify-end" : "justify-start"}`}>
+        {isLoading ? (
+          <div className="space-y-md">
+            <Skeleton className="h-12 w-2/3" />
+            <Skeleton className="h-12 w-1/2 ml-auto" />
+            <Skeleton className="h-12 w-3/4" />
+          </div>
+        ) : messages.length === 0 ? (
+          <div className="text-center text-muted-foreground text-body-sm py-xl">
+            No messages yet. Send a message to start the conversation.
+          </div>
+        ) : (
+          messages.map((m) => {
+            const isStaff = ticket.assignedToId ? m.senderId === ticket.assignedToId : false;
+            const formattedTime = new Date(m.sentAt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+
+            return (
               <div
-                className={`max-w-[70%] p-md rounded-xl space-y-xs ${
-                  isAgent
-                    ? "bg-primary text-primary-foreground rounded-tr-none"
-                    : "bg-muted border border-border text-foreground rounded-tl-none"
-                }`}
+                key={m.id}
+                className={`flex flex-col ${isStaff ? "items-end" : "items-start"}`}
               >
-                <p className="text-body-sm leading-relaxed whitespace-pre-wrap">{m.text}</p>
-                <span
-                  className={`text-label-sm block text-right font-mono ${
-                    isAgent ? "text-primary-foreground/75" : "text-muted-foreground"
+                <span className="text-[10px] text-muted-foreground mb-1 px-1 font-medium">
+                  {m.senderName}
+                </span>
+                <div
+                  className={`max-w-[75%] p-md rounded-xl space-y-xs ${
+                    isStaff
+                      ? "bg-primary text-primary-foreground rounded-tr-none font-medium"
+                      : "bg-muted border border-border text-foreground rounded-tl-none font-medium"
                   }`}
                 >
-                  {m.time}
-                </span>
+                  <p className="text-body-sm leading-relaxed whitespace-pre-wrap">{m.content}</p>
+                  <span
+                    className={`text-[10px] block text-right font-mono ${
+                      isStaff ? "text-primary-foreground/85 font-semibold" : "text-muted-foreground"
+                    }`}
+                  >
+                    {formattedTime}
+                  </span>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Chat input form */}
-      <form
-        onSubmit={onSendMessage}
-        className="p-md border-t border-border bg-card flex gap-md"
-      >
+      {/* Input */}
+      <form onSubmit={handleSubmit} className="p-3 sm:p-4 border-t border-border bg-card flex gap-md">
         <Input
           placeholder="Type message here..."
           value={typedMessage}
-          onChange={(e) => onTypedMessageChange(e.target.value)}
+          onChange={(e) => setTypedMessage(e.target.value)}
           className="flex-1 bg-muted/50 border-border text-body-sm"
         />
-        <Button type="submit" size="icon">
-          <Send className="w-4 h-4" />
+        <Button type="submit" size="icon" className="bg-primary text-primary-foreground font-semibold" disabled={!typedMessage.trim()}>
+          <Send className="w-4 h-4 text-primary-foreground" />
         </Button>
       </form>
     </div>

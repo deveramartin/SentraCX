@@ -79,7 +79,7 @@ export function TicketCreateSheet({ customerId = "00000000-0000-0000-0000-000000
   return (
     <Dialog open={isOpen} onOpenChange={(val) => { if (!val) form.reset(); setIsOpen(val); }}>
       <DialogTrigger asChild>
-        <Button className="self-start sm:self-center">
+        <Button className="w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           Create Ticket
         </Button>

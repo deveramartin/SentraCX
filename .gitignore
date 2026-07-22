@@ -28,7 +28,8 @@ venv/
 .DS_Store
 *.pem
 .kiro/
-.agents/
+.agents/*
+!.agents/skills/
 agents/
 .design-ref/
 .vscode/

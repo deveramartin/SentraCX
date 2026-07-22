@@ -9,6 +9,7 @@ import {
   OrderHistory,
   PaginatedResponse,
 } from "@/types/customer";
+import { Message } from "@/types/message";
 import {
   Campaign,
   CampaignListItem,
@@ -33,7 +34,7 @@ const CRM_BASE = process.env.NEXT_PUBLIC_CRM_API_URL ?? "https://localhost:7001"
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const url = `${CRM_BASE}${path}`;
-  const headers: Record<string, string> = { ...init?.headers as Record<string, string> };
+  const headers: Record<string, string> = { ...(init?.headers as Record<string, string>) };
 
   if (!(init?.body instanceof FormData)) {
     headers["Content-Type"] = "application/json";
@@ -189,13 +190,13 @@ export const crmClient = {
       request<Template>(`/api/v1/templates/${id}`),
   },
   tickets: {
-    list: (page = 1, pageSize = 20, status?: string, customerId?: string) => {
+    list: (page = 1, pageSize = 20, status?: string, assignedToIdOrCustomerId?: string) => {
       let url = `/api/v1/tickets?page=${page}&pageSize=${pageSize}`;
       if (status && status !== "All") {
         url += `&status=${encodeURIComponent(status)}`;
       }
-      if (customerId) {
-        url += `&customerId=${encodeURIComponent(customerId)}`;
+      if (assignedToIdOrCustomerId) {
+        url += `&assignedToId=${encodeURIComponent(assignedToIdOrCustomerId)}`;
       }
       return request<PaginatedTicketResponse>(url);
     },
@@ -210,6 +211,8 @@ export const crmClient = {
       request<void>(`/api/v1/tickets/${id}/claim?staffUserId=${encodeURIComponent(staffUserId)}`, {
         method: "PUT",
       }),
+    unclaim: (id: string) =>
+      request<void>(`/api/v1/tickets/${id}/unclaim`, { method: "PUT" }),
     updateStatus: (id: string, status: string) =>
       request<void>(`/api/v1/tickets/${id}/status`, {
         method: "PUT",
@@ -218,6 +221,14 @@ export const crmClient = {
     cancel: (id: string) =>
       request<void>(`/api/v1/tickets/${id}`, {
         method: "DELETE",
+      }),
+  },
+  messages: {
+    listByTicket: (ticketId: string) =>
+      request<Message[]>(`/api/v1/tickets/${ticketId}/messages`),
+    markRead: (ticketId: string, messageId: string) =>
+      request<void>(`/api/v1/tickets/${ticketId}/messages/${messageId}/read`, {
+        method: "PUT",
       }),
   },
   upload: {
