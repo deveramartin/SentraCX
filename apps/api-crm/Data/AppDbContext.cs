@@ -11,6 +11,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<MarketingInteraction> MarketingInteractions => Set<MarketingInteraction>();
     public DbSet<Ticket> Tickets => Set<Ticket>();
     public DbSet<Message> Messages => Set<Message>();
+    public DbSet<Campaign> Campaigns => Set<Campaign>();
+    public DbSet<CampaignSchedule> CampaignSchedules => Set<CampaignSchedule>();
+    public DbSet<Promotion> Promotions => Set<Promotion>();
+    public DbSet<CampaignPromotion> CampaignPromotions => Set<CampaignPromotion>();
+    public DbSet<Template> Templates => Set<Template>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

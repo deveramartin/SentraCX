@@ -1,0 +1,50 @@
+using Crm.Api.Controllers;
+using Crm.Api.DTOs.Requests;
+using Crm.Api.DTOs.Responses;
+using Crm.Api.Interfaces.Services;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+
+namespace Crm.Api.Tests.Controllers;
+
+public class CampaignsControllerTests
+{
+    private readonly Mock<ICampaignService> _campaignServiceMock = new();
+    private readonly CampaignsController _sut;
+
+    public CampaignsControllerTests()
+    {
+        _sut = new CampaignsController(_campaignServiceMock.Object);
+    }
+
+    [Fact]
+    public async Task GetAll_ReturnsOkResultWithCampaigns()
+    {
+        var campaigns = new List<CampaignListResponseDto>
+        {
+            new() { Id = Guid.NewGuid(), Title = "Campaign 1", Status = "Active" }
+        };
+
+        _campaignServiceMock.Setup(s => s.GetAllAsync("Active")).ReturnsAsync(campaigns);
+
+        var result = await _sut.GetAll("Active");
+
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returned = Assert.IsAssignableFrom<IEnumerable<CampaignListResponseDto>>(okResult.Value);
+        Assert.Single(returned);
+    }
+
+    [Fact]
+    public async Task Create_ReturnsCreatedAtActionResult()
+    {
+        var dto = new CreateCampaignRequestDto { Title = "Test Campaign" };
+        var response = new CampaignResponseDto { Id = Guid.NewGuid(), Title = "Test Campaign" };
+
+        _campaignServiceMock.Setup(s => s.CreateAsync(dto, "usr-staff-default")).ReturnsAsync(response);
+
+        var result = await _sut.Create(dto, "usr-staff-default");
+
+        var createdResult = Assert.IsType<CreatedAtActionResult>(result);
+        Assert.Equal(response, createdResult.Value);
+    }
+}

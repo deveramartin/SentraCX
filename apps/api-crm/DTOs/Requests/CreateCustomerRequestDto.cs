@@ -7,4 +7,5 @@ public class CreateCustomerRequestDto
     public string LastName { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; }
     public string CustomerType { get; set; } = "Regular";
+    public string? Address { get; set; }
 }

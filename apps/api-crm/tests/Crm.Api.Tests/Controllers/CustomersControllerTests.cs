@@ -94,6 +94,74 @@ public class CustomersControllerTests(TestWebApplicationFactory factory)
     }
 
     [Fact]
+    public async Task GetAll_WithFilter_ReturnsFilteredResults()
+    {
+        await SeedCustomerAsync("Lead");
+        await SeedCustomerAsync("Regular");
+
+        var response = await _client.GetAsync("/api/v1/customers?customerType=Lead");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await response.Content
+            .ReadFromJsonAsync<PaginatedResponseDto<CustomerListResponseDto>>();
+        Assert.NotNull(result);
+        Assert.True(result.Items.All(i => i.CustomerType == "Lead"));
+    }
+
+    [Fact]
+    public async Task GetAll_WithSearchTerm_ReturnsMatchingResults()
+    {
+        using var scope = factory.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        var userId = Guid.NewGuid().ToString();
+        var user = new User
+        {
+            Id = userId,
+            Email = $"search-{Guid.NewGuid():N}@example.com",
+            FirstName = "UniqueSearchName",
+            LastName = "Customer",
+            DisplayName = "UniqueSearchName Customer",
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+        dbContext.Users.Add(user);
+
+        var profile = new CustomerProfile
+        {
+            Id = Guid.NewGuid(),
+            UserId = userId,
+            CustomerType = "Regular",
+            Status = "Active",
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+        dbContext.CustomerProfiles.Add(profile);
+        await dbContext.SaveChangesAsync();
+
+        var response = await _client.GetAsync("/api/v1/customers?searchTerm=UniqueSearchName");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await response.Content
+            .ReadFromJsonAsync<PaginatedResponseDto<CustomerListResponseDto>>();
+        Assert.NotNull(result);
+        Assert.Single(result.Items);
+        Assert.Equal("UniqueSearchName Customer", result.Items[0].DisplayName);
+    }
+
+    [Fact]
+    public async Task UpdateType_WhenLead_ReturnsNotFound()
+    {
+        var customerId = await SeedCustomerAsync("Lead");
+        var dto = new UpdateCustomerTypeRequestDto { CustomerType = "Regular" };
+
+        var response = await _client.PutAsJsonAsync(
+            $"/api/v1/customers/{customerId}/type", dto);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
     public async Task Delete_WhenExists_ReturnsNoContent()
     {
         var customerId = await SeedCustomerAsync();
@@ -103,7 +171,7 @@ public class CustomersControllerTests(TestWebApplicationFactory factory)
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
-    private async Task<Guid> SeedCustomerAsync()
+    private async Task<Guid> SeedCustomerAsync(string type = "Regular")
     {
         using var scope = factory.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -125,7 +193,7 @@ public class CustomersControllerTests(TestWebApplicationFactory factory)
         {
             Id = Guid.NewGuid(),
             UserId = userId,
-            CustomerType = "Regular",
+            CustomerType = type,
             Status = "Active",
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow

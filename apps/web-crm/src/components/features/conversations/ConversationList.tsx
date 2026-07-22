@@ -26,11 +26,12 @@ export function ConversationList({
   activeTab,
   onTabChange,
 }: ConversationListProps) {
-  const unreadTotal = tickets.reduce((acc, t) => acc + (t.unreadMessageCount > 0 ? 1 : 0), 0);
+  const unreadTotal = tickets.reduce((acc, t) => acc + ((t.unreadMessageCount ?? 0) > 0 ? 1 : 0), 0);
 
   const filteredTickets = tickets.filter((t) => {
-    if (activeTab === "unread") return t.unreadMessageCount > 0;
-    if (activeTab === "read") return t.unreadMessageCount === 0;
+    const count = t.unreadMessageCount ?? 0;
+    if (activeTab === "unread") return count > 0;
+    if (activeTab === "read") return count === 0;
     return true;
   });
 
@@ -88,7 +89,7 @@ export function ConversationList({
           </div>
         ) : (
           filteredTickets.map((ticket) => {
-            const hasUnread = ticket.unreadMessageCount > 0;
+            const hasUnread = (ticket.unreadMessageCount ?? 0) > 0;
             const initials = ticket.customerName
               .split(" ")
               .map((n) => n[0])

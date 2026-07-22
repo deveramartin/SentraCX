@@ -53,6 +53,7 @@ export function useTicket(id: string | null) {
 
   return {
     ticket,
+    data: ticket,
     isLoading,
     error,
     refetch: fetchTicket,

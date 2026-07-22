@@ -1,24 +1,33 @@
-export type TicketStatus = "Unclaimed" | "Claimed" | "Ongoing" | "Completed" | "Canceled";
+export type TicketStatus = "Unclaimed" | "Claimed" | "Ongoing" | "Completed" | "Canceled" | string;
 
 export interface TicketListItem {
   id: string;
   title: string;
-  status: TicketStatus | string;
+  status: TicketStatus;
   customerName: string;
-  unreadMessageCount: number;
+  unreadMessageCount?: number;
+  assignedToName?: string | null;
   createdAt: string;
 }
 
-export interface Ticket {
-  id: string;
-  title: string;
+export interface Ticket extends TicketListItem {
   description: string;
   imageUrl?: string | null;
-  status: TicketStatus | string;
   customerId: string;
-  customerName: string;
   assignedToId?: string | null;
-  assignedToName?: string | null;
-  createdAt: string;
   updatedAt: string;
+}
+
+export interface CreateTicketInput {
+  title: string;
+  description: string;
+  imageUrl?: string;
+}
+
+export interface PaginatedTicketResponse {
+  items: TicketListItem[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
 }

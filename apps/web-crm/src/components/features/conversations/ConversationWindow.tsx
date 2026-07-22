@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Send, CheckCircle, Undo2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -177,7 +176,7 @@ export function ConversationWindow({
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSubmit} className="p-md border-t border-border bg-card flex gap-md">
+      <form onSubmit={handleSubmit} className="p-3 sm:p-4 border-t border-border bg-card flex gap-md">
         <Input
           placeholder="Type message here..."
           value={typedMessage}

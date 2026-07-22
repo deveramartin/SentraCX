@@ -1,54 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import { CampaignMetricsCards } from "./CampaignMetricsCards";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useCampaigns } from "@/hooks/useCampaigns";
+import { CampaignFormSheet } from "./CampaignFormSheet";
 import { CampaignTable } from "./CampaignTable";
-import { CampaignLaunchSheet } from "./CampaignLaunchSheet";
-import type { Campaign } from "./types";
 
 export function Campaigns() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("All");
+  const [activeTab, setActiveTab] = useState<string>("Active");
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
-  const [campaigns, setCampaigns] = useState<Campaign[]>([
-    { id: "CMP-001", name: "Summer Retention Program", status: "Active", budget: 15000, spent: 12400, conversion: 8.7, clicks: 12500 },
-    { id: "CMP-002", name: "SSO Gateway Launch Email", status: "Active", budget: 5000, spent: 4800, conversion: 14.2, clicks: 8300 },
-    { id: "CMP-003", name: "Q3 Churn-Risk Prevention", status: "Scheduled", budget: 20000, spent: 0, conversion: 0, clicks: 0 },
-    { id: "CMP-004", name: "Winter Referral Drive", status: "Completed", budget: 12000, spent: 12000, conversion: 10.5, clicks: 14200 },
-  ]);
+  const { data: campaigns, isLoading, refetch } = useCampaigns(activeTab);
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3000);
   };
-
-  const handleLaunchCampaign = (newCamp: Campaign) => {
-    setCampaigns([newCamp, ...campaigns]);
-    showToast(`Campaign ${newCamp.name} registered successfully!`);
-  };
-
-  const handleStartCampaign = (campaignId: string) => {
-    setCampaigns((prev) =>
-      prev.map((c) => {
-        if (c.id === campaignId) {
-          showToast(`Campaign ${c.name} has been activated!`);
-          return { ...c, status: "Active" as const };
-        }
-        return c;
-      })
-    );
-  };
-
-  const totalBudget = campaigns.reduce((sum, c) => sum + c.budget, 0);
-  const totalSpent = campaigns.reduce((sum, c) => sum + c.spent, 0);
-  const activeCount = campaigns.filter((c) => c.status === "Active").length;
-  const avgConversion =
-    campaigns
-      .filter((c) => c.status === "Completed" || c.status === "Active")
-      .reduce((sum, c, _, arr) => sum + c.conversion / (arr.length || 1), 0);
-
-  const nextIdNum = Math.max(...campaigns.map((c) => parseInt(c.id.split("-")[1]))) + 1;
 
   return (
     <div className="w-full min-h-full py-xl px-lg md:px-xl space-y-2xl">
@@ -62,27 +29,34 @@ export function Campaigns() {
         <div className="space-y-sm">
           <h1 className="text-headline-md font-bold tracking-tight text-foreground">Marketing Campaigns</h1>
           <p className="text-body-md text-muted-foreground">
-            Create email marketing outreaches, track clicks, and audit conversion metrics.
+            Create multi-channel marketing outreaches (Email, InApp, Facebook, Twitter, Instagram).
           </p>
         </div>
-        <CampaignLaunchSheet onLaunchCampaign={handleLaunchCampaign} nextIdNum={nextIdNum} />
+        <CampaignFormSheet onSuccess={refetch} onShowToast={showToast} />
       </div>
 
-      <CampaignMetricsCards
-        activeCount={activeCount}
-        totalBudget={totalBudget}
-        totalSpent={totalSpent}
-        avgConversion={avgConversion}
-      />
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full space-y-md">
+        <TabsList className="w-full sm:w-auto overflow-x-auto justify-start border-b border-border bg-transparent p-0">
+          <TabsTrigger value="Active" className="px-lg py-sm font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
+            Campaign List
+          </TabsTrigger>
+          <TabsTrigger value="Draft" className="px-lg py-sm font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
+            Campaign Drafts
+          </TabsTrigger>
+          <TabsTrigger value="Ended" className="px-lg py-sm font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none bg-transparent">
+            Campaign History
+          </TabsTrigger>
+        </TabsList>
 
-      <CampaignTable
-        campaigns={campaigns}
-        searchQuery={searchQuery}
-        statusFilter={statusFilter}
-        onSearchChange={setSearchQuery}
-        onStatusFilterChange={setStatusFilter}
-        onStartCampaign={handleStartCampaign}
-      />
+        <TabsContent value={activeTab} className="p-0 m-0">
+          <CampaignTable
+            campaigns={campaigns}
+            isLoading={isLoading}
+            onRefresh={refetch}
+            onShowToast={showToast}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

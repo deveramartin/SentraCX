@@ -27,7 +27,7 @@ public class CustomerServiceTests
         };
 
         _customerRepoMock
-            .Setup(r => r.GetAllAsync(1, 10))
+            .Setup(r => r.GetAllAsync(1, 10, null, null))
             .ReturnsAsync((profiles, 2));
 
         var result = await _sut.GetAllAsync(1, 10);
@@ -144,6 +144,23 @@ public class CustomerServiceTests
 
         Assert.True(result);
         Assert.Equal("InstitutionalBuyer", profile.CustomerType);
+    }
+
+    [Fact]
+    public async Task UpdateTypeAsync_WhenLead_ReturnsFalse()
+    {
+        var id = Guid.NewGuid();
+        var profile = CreateTestProfile("user-1", "John", "Doe");
+        profile.Id = id;
+        profile.CustomerType = "Lead";
+
+        _customerRepoMock.Setup(r => r.GetByIdAsync(id)).ReturnsAsync(profile);
+
+        var result = await _sut.UpdateTypeAsync(id,
+            new UpdateCustomerTypeRequestDto { CustomerType = "Regular" });
+
+        Assert.False(result);
+        Assert.Equal("Lead", profile.CustomerType);
     }
 
     [Fact]

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, MessageSquare, Ticket, Settings } from "lucide-react";
+import { LayoutDashboard, Users, MessageSquare, Ticket, Tag, Settings } from "lucide-react";
 
 export function MobileNav() {
   const pathname = usePathname();
@@ -10,13 +10,13 @@ export function MobileNav() {
   const navItems = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
     { name: "Customers", href: "/customers", icon: Users },
-    { name: "Conversations", href: "/conversations", icon: MessageSquare },
     { name: "Tickets", href: "/tickets", icon: Ticket },
+    { name: "Promotions", href: "/promotions", icon: Tag },
     { name: "Settings", href: "/settings", icon: Settings },
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-background border-t border-border flex items-center justify-around px-4 z-50">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-background border-t border-border flex items-center justify-around px-2 z-50">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href;
@@ -29,7 +29,7 @@ export function MobileNav() {
             }`}
           >
             <Icon className="w-5 h-5" />
-            <span className="text-label-sm font-medium">{item.name}</span>
+            <span className="text-[10px] font-medium">{item.name}</span>
           </Link>
         );
       })}

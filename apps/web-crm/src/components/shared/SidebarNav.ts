@@ -4,6 +4,7 @@ import {
   MessageSquare,
   Ticket,
   Megaphone,
+  Tag,
   Settings,
   Building2,
   ShoppingCart,
@@ -41,6 +42,7 @@ export const mainNavItems: NavItem[] = [
   { name: "Conversations", href: "/conversations", icon: MessageSquare },
   { name: "Tickets", href: "/tickets", icon: Ticket },
   { name: "Campaigns", href: "/campaigns", icon: Megaphone },
+  { name: "Promotions", href: "/promotions", icon: Tag },
 ];
 
 export const settingsNavItem: NavItem = {

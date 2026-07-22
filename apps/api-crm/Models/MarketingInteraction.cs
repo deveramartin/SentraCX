@@ -12,6 +12,7 @@ public class MarketingInteraction
     public string InteractionType { get; set; } = string.Empty;
     public DateTime SentAt { get; set; }
 
-    // Navigation property
+    // Navigation properties
     public CustomerProfile CustomerProfile { get; set; } = null!;
+    public Campaign? Campaign { get; set; }
 }

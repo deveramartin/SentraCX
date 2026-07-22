@@ -9,17 +9,17 @@ Each item maps to its BRD requirement(s) where applicable, so tasks can be trace
 ### CRM-001 — Customer Profiles (Contacts & Leads)
 *Maps to: BR-CRM-01*
 
-- [ ] Customer module with separate tabs for **contacts** and **leads
-- [ ] Contact/lead list view showing name, email, phone (optional), customer type, created at
-- [ ] "Add new customer contact/lead" form: first name, last name, email, phone (optional), customer type
-- [ ] Delete customer contact/lead action (with confirmation)
-- [ ] Customer detail page, opened by clicking a customer's name, with three tabs: **Overview**, **Marketing History**, **Order History**
-- [ ] Overview tab: display name, email, address (optional), created at, status, customer type, profile (optional), plus the 5 most recent order history and marketing history items
-- [ ] Status control on the detail page: active / inactive / suspended
-- [ ] Customer type control: vip / regular / institutional buyer — disabled/locked for leads (always shows "lead")
-- [ ] Optional notes field/section on the customer profile
-- [ ] Marketing History tab: paginated list; clicking an item opens details (title, description, channel, interaction type, sent at)
-- [ ] Order History tab: paginated list; clicking an item opens order details — **hide this tab entirely for leads**, show only for customer contacts
+- [x] Customer module with separate tabs for **contacts** and **leads**
+- [x] Contact/lead list view showing name, email, phone (optional), customer type, created at
+- [x] "Add new customer contact/lead" form: first name, last name, email, phone (optional), customer type
+- [x] Delete customer contact/lead action (with confirmation)
+- [x] Customer detail page, opened by clicking a customer's name, with three tabs: **Overview**, **Marketing History**, **Order History**
+- [x] Overview tab: display name, email, address (optional), created at, status, customer type, profile (optional), plus the 5 most recent order history and marketing history items
+- [x] Status control on the detail page: active / inactive / suspended
+- [x] Customer type control: vip / regular / institutional buyer — disabled/locked for leads (always shows "lead")
+- [x] Optional notes field/section on the customer profile
+- [x] Marketing History tab: paginated list; clicking an item opens details (title, description, channel, interaction type, sent at)
+- [x] Order History tab: paginated list; clicking an item opens order details — **hide this tab entirely for leads**, show only for customer contacts
 - [ ] ~~Email button on profile redirecting to campaign~~ — marked **Discarded** in source, confirm before building
 
 ---
@@ -29,43 +29,43 @@ Each item maps to its BRD requirement(s) where applicable, so tasks can be trace
 ### CRM-002 — Campaigns
 *Maps to: BR-CRM-05, BR-CRM-06*
 
-- [ ] Campaigns module with three tabs: Campaign List, Campaign Drafts, Campaign History
-- [ ] "Create campaign" button/entry point
-- [ ] Campaign List tab: active campaigns, click to view details
-- [ ] Campaign Drafts tab: drafted campaigns, click to view/edit details
-- [ ] Campaign History tab: ended campaigns, click to view details
-- [ ] Create-campaign form: title, subject, description (all required), channel selection (email, in-app), schedule options (send now, scheduled, recurring on Mon/Tue/Wed), optional image upload
-- [ ] Template picker within the create-campaign flow
-- [ ] "Save as draft" action
+- [x] Campaigns module with three tabs: Campaign List, Campaign Drafts, Campaign History
+- [x] "Create campaign" button/entry point
+- [x] Campaign List tab: active campaigns, click to view details
+- [x] Campaign Drafts tab: drafted campaigns, click to view/edit details
+- [x] Campaign History tab: ended campaigns, click to view details
+- [x] Create-campaign form: title, subject, description (all required), channel selection (email, in-app, facebook, twitter, instagram), schedule options (send now, scheduled, recurring on Mon/Tue/Wed), optional image upload
+- [x] Template picker within the create-campaign flow
+- [x] "Save as draft" action
 
 ### CRM-003 — Promotions
 *Maps to: BR-CRM-05*
 
-- [ ] Promotions views: all/active, drafted, cancelled, accomplished — each clickable to view details
-- [ ] Create-promotion form: title, description, promotion type (discount, voucher, free shipping, buy-one-get-one, cashback), discount value, voucher code, start date, end date
-- [ ] "Save as draft" action for promotions
-- [ ] Edit/update UI for a drafted promotion
-- [ ] Stop/cancel action for an active promotion
+- [x] Promotions views: all/active, drafted, cancelled, accomplished — each clickable to view details
+- [x] Create-promotion form: title, description, promotion type (discount, voucher, free shipping, buy-one-get-one, cashback), discount value, voucher code, start date, end date
+- [x] "Save as draft" action for promotions
+- [x] Edit/update UI for a drafted promotion
+- [x] Stop/cancel action for an active promotion
 
 ### CRM-004 — Campaign–Promotion Linking
-- [ ] Multi-select promotion picker inside the campaign create/edit form, so several promotions can be attached to one campaign
+- [x] Multi-select promotion picker inside the campaign create/edit form, so several promotions can be attached to one campaign
 
 ### CRM-005 — Tickets (Staff/Manager view)
 *Maps to: BR-CRM-02*
 
-- [ ] Tickets module with tabs: Available (unclaimed), Claimed, Completed
-- [ ] Ticket details view on click
-- [ ] Claim / unclaim button on each ticket
-- [ ] "Message" button on a ticket that redirects to its conversation
+- [x] Tickets module with tabs: Available (unclaimed), Claimed, Completed
+- [x] Ticket details view on click
+- [x] Claim / unclaim button on each ticket
+- [x] "Message" button on a ticket that redirects to its conversation
 
 ### CRM-006 — Tickets (Customer view)
 *Maps to: BR-CRM-02*
 
-- [ ] Ticket module with tabs: Pending, Ongoing, Completed, Cancel
-- [ ] "Create ticket" form: title, description, image (optional)
-- [ ] Ticket details view on click
-- [ ] Cancel-ticket action
-- [ ] "Message" button within each ticket component
+- [x] Ticket module with tabs: Pending, Ongoing, Completed, Cancel
+- [x] "Create ticket" form: title, description, image (optional)
+- [x] Ticket details view on click
+- [x] Cancel-ticket action
+- [x] "Message" button within each ticket component
 
 ---
 

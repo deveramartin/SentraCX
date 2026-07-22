@@ -7,21 +7,21 @@ interface CustomerStatusBadgeProps {
 }
 
 export function CustomerStatusBadge({ status }: CustomerStatusBadgeProps) {
-  const getVariant = (): "default" | "secondary" | "outline" | "destructive" => {
+  const getStyle = () => {
     switch (status) {
       case "Active":
-        return "default";
+        return "bg-badge-success text-badge-success-foreground border-transparent";
       case "Inactive":
-        return "secondary";
+        return "bg-muted text-muted-foreground border-transparent";
       case "Suspended":
-        return "outline";
+        return "bg-badge-destructive text-badge-destructive-foreground border-transparent";
       default:
-        return "secondary";
+        return "bg-muted text-muted-foreground border-transparent";
     }
   };
 
   return (
-    <Badge variant={getVariant()} className="text-label-sm font-semibold">
+    <Badge className={`text-label-sm font-medium border-none shadow-none ${getStyle()}`}>
       {status}
     </Badge>
   );

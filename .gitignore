@@ -31,6 +31,15 @@ venv/
 .agents/
 agents/
 .design-ref/
+.vscode/
+
+# ignored doc directories
+docs/deliverables/
+docs/deliverables/
+docs/development/
+docs/development/
+docs/implementation-reports/
+docs/implementation-reports/
 
 # debug
 npm-debug.log*

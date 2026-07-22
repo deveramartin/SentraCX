@@ -26,6 +26,25 @@
   --warning-foreground: oklch(0.145 0 0);
   --info: oklch(0.6 0.118 184.704);
   --info-foreground: oklch(0.985 0 0);
+  /* Badge-specific pastel tokens — separate from semantic alert/button colors */
+  --badge-success: oklch(0.94 0.05 149);
+  --badge-success-foreground: oklch(0.32 0.10 149);
+  --badge-warning: oklch(0.96 0.05 70);
+  --badge-warning-foreground: oklch(0.40 0.12 70);
+  --badge-destructive: oklch(0.94 0.05 27);
+  --badge-destructive-foreground: oklch(0.40 0.14 27);
+  --badge-info: oklch(0.94 0.04 184);
+  --badge-info-foreground: oklch(0.35 0.10 184);
+  --badge-purple: oklch(0.94 0.05 300);
+  --badge-purple-foreground: oklch(0.38 0.12 300);
+  --badge-indigo: oklch(0.94 0.05 260);
+  --badge-indigo-foreground: oklch(0.35 0.12 260);
+  --badge-teal: oklch(0.94 0.05 170);
+  --badge-teal-foreground: oklch(0.33 0.10 170);
+  --badge-orange: oklch(0.95 0.06 45);
+  --badge-orange-foreground: oklch(0.40 0.14 45);
+  --badge-notification: oklch(0.205 0 0);
+  --badge-notification-foreground: oklch(0.985 0 0);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -67,6 +86,25 @@
   --warning-foreground: oklch(0.145 0 0);
   --info: oklch(0.6 0.118 184.704);
   --info-foreground: oklch(0.985 0 0);
+  /* Badge-specific pastel tokens — dark mode */
+  --badge-success: oklch(0.25 0.07 149);
+  --badge-success-foreground: oklch(0.82 0.10 149);
+  --badge-warning: oklch(0.28 0.07 70);
+  --badge-warning-foreground: oklch(0.88 0.10 70);
+  --badge-destructive: oklch(0.25 0.07 27);
+  --badge-destructive-foreground: oklch(0.82 0.12 27);
+  --badge-info: oklch(0.25 0.06 184);
+  --badge-info-foreground: oklch(0.82 0.09 184);
+  --badge-purple: oklch(0.26 0.07 300);
+  --badge-purple-foreground: oklch(0.85 0.10 300);
+  --badge-indigo: oklch(0.26 0.07 260);
+  --badge-indigo-foreground: oklch(0.85 0.10 260);
+  --badge-teal: oklch(0.25 0.06 170);
+  --badge-teal-foreground: oklch(0.82 0.09 170);
+  --badge-orange: oklch(0.27 0.07 45);
+  --badge-orange-foreground: oklch(0.85 0.12 45);
+  --badge-notification: oklch(0.985 0 0);
+  --badge-notification-foreground: oklch(0.145 0 0);
   --border: oklch(0.269 0 0);
   --input: oklch(0.269 0 0);
   --ring: oklch(0.439 0 0);
@@ -108,6 +146,24 @@
   --color-warning-foreground: var(--warning-foreground);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-badge-success: var(--badge-success);
+  --color-badge-success-foreground: var(--badge-success-foreground);
+  --color-badge-warning: var(--badge-warning);
+  --color-badge-warning-foreground: var(--badge-warning-foreground);
+  --color-badge-destructive: var(--badge-destructive);
+  --color-badge-destructive-foreground: var(--badge-destructive-foreground);
+  --color-badge-info: var(--badge-info);
+  --color-badge-info-foreground: var(--badge-info-foreground);
+  --color-badge-purple: var(--badge-purple);
+  --color-badge-purple-foreground: var(--badge-purple-foreground);
+  --color-badge-indigo: var(--badge-indigo);
+  --color-badge-indigo-foreground: var(--badge-indigo-foreground);
+  --color-badge-teal: var(--badge-teal);
+  --color-badge-teal-foreground: var(--badge-teal-foreground);
+  --color-badge-orange: var(--badge-orange);
+  --color-badge-orange-foreground: var(--badge-orange-foreground);
+  --color-badge-notification: var(--badge-notification);
+  --color-badge-notification-foreground: var(--badge-notification-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -207,7 +263,7 @@ body {
 @utility text-label-sm {
   font-size: 0.75rem;
   font-weight: 500;
-  line-height: 1rem;
+  line-height: 1.0rem;
 }
 
 @theme inline {

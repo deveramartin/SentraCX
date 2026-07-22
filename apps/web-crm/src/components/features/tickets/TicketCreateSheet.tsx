@@ -1,124 +1,151 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import type { SupportTicket } from "./types";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { crmClient } from "@/lib/api/crm-client";
+import { CreateTicketInput } from "@/types/ticket";
 
 interface TicketCreateSheetProps {
-  onCreateTicket: (ticket: SupportTicket) => void;
-  nextId: number;
+  customerId?: string;
+  onSuccess: () => void;
+  onShowToast: (msg: string) => void;
 }
 
-export function TicketCreateSheet({ onCreateTicket, nextId }: TicketCreateSheetProps) {
+export function TicketCreateSheet({ customerId = "00000000-0000-0000-0000-000000000001", onSuccess, onShowToast }: TicketCreateSheetProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [newCustomer, setNewCustomer] = useState("");
-  const [newIssue, setNewIssue] = useState("");
-  const [newPriority, setNewPriority] = useState<"High" | "Medium" | "Low">("Medium");
+  const [isUploading, setIsUploading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newCustomer.trim() || !newIssue.trim()) return;
+  const form = useForm<CreateTicketInput>({
+    defaultValues: {
+      title: "",
+      description: "",
+      imageUrl: "",
+    },
+  });
 
-    const ticket: SupportTicket = {
-      id: `TCK-${nextId}`,
-      customer: newCustomer.trim(),
-      issue: newIssue.trim(),
-      priority: newPriority,
-      status: "Open",
-      time: "Just now",
-    };
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const res = await crmClient.upload.uploadFile(file, "tickets");
+      form.setValue("imageUrl", res.url);
+      onShowToast("Attachment uploaded successfully.");
+    } catch {
+      onShowToast("Failed to upload attachment.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
-    onCreateTicket(ticket);
-    setNewCustomer("");
-    setNewIssue("");
-    setNewPriority("Medium");
-    setIsOpen(false);
+  const onSubmit = async (values: CreateTicketInput) => {
+    if (!values.title.trim() || !values.description.trim()) {
+      onShowToast("Please fill in title and description.");
+      return;
+    }
+
+    try {
+      const ticket = await crmClient.tickets.create(values, customerId);
+      onShowToast(`Ticket ${ticket.title} created successfully!`);
+      form.reset();
+      setIsOpen(false);
+      onSuccess();
+    } catch (err) {
+      onShowToast(err instanceof Error ? err.message : "Failed to create ticket");
+    }
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild>
+    <Dialog open={isOpen} onOpenChange={(val) => { if (!val) form.reset(); setIsOpen(val); }}>
+      <DialogTrigger asChild>
         <Button className="w-full sm:w-auto">
-          <Plus />
-          Create Task
+          <Plus className="w-4 h-4 mr-2" />
+          Create Ticket
         </Button>
-      </SheetTrigger>
-      <SheetContent side="right" className="bg-card border-border w-full max-w-full sm:max-w-md md:max-w-lg overflow-y-auto p-4 sm:p-6">
-        <SheetHeader className="pb-md sm:pb-lg">
-          <SheetTitle className="text-headline-md font-bold text-foreground">Create Support Ticket</SheetTitle>
-          <SheetDescription className="text-body-sm text-muted-foreground">
-            Log a new support query into the CRM task queue.
-          </SheetDescription>
-        </SheetHeader>
-        <form onSubmit={handleSubmit} className="space-y-md sm:space-y-lg mt-md sm:mt-lg">
-          <div className="space-y-xs">
-            <Label htmlFor="ticket-customer" className="text-label-sm font-semibold text-foreground block">
-              Customer Name *
-            </Label>
-            <Input
-              id="ticket-customer"
-              placeholder="e.g. Jackson Reed"
-              value={newCustomer}
-              onChange={(e) => setNewCustomer(e.target.value)}
-              className="bg-muted/50 border-border focus:border-primary text-body-sm"
-              required
+      </DialogTrigger>
+      <DialogContent className="w-[90vw] max-w-[90vw] sm:max-w-[80vw] md:max-w-[700px] lg:max-w-[900px] max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
+        <DialogHeader className="space-y-1.5 text-left">
+          <DialogTitle className="text-xl sm:text-2xl font-bold tracking-tight">Create Support Ticket</DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
+            Log a new support query into the CRM ticket queue.
+          </DialogDescription>
+        </DialogHeader>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-2">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ticket Title *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. Account lockout during checkout" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="space-y-xs">
-            <Label htmlFor="ticket-issue" className="text-label-sm font-semibold text-foreground block">
-              Support Query *
-            </Label>
-            <Input
-              id="ticket-issue"
-              placeholder="e.g. Account lockout during checkout"
-              value={newIssue}
-              onChange={(e) => setNewIssue(e.target.value)}
-              className="bg-muted/50 border-border focus:border-primary text-body-sm"
-              required
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description *</FormLabel>
+                  <FormControl>
+                    <Textarea rows={3} placeholder="Detailed explanation of the issue..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="space-y-xs">
-            <Label className="text-label-sm font-semibold text-foreground block">Severity Priority</Label>
-            <div className="grid grid-cols-3 gap-xs sm:gap-sm">
-              {(["High", "Medium", "Low"] as const).map((p) => (
-                <Button
-                  type="button"
-                  key={p}
-                  variant={newPriority === p ? "default" : "outline"}
-                  className="w-full text-label-sm"
-                  onClick={() => setNewPriority(p)}
-                >
-                  {p}
-                </Button>
-              ))}
+
+            <div className="space-y-1">
+              <FormLabel>Attachment Image (Optional)</FormLabel>
+              <div className="flex items-center gap-2">
+                <Input type="file" accept="image/*" onChange={handleImageUpload} disabled={isUploading} />
+                {isUploading && <Loader2 className="w-4 h-4 animate-spin shrink-0" />}
+              </div>
             </div>
-          </div>
-          <div className="pt-md sm:pt-xl flex flex-col-reverse sm:flex-row gap-xs sm:gap-sm">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsOpen(false)}
-              className="w-full sm:flex-1"
-            >
-              Cancel
-            </Button>
-            <Button type="submit" className="w-full sm:flex-1">
-              Create Task
-            </Button>
-          </div>
-        </form>
-      </SheetContent>
-    </Sheet>
+
+            <DialogFooter className="pt-4 flex flex-col-reverse sm:flex-row justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsOpen(false)}
+                className="w-full sm:w-auto"
+              >
+                Cancel
+              </Button>
+              <Button type="submit" className="w-full sm:w-auto">
+                Submit Ticket
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

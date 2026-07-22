@@ -12,6 +12,7 @@ public class User
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    // Navigation property
+    // Navigation properties
     public CustomerProfile? CustomerProfile { get; set; }
+    public ICollection<Campaign> Campaigns { get; set; } = [];
 }

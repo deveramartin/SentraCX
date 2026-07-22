@@ -62,8 +62,32 @@ describe("createCustomerSchema", () => {
     }
   });
 
+  it("accepts a VIP customer type", () => {
+    const result = createCustomerSchema.safeParse({
+      ...validInput,
+      customerType: "VIP",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts a Lead customer type", () => {
+    const result = createCustomerSchema.safeParse({
+      ...validInput,
+      customerType: "Lead",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts an optional address", () => {
+    const result = createCustomerSchema.safeParse({
+      ...validInput,
+      address: "123 Test St",
+    });
+    expect(result.success).toBe(true);
+  });
+
   it("rejects an invalid customerType", () => {
-    const result = createCustomerSchema.safeParse({ ...validInput, customerType: "VIP" });
+    const result = createCustomerSchema.safeParse({ ...validInput, customerType: "SuperVIP" });
     expect(result.success).toBe(false);
   });
 

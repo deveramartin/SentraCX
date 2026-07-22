@@ -30,7 +30,7 @@ export function CustomerTypeControl({
     setIsUpdating(true);
     try {
       await crmClient.customers.updateType(customerId, { customerType: newType });
-      toast.success(`Customer type updated to ${newType === "InstitutionalBuyer" ? "Institutional Buyer" : "Regular"}.`);
+      toast.success(`Customer type updated to ${newType}.`);
       onUpdated(newType);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to update customer type.");
@@ -45,7 +45,7 @@ export function CustomerTypeControl({
       <Select
         value={currentType}
         onValueChange={(val) => handleChange(val as CustomerType)}
-        disabled={isUpdating}
+        disabled={isUpdating || currentType === "Lead"}
       >
         <SelectTrigger className="w-full sm:w-[160px] h-8 text-label-sm font-semibold">
           <SelectValue />
@@ -53,6 +53,8 @@ export function CustomerTypeControl({
         <SelectContent>
           <SelectItem value="Regular">Regular</SelectItem>
           <SelectItem value="InstitutionalBuyer">Institutional Buyer</SelectItem>
+          <SelectItem value="VIP">VIP</SelectItem>
+          <SelectItem value="Lead">Lead</SelectItem>
         </SelectContent>
       </Select>
     </div>

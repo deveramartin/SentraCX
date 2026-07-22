@@ -7,11 +7,30 @@ interface CustomerTypeBadgeProps {
 }
 
 export function CustomerTypeBadge({ customerType }: CustomerTypeBadgeProps) {
-  const label = customerType === "InstitutionalBuyer" ? "Institutional Buyer" : "Regular";
-  const variant = customerType === "InstitutionalBuyer" ? "outline" : "secondary";
+  let label = "Regular";
+  let styleClass = "bg-badge-info text-badge-info-foreground border-transparent";
+
+  switch (customerType) {
+    case "InstitutionalBuyer":
+      label = "Institutional Buyer";
+      styleClass = "bg-badge-indigo text-badge-indigo-foreground border-transparent";
+      break;
+    case "VIP":
+      label = "VIP";
+      styleClass = "bg-badge-purple text-badge-purple-foreground border-transparent";
+      break;
+    case "Lead":
+      label = "Lead";
+      styleClass = "bg-badge-warning text-badge-warning-foreground border-transparent";
+      break;
+    default:
+      label = "Regular";
+      styleClass = "bg-badge-info text-badge-info-foreground border-transparent";
+      break;
+  }
 
   return (
-    <Badge variant={variant} className="text-label-sm font-medium">
+    <Badge className={`text-label-sm font-medium border-none shadow-none ${styleClass}`}>
       {label}
     </Badge>
   );
