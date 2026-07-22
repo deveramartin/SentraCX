@@ -74,13 +74,13 @@ Each item maps to its BRD requirement(s) where applicable, so tasks can be trace
 ### CRM-007 — Conversations (Staff/Manager view)
 *Maps to: BR-CRM-03, BR-CRM-04*
 
-- [ ] Conversations module with tabs: Unread, Read, All
-- [ ] Active conversation list on the user's page (sourced from claimed tickets)
-- [ ] Mark-as-read / mark-as-unread control
-- [ ] Real-time chat UI: send and receive messages live
-- [ ] Message/conversation details view
-- [ ] "Completed" and "Unclaim" buttons inside the conversation view
-- [ ] Deep link: clicking the "message" button on a ticket routes here, opening the right conversation
+- [x] Conversations module with tabs: Unread, Read, All
+- [x] Active conversation list on the user's page (sourced from claimed tickets)
+- [x] Mark-as-read / mark-as-unread control
+- [x] Real-time chat UI: send and receive messages live
+- [x] Message/conversation details view
+- [x] "Completed" and "Unclaim" buttons inside the conversation view
+- [x] Deep link: clicking the "message" button on a ticket routes here, opening the right conversation
 
 ### CRM-008 — Conversations (Customer view)
 *Maps to: BR-CRM-03, BR-CRM-04*
