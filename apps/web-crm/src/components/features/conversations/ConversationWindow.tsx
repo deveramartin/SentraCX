@@ -93,7 +93,7 @@ export function ConversationWindow({
             variant="outline"
             size="sm"
             onClick={() => onUnclaim(ticket.id)}
-            className="text-label-sm font-medium gap-xs"
+            className="text-label-sm font-semibold gap-xs"
           >
             <Undo2 className="w-3.5 h-3.5" />
             Unclaim
@@ -101,8 +101,8 @@ export function ConversationWindow({
 
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button size="sm" className="text-label-sm font-medium gap-xs">
-                <CheckCircle className="w-3.5 h-3.5" />
+              <Button size="sm" className="bg-primary text-primary-foreground font-semibold text-label-sm gap-xs">
+                <CheckCircle className="w-3.5 h-3.5 text-primary-foreground" />
                 Complete
               </Button>
             </AlertDialogTrigger>
@@ -115,7 +115,7 @@ export function ConversationWindow({
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => onComplete(ticket.id)}>
+                <AlertDialogAction className="bg-primary text-primary-foreground font-semibold" onClick={() => onComplete(ticket.id)}>
                   Mark Completed
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -155,14 +155,14 @@ export function ConversationWindow({
                 <div
                   className={`max-w-[75%] p-md rounded-xl space-y-xs ${
                     isStaff
-                      ? "bg-primary text-primary-foreground rounded-tr-none"
-                      : "bg-muted border border-border text-foreground rounded-tl-none"
+                      ? "bg-primary text-primary-foreground rounded-tr-none font-medium"
+                      : "bg-muted border border-border text-foreground rounded-tl-none font-medium"
                   }`}
                 >
                   <p className="text-body-sm leading-relaxed whitespace-pre-wrap">{m.content}</p>
                   <span
                     className={`text-[10px] block text-right font-mono ${
-                      isStaff ? "text-primary-foreground/75" : "text-muted-foreground"
+                      isStaff ? "text-primary-foreground/85 font-semibold" : "text-muted-foreground"
                     }`}
                   >
                     {formattedTime}
@@ -183,8 +183,8 @@ export function ConversationWindow({
           onChange={(e) => setTypedMessage(e.target.value)}
           className="flex-1 bg-muted/50 border-border text-body-sm"
         />
-        <Button type="submit" size="icon" disabled={!typedMessage.trim()}>
-          <Send className="w-4 h-4" />
+        <Button type="submit" size="icon" className="bg-primary text-primary-foreground font-semibold" disabled={!typedMessage.trim()}>
+          <Send className="w-4 h-4 text-primary-foreground" />
         </Button>
       </form>
     </div>

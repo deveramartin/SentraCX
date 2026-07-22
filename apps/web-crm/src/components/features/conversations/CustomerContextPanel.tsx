@@ -75,7 +75,7 @@ export function CustomerContextPanel({ ticket, onUseTemplate }: CustomerContextP
         <Button
           variant="default"
           size="sm"
-          className="w-full text-label-sm font-bold mt-xs"
+          className="w-full bg-primary text-primary-foreground font-bold text-label-sm mt-xs shadow-xs"
           onClick={() => onUseTemplate(smartReply)}
         >
           Use Template

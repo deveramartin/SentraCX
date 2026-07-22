@@ -43,7 +43,7 @@ export function ConversationList({
             <MessageSquare className="w-5 h-5" />
             Conversations
           </h2>
-          <Badge className="bg-primary text-primary-foreground border-none shadow-none">
+          <Badge className="bg-primary text-primary-foreground border-none shadow-none font-bold">
             {unreadTotal} Unread
           </Badge>
         </div>
@@ -56,8 +56,8 @@ export function ConversationList({
               onClick={() => onTabChange(tab)}
               className={`flex-1 py-1 text-center rounded-md capitalize transition-colors ${
                 activeTab === tab
-                  ? "bg-card text-foreground font-bold shadow-xs"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-primary text-primary-foreground font-bold shadow-xs"
+                  : "text-muted-foreground hover:text-foreground font-semibold"
               }`}
             >
               {tab}
