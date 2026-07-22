@@ -1,4 +1,4 @@
-name: CI - Build Verification
+name: CI - Build & Test Verification
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build-web-crm:
-    name: Build web-crm (Next.js)
+  test-and-build-web-crm:
+    name: Build & Test web-crm (Next.js)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -29,12 +29,16 @@ jobs:
         run: pnpm install --frozen-lockfile
         working-directory: .
 
+      - name: Run Unit Tests
+        run: pnpm --filter ./apps/web-crm test
+        working-directory: .
+
       - name: Build
         run: pnpm build:web
         working-directory: .
 
-  build-api-crm:
-    name: Build api-crm (.NET)
+  test-and-build-api-crm:
+    name: Build & Test api-crm (.NET)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -52,8 +56,11 @@ jobs:
       - name: Build
         run: dotnet build -c Release --no-restore
 
-  build-api-ai-analytics:
-    name: Build api-ai-analytics (Python)
+      - name: Run Unit Tests
+        run: dotnet test tests/Crm.Api.Tests/Crm.Api.Tests.csproj -c Release --no-build --verbosity normal
+
+  test-and-build-api-ai-analytics:
+    name: Build & Test api-ai-analytics (Python)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -68,8 +75,15 @@ jobs:
           cache-dependency-path: apps/api-ai-analytics/requirements.txt
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio pytest-cov
 
       - name: Verify app loads
         run: |
           python -c "from app.main import app; print('OK: app loads successfully')"
+
+      - name: Run Unit Tests
+        run: pytest
+        env:
+          PYTHONPATH: .
