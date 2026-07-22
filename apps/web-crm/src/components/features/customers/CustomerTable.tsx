@@ -33,7 +33,7 @@ export function CustomerTable({
 }: CustomerTableProps) {
   return (
     <div className="w-full border rounded-md border-border overflow-hidden bg-card">
-      <div className="flex items-center gap-3 px-4 py-2 border-b border-border bg-muted/20">
+      <div className="flex items-center justify-around gap-3 px-4 py-2 border-b border-border bg-muted/20">
         <Search className="w-4 h-4 text-muted-foreground shrink-0" />
         <Input
           className="border-0 shadow-none focus-visible:ring-0 bg-transparent h-8 p-0 text-body-sm flex-1"
@@ -59,53 +59,81 @@ export function CustomerTable({
         ) : (
           <Table className="min-w-[700px] w-full text-left text-body-sm">
             <TableHeader>
-          <TableRow className="border-b border-border">
-            <TableHead className="w-[20%]">Customer Name</TableHead>
-            <TableHead className="w-[20%]">Email</TableHead>
-            <TableHead className="w-[15%]">Phone</TableHead>
-            <TableHead className="w-[15%]">Type</TableHead>
-            <TableHead className="w-[10%]">Status</TableHead>
-            <TableHead className="w-[10%]">Created At</TableHead>
-            <TableHead className="w-[10%] text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="divide-y divide-border">
-          {customers.map((c) => (
-            <TableRow key={c.id} className="hover:bg-muted/50 transition-colors">
-              <TableCell className="font-semibold text-foreground">
-                <Link
-                  href={`/customers/${c.id}`}
-                  className="hover:underline hover:text-primary transition-colors"
-                >
-                  {c.displayName}
-                </Link>
-              </TableCell>
-              <TableCell className="text-muted-foreground text-body-sm">{c.email}</TableCell>
-              <TableCell className="text-muted-foreground text-body-sm">{c.phoneNumber || "-"}</TableCell>
-              <TableCell>
-                <CustomerTypeBadge customerType={c.customerType} />
-              </TableCell>
-              <TableCell>
-                <CustomerStatusBadge status={c.status} />
-              </TableCell>
-              <TableCell className="text-muted-foreground text-body-sm">
-                {new Date(c.createdAt).toLocaleDateString()}
-              </TableCell>
-              <TableCell className="text-right">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onDeleteClick(c)}
-                  className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                  title="Delete customer"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              <TableRow className="border-b border-border">
+                <TableHead className="w-[20%] flex items-center justify-around">
+                  <div className="flex items-center justify-around w-full">Customer Name</div>
+                </TableHead>
+                <TableHead className="w-[20%] flex items-center justify-around">
+                  <div className="flex items-center justify-around w-full">Email</div>
+                </TableHead>
+                <TableHead className="w-[15%] flex items-center justify-around">
+                  <div className="flex items-center justify-around w-full">Phone</div>
+                </TableHead>
+                <TableHead className="w-[15%] flex items-center justify-around">
+                  <div className="flex items-center justify-around w-full">Type</div>
+                </TableHead>
+                <TableHead className="w-[10%] flex items-center justify-around">
+                  <div className="flex items-center justify-around w-full">Status</div>
+                </TableHead>
+                <TableHead className="w-[10%] flex items-center justify-around">
+                  <div className="flex items-center justify-around w-full">Created At</div>
+                </TableHead>
+                <TableHead className="w-[10%] flex items-center justify-around text-right">
+                  <div className="flex items-center justify-around w-full">Actions</div>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="divide-y divide-border">
+              {customers.map((c) => (
+                <TableRow key={c.id} className="hover:bg-muted/50 transition-colors">
+                  <TableCell className="font-semibold text-foreground flex items-center justify-around">
+                    <div className="flex items-center justify-around w-full">
+                      <Link
+                        href={`/customers/${c.id}`}
+                        className="hover:underline hover:text-primary transition-colors"
+                      >
+                        {c.displayName}
+                      </Link>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground text-body-sm flex items-center justify-around">
+                    <div className="flex items-center justify-around w-full">{c.email}</div>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground text-body-sm flex items-center justify-around">
+                    <div className="flex items-center justify-around w-full">{c.phoneNumber || "-"}</div>
+                  </TableCell>
+                  <TableCell className="flex items-center justify-around">
+                    <div className="flex items-center justify-around w-full">
+                      <CustomerTypeBadge customerType={c.customerType} />
+                    </div>
+                  </TableCell>
+                  <TableCell className="flex items-center justify-around">
+                    <div className="flex items-center justify-around w-full">
+                      <CustomerStatusBadge status={c.status} />
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground text-body-sm flex items-center justify-around">
+                    <div className="flex items-center justify-around w-full">
+                      {new Date(c.createdAt).toLocaleDateString()}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right flex items-center justify-around">
+                    <div className="flex items-center justify-around w-full">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => onDeleteClick(c)}
+                        className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                        title="Delete customer"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         )}
       </div>
     </div>

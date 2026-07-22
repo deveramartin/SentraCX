@@ -36,12 +36,12 @@ export function CampaignTable({ campaigns, isLoading, onRefresh, onShowToast }: 
 
   return (
     <Card className="shadow-none border-border flex flex-col">
-      <CardHeader className="pb-md p-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-md">
+      <CardHeader className="pb-md p-lg flex flex-col sm:flex-row sm:items-center justify-around gap-md">
         <CardTitle className="text-title-lg font-bold text-foreground">Campaign Audit Log</CardTitle>
       </CardHeader>
       <CardContent className="py-md pt-0 overflow-x-auto">
         <div className="w-full border rounded-md border-border overflow-hidden bg-card">
-          <div className="flex items-center gap-3 px-4 py-2 border-b border-border bg-muted/20">
+          <div className="flex items-center justify-around gap-3 px-4 py-2 border-b border-border bg-muted/20">
             <Search className="w-4 h-4 text-muted-foreground shrink-0" />
             <Input
               className="border-0 shadow-none focus-visible:ring-0 bg-transparent h-8 p-0 text-body-sm flex-1"
@@ -68,39 +68,57 @@ export function CampaignTable({ campaigns, isLoading, onRefresh, onShowToast }: 
               <Table className="min-w-[700px] w-full text-left text-body-sm">
                 <TableHeader>
                   <TableRow className="border-b border-border">
-                    <TableHead className="w-[30%]">Title</TableHead>
-                    <TableHead className="w-[25%]">Channels</TableHead>
-                    <TableHead className="w-[15%]">Status</TableHead>
-                    <TableHead className="w-[15%]">Created At</TableHead>
-                    <TableHead className="w-[15%] text-right">Actions</TableHead>
+                    <TableHead className="w-[30%] flex items-center justify-around">
+                      <div className="flex items-center justify-around w-full">Title</div>
+                    </TableHead>
+                    <TableHead className="w-[25%] flex items-center justify-around">
+                      <div className="flex items-center justify-around w-full">Channels</div>
+                    </TableHead>
+                    <TableHead className="w-[15%] flex items-center justify-around">
+                      <div className="flex items-center justify-around w-full">Status</div>
+                    </TableHead>
+                    <TableHead className="w-[15%] flex items-center justify-around">
+                      <div className="flex items-center justify-around w-full">Created At</div>
+                    </TableHead>
+                    <TableHead className="w-[15%] flex items-center justify-around text-right">
+                      <div className="flex items-center justify-around w-full">Actions</div>
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody className="divide-y divide-border">
                   {filteredCampaigns.map((c) => (
                     <TableRow key={c.id} className="hover:bg-muted/50 transition-colors">
-                      <TableCell className="font-semibold text-foreground">{c.title}</TableCell>
-                      <TableCell>
-                        <div className="flex flex-wrap gap-1">
+                      <TableCell className="font-semibold text-foreground flex items-center justify-around">
+                        <div className="flex items-center justify-around w-full">{c.title}</div>
+                      </TableCell>
+                      <TableCell className="flex items-center justify-around">
+                        <div className="flex flex-wrap gap-1 items-center justify-around w-full">
                           {c.channels.map((ch) => (
                             <CampaignChannelBadge key={ch} channel={ch} />
                           ))}
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <CampaignStatusBadge status={c.status} />
+                      <TableCell className="flex items-center justify-around">
+                        <div className="flex items-center justify-around w-full">
+                          <CampaignStatusBadge status={c.status} />
+                        </div>
                       </TableCell>
-                      <TableCell className="text-muted-foreground text-body-sm">
-                        {new Date(c.createdAt).toLocaleDateString()}
+                      <TableCell className="text-muted-foreground text-body-sm flex items-center justify-around">
+                        <div className="flex items-center justify-around w-full">
+                          {new Date(c.createdAt).toLocaleDateString()}
+                        </div>
                       </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setSelectedCampaignId(c.id)}
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          <Eye className="w-4 h-4 mr-1" /> View
-                        </Button>
+                      <TableCell className="text-right flex items-center justify-around">
+                        <div className="flex items-center justify-around w-full">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setSelectedCampaignId(c.id)}
+                            className="text-muted-foreground hover:text-foreground"
+                          >
+                            <Eye className="w-4 h-4 mr-1" /> View
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
