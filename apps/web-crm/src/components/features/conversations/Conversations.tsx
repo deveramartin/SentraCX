@@ -59,7 +59,7 @@ export function Conversations({ initialTicketId }: ConversationsProps) {
       setActiveTicketId(ticketId);
       // Mark initial batch as read if unread count > 0
       const selected = tickets.find((t) => t.id === ticketId);
-      if (selected && selected.unreadMessageCount > 0) {
+      if (selected && (selected.unreadMessageCount ?? 0) > 0) {
         crmClient.messages
           .listByTicket(ticketId)
           .then((msgs) => {
