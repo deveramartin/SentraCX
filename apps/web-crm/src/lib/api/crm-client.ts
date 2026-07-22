@@ -30,7 +30,7 @@ import {
   PaginatedTicketResponse,
 } from "@/types/ticket";
 
-const CRM_BASE = process.env.NEXT_PUBLIC_CRM_API_URL ?? "https://localhost:5005";
+const CRM_BASE = process.env.NEXT_PUBLIC_CRM_API_URL ?? "https://localhost:7001";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const url = `${CRM_BASE}${path}`;
