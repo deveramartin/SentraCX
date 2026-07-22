@@ -112,48 +112,48 @@ export function TicketsCustomerView({ customerId }: TicketsCustomerViewProps) {
                       ))}
                     </div>
                   ) : filteredTickets.length === 0 ? (
-                    <div className="py-12 text-center text-muted-foreground">
-                      <p className="text-body-sm font-medium">No tickets found.</p>
-                      <p className="text-label-sm text-muted-foreground mt-xs">
+                    <div className="py-12 text-center text-muted-foreground flex flex-col items-center justify-around">
+                      <p className="text-body-sm font-medium flex justify-around">No tickets found.</p>
+                      <p className="text-label-sm text-muted-foreground mt-xs flex justify-around">
                         Try searching with a different keyword or create a new support inquiry.
                       </p>
                     </div>
                   ) : (
                     <Table className="min-w-[700px] w-full text-left text-body-sm">
                       <TableHeader>
-                        <TableRow className="border-b border-border">
-                          <TableHead className="w-[35%] flex items-center justify-around">
-                            <div className="flex items-center justify-around w-full">Title</div>
+                        <TableRow className="border-b border-border flex items-center justify-around w-full">
+                          <TableHead className="flex-1 flex items-center justify-around">
+                            <span className="flex items-center justify-around w-full">Title</span>
                           </TableHead>
-                          <TableHead className="w-[20%] flex items-center justify-around">
-                            <div className="flex items-center justify-around w-full">Status</div>
+                          <TableHead className="flex-1 flex items-center justify-around">
+                            <span className="flex items-center justify-around w-full">Status</span>
                           </TableHead>
-                          <TableHead className="w-[20%] flex items-center justify-around">
-                            <div className="flex items-center justify-around w-full">Created At</div>
+                          <TableHead className="flex-1 flex items-center justify-around">
+                            <span className="flex items-center justify-around w-full">Created At</span>
                           </TableHead>
-                          <TableHead className="w-[25%] flex items-center justify-around text-right">
-                            <div className="flex items-center justify-around w-full">Actions</div>
+                          <TableHead className="flex-1 flex items-center justify-around text-right">
+                            <span className="flex items-center justify-around w-full">Actions</span>
                           </TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody className="divide-y divide-border">
                         {filteredTickets.map((t) => (
-                          <TableRow key={t.id} className="hover:bg-muted/50 transition-colors">
-                            <TableCell className="font-semibold text-foreground flex items-center justify-around">
-                              <div className="flex items-center justify-around w-full">{t.title}</div>
+                          <TableRow key={t.id} className="hover:bg-muted/50 transition-colors flex items-center justify-around w-full">
+                            <TableCell className="flex-1 font-semibold text-foreground flex items-center justify-around">
+                              <span className="flex items-center justify-around w-full">{t.title}</span>
                             </TableCell>
-                            <TableCell className="flex items-center justify-around">
-                              <div className="flex items-center justify-around w-full">
+                            <TableCell className="flex-1 flex items-center justify-around">
+                              <span className="flex items-center justify-around w-full">
                                 <TicketStatusBadge status={t.status} />
-                              </div>
+                              </span>
                             </TableCell>
-                            <TableCell className="text-muted-foreground text-body-sm flex items-center justify-around">
-                              <div className="flex items-center justify-around w-full">
+                            <TableCell className="flex-1 text-muted-foreground text-body-sm flex items-center justify-around">
+                              <span className="flex items-center justify-around w-full">
                                 {new Date(t.createdAt).toLocaleDateString()}
-                              </div>
+                              </span>
                             </TableCell>
-                            <TableCell className="text-right flex items-center justify-around gap-1">
-                              <div className="flex items-center justify-around w-full gap-1">
+                            <TableCell className="flex-1 text-right flex items-center justify-around">
+                              <span className="flex items-center justify-around w-full gap-1">
                                 <Button variant="ghost" size="sm" onClick={() => setSelectedTicketId(t.id)} className="text-muted-foreground hover:text-foreground">
                                   <Eye className="w-4 h-4 mr-1" /> View
                                 </Button>
@@ -167,7 +167,7 @@ export function TicketsCustomerView({ customerId }: TicketsCustomerViewProps) {
                                     <XCircle className="w-4 h-4 mr-1" /> Cancel
                                   </Button>
                                 )}
-                              </div>
+                              </span>
                             </TableCell>
                           </TableRow>
                         ))}

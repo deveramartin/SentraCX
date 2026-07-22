@@ -50,75 +50,75 @@ export function CustomerTable({
             ))}
           </div>
         ) : customers.length === 0 ? (
-          <div className="py-12 text-center text-muted-foreground">
-            <p className="text-body-sm font-medium">No customers found.</p>
-            <p className="text-label-sm text-muted-foreground mt-xs">
+          <div className="py-12 text-center text-muted-foreground flex flex-col items-center justify-around">
+            <p className="text-body-sm font-medium flex justify-around">No customers found.</p>
+            <p className="text-label-sm text-muted-foreground mt-xs flex justify-around">
               Try searching with a different keyword or create a new customer record.
             </p>
           </div>
         ) : (
           <Table className="min-w-[700px] w-full text-left text-body-sm">
             <TableHeader>
-              <TableRow className="border-b border-border">
-                <TableHead className="w-[20%] flex items-center justify-around">
-                  <div className="flex items-center justify-around w-full">Customer Name</div>
+              <TableRow className="border-b border-border flex items-center justify-around w-full">
+                <TableHead className="flex-1 flex items-center justify-around">
+                  <span className="flex items-center justify-around w-full">Customer Name</span>
                 </TableHead>
-                <TableHead className="w-[20%] flex items-center justify-around">
-                  <div className="flex items-center justify-around w-full">Email</div>
+                <TableHead className="flex-1 flex items-center justify-around">
+                  <span className="flex items-center justify-around w-full">Email</span>
                 </TableHead>
-                <TableHead className="w-[15%] flex items-center justify-around">
-                  <div className="flex items-center justify-around w-full">Phone</div>
+                <TableHead className="flex-1 flex items-center justify-around">
+                  <span className="flex items-center justify-around w-full">Phone</span>
                 </TableHead>
-                <TableHead className="w-[15%] flex items-center justify-around">
-                  <div className="flex items-center justify-around w-full">Type</div>
+                <TableHead className="flex-1 flex items-center justify-around">
+                  <span className="flex items-center justify-around w-full">Type</span>
                 </TableHead>
-                <TableHead className="w-[10%] flex items-center justify-around">
-                  <div className="flex items-center justify-around w-full">Status</div>
+                <TableHead className="flex-1 flex items-center justify-around">
+                  <span className="flex items-center justify-around w-full">Status</span>
                 </TableHead>
-                <TableHead className="w-[10%] flex items-center justify-around">
-                  <div className="flex items-center justify-around w-full">Created At</div>
+                <TableHead className="flex-1 flex items-center justify-around">
+                  <span className="flex items-center justify-around w-full">Created At</span>
                 </TableHead>
-                <TableHead className="w-[10%] flex items-center justify-around text-right">
-                  <div className="flex items-center justify-around w-full">Actions</div>
+                <TableHead className="flex-1 flex items-center justify-around text-right">
+                  <span className="flex items-center justify-around w-full">Actions</span>
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="divide-y divide-border">
               {customers.map((c) => (
-                <TableRow key={c.id} className="hover:bg-muted/50 transition-colors">
-                  <TableCell className="font-semibold text-foreground flex items-center justify-around">
-                    <div className="flex items-center justify-around w-full">
+                <TableRow key={c.id} className="hover:bg-muted/50 transition-colors flex items-center justify-around w-full">
+                  <TableCell className="flex-1 font-semibold text-foreground flex items-center justify-around">
+                    <span className="flex items-center justify-around w-full">
                       <Link
                         href={`/customers/${c.id}`}
                         className="hover:underline hover:text-primary transition-colors"
                       >
                         {c.displayName}
                       </Link>
-                    </div>
+                    </span>
                   </TableCell>
-                  <TableCell className="text-muted-foreground text-body-sm flex items-center justify-around">
-                    <div className="flex items-center justify-around w-full">{c.email}</div>
+                  <TableCell className="flex-1 text-muted-foreground text-body-sm flex items-center justify-around">
+                    <span className="flex items-center justify-around w-full">{c.email}</span>
                   </TableCell>
-                  <TableCell className="text-muted-foreground text-body-sm flex items-center justify-around">
-                    <div className="flex items-center justify-around w-full">{c.phoneNumber || "-"}</div>
+                  <TableCell className="flex-1 text-muted-foreground text-body-sm flex items-center justify-around">
+                    <span className="flex items-center justify-around w-full">{c.phoneNumber || "-"}</span>
                   </TableCell>
-                  <TableCell className="flex items-center justify-around">
-                    <div className="flex items-center justify-around w-full">
+                  <TableCell className="flex-1 flex items-center justify-around">
+                    <span className="flex items-center justify-around w-full">
                       <CustomerTypeBadge customerType={c.customerType} />
-                    </div>
+                    </span>
                   </TableCell>
-                  <TableCell className="flex items-center justify-around">
-                    <div className="flex items-center justify-around w-full">
+                  <TableCell className="flex-1 flex items-center justify-around">
+                    <span className="flex items-center justify-around w-full">
                       <CustomerStatusBadge status={c.status} />
-                    </div>
+                    </span>
                   </TableCell>
-                  <TableCell className="text-muted-foreground text-body-sm flex items-center justify-around">
-                    <div className="flex items-center justify-around w-full">
+                  <TableCell className="flex-1 text-muted-foreground text-body-sm flex items-center justify-around">
+                    <span className="flex items-center justify-around w-full">
                       {new Date(c.createdAt).toLocaleDateString()}
-                    </div>
+                    </span>
                   </TableCell>
-                  <TableCell className="text-right flex items-center justify-around">
-                    <div className="flex items-center justify-around w-full">
+                  <TableCell className="flex-1 text-right flex items-center justify-around">
+                    <span className="flex items-center justify-around w-full">
                       <Button
                         variant="ghost"
                         size="icon"
@@ -128,7 +128,7 @@ export function CustomerTable({
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
-                    </div>
+                    </span>
                   </TableCell>
                 </TableRow>
               ))}

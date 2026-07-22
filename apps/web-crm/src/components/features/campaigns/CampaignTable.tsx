@@ -58,58 +58,58 @@ export function CampaignTable({ campaigns, isLoading, onRefresh, onShowToast }: 
                 ))}
               </div>
             ) : filteredCampaigns.length === 0 ? (
-              <div className="py-12 text-center text-muted-foreground">
-                <p className="text-body-sm font-medium">No campaigns found.</p>
-                <p className="text-label-sm text-muted-foreground mt-xs">
+              <div className="py-12 text-center text-muted-foreground flex flex-col items-center justify-around">
+                <p className="text-body-sm font-medium flex justify-around">No campaigns found.</p>
+                <p className="text-label-sm text-muted-foreground mt-xs flex justify-around">
                   Try searching with a different keyword or launch a new campaign.
                 </p>
               </div>
             ) : (
               <Table className="min-w-[700px] w-full text-left text-body-sm">
                 <TableHeader>
-                  <TableRow className="border-b border-border">
-                    <TableHead className="w-[30%] flex items-center justify-around">
-                      <div className="flex items-center justify-around w-full">Title</div>
+                  <TableRow className="border-b border-border flex items-center justify-around w-full">
+                    <TableHead className="flex-1 flex items-center justify-around">
+                      <span className="flex items-center justify-around w-full">Title</span>
                     </TableHead>
-                    <TableHead className="w-[25%] flex items-center justify-around">
-                      <div className="flex items-center justify-around w-full">Channels</div>
+                    <TableHead className="flex-1 flex items-center justify-around">
+                      <span className="flex items-center justify-around w-full">Channels</span>
                     </TableHead>
-                    <TableHead className="w-[15%] flex items-center justify-around">
-                      <div className="flex items-center justify-around w-full">Status</div>
+                    <TableHead className="flex-1 flex items-center justify-around">
+                      <span className="flex items-center justify-around w-full">Status</span>
                     </TableHead>
-                    <TableHead className="w-[15%] flex items-center justify-around">
-                      <div className="flex items-center justify-around w-full">Created At</div>
+                    <TableHead className="flex-1 flex items-center justify-around">
+                      <span className="flex items-center justify-around w-full">Created At</span>
                     </TableHead>
-                    <TableHead className="w-[15%] flex items-center justify-around text-right">
-                      <div className="flex items-center justify-around w-full">Actions</div>
+                    <TableHead className="flex-1 flex items-center justify-around text-right">
+                      <span className="flex items-center justify-around w-full">Actions</span>
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody className="divide-y divide-border">
                   {filteredCampaigns.map((c) => (
-                    <TableRow key={c.id} className="hover:bg-muted/50 transition-colors">
-                      <TableCell className="font-semibold text-foreground flex items-center justify-around">
-                        <div className="flex items-center justify-around w-full">{c.title}</div>
+                    <TableRow key={c.id} className="hover:bg-muted/50 transition-colors flex items-center justify-around w-full">
+                      <TableCell className="flex-1 font-semibold text-foreground flex items-center justify-around">
+                        <span className="flex items-center justify-around w-full">{c.title}</span>
                       </TableCell>
-                      <TableCell className="flex items-center justify-around">
-                        <div className="flex flex-wrap gap-1 items-center justify-around w-full">
+                      <TableCell className="flex-1 flex items-center justify-around">
+                        <span className="flex flex-wrap gap-1 items-center justify-around w-full">
                           {c.channels.map((ch) => (
                             <CampaignChannelBadge key={ch} channel={ch} />
                           ))}
-                        </div>
+                        </span>
                       </TableCell>
-                      <TableCell className="flex items-center justify-around">
-                        <div className="flex items-center justify-around w-full">
+                      <TableCell className="flex-1 flex items-center justify-around">
+                        <span className="flex items-center justify-around w-full">
                           <CampaignStatusBadge status={c.status} />
-                        </div>
+                        </span>
                       </TableCell>
-                      <TableCell className="text-muted-foreground text-body-sm flex items-center justify-around">
-                        <div className="flex items-center justify-around w-full">
+                      <TableCell className="flex-1 text-muted-foreground text-body-sm flex items-center justify-around">
+                        <span className="flex items-center justify-around w-full">
                           {new Date(c.createdAt).toLocaleDateString()}
-                        </div>
+                        </span>
                       </TableCell>
-                      <TableCell className="text-right flex items-center justify-around">
-                        <div className="flex items-center justify-around w-full">
+                      <TableCell className="flex-1 text-right flex items-center justify-around">
+                        <span className="flex items-center justify-around w-full">
                           <Button
                             variant="ghost"
                             size="sm"
@@ -118,7 +118,7 @@ export function CampaignTable({ campaigns, isLoading, onRefresh, onShowToast }: 
                           >
                             <Eye className="w-4 h-4 mr-1" /> View
                           </Button>
-                        </div>
+                        </span>
                       </TableCell>
                     </TableRow>
                   ))}

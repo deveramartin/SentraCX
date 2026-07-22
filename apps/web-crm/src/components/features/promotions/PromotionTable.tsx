@@ -58,62 +58,62 @@ export function PromotionTable({ promotions, isLoading, onRefresh, onShowToast }
                 ))}
               </div>
             ) : filteredPromotions.length === 0 ? (
-              <div className="py-12 text-center text-muted-foreground">
-                <p className="text-body-sm font-medium">No promotions found.</p>
-                <p className="text-label-sm text-muted-foreground mt-xs">
+              <div className="py-12 text-center text-muted-foreground flex flex-col items-center justify-around">
+                <p className="text-body-sm font-medium flex justify-around">No promotions found.</p>
+                <p className="text-label-sm text-muted-foreground mt-xs flex justify-around">
                   Try searching with a different keyword or create a new promotion.
                 </p>
               </div>
             ) : (
               <Table className="min-w-[700px] w-full text-left text-body-sm">
                 <TableHeader>
-                  <TableRow className="border-b border-border">
-                    <TableHead className="w-[25%] flex items-center justify-around">
-                      <div className="flex items-center justify-around w-full">Title</div>
+                  <TableRow className="border-b border-border flex items-center justify-around w-full">
+                    <TableHead className="flex-1 flex items-center justify-around">
+                      <span className="flex items-center justify-around w-full">Title</span>
                     </TableHead>
-                    <TableHead className="w-[15%] flex items-center justify-around">
-                      <div className="flex items-center justify-around w-full">Type</div>
+                    <TableHead className="flex-1 flex items-center justify-around">
+                      <span className="flex items-center justify-around w-full">Type</span>
                     </TableHead>
-                    <TableHead className="w-[15%] flex items-center justify-around">
-                      <div className="flex items-center justify-around w-full">Status</div>
+                    <TableHead className="flex-1 flex items-center justify-around">
+                      <span className="flex items-center justify-around w-full">Status</span>
                     </TableHead>
-                    <TableHead className="w-[15%] flex items-center justify-around">
-                      <div className="flex items-center justify-around w-full">Discount Value</div>
+                    <TableHead className="flex-1 flex items-center justify-around">
+                      <span className="flex items-center justify-around w-full">Discount Value</span>
                     </TableHead>
-                    <TableHead className="w-[15%] flex items-center justify-around">
-                      <div className="flex items-center justify-around w-full">End Date</div>
+                    <TableHead className="flex-1 flex items-center justify-around">
+                      <span className="flex items-center justify-around w-full">End Date</span>
                     </TableHead>
-                    <TableHead className="w-[15%] flex items-center justify-around text-right">
-                      <div className="flex items-center justify-around w-full">Actions</div>
+                    <TableHead className="flex-1 flex items-center justify-around text-right">
+                      <span className="flex items-center justify-around w-full">Actions</span>
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody className="divide-y divide-border">
                   {filteredPromotions.map((p) => (
-                    <TableRow key={p.id} className="hover:bg-muted/50 transition-colors">
-                      <TableCell className="font-semibold text-foreground flex items-center justify-around">
-                        <div className="flex items-center justify-around w-full">{p.title}</div>
+                    <TableRow key={p.id} className="hover:bg-muted/50 transition-colors flex items-center justify-around w-full">
+                      <TableCell className="flex-1 font-semibold text-foreground flex items-center justify-around">
+                        <span className="flex items-center justify-around w-full">{p.title}</span>
                       </TableCell>
-                      <TableCell className="flex items-center justify-around">
-                        <div className="flex items-center justify-around w-full">
+                      <TableCell className="flex-1 flex items-center justify-around">
+                        <span className="flex items-center justify-around w-full">
                           <PromotionTypeBadge type={p.promotionType} />
-                        </div>
+                        </span>
                       </TableCell>
-                      <TableCell className="flex items-center justify-around">
-                        <div className="flex items-center justify-around w-full">
+                      <TableCell className="flex-1 flex items-center justify-around">
+                        <span className="flex items-center justify-around w-full">
                           <PromotionStatusBadge status={p.status} />
-                        </div>
+                        </span>
                       </TableCell>
-                      <TableCell className="font-mono text-body-sm text-muted-foreground flex items-center justify-around">
-                        <div className="flex items-center justify-around w-full">{p.discountValue ?? "—"}</div>
+                      <TableCell className="flex-1 font-mono text-body-sm text-muted-foreground flex items-center justify-around">
+                        <span className="flex items-center justify-around w-full">{p.discountValue ?? "—"}</span>
                       </TableCell>
-                      <TableCell className="text-muted-foreground text-body-sm flex items-center justify-around">
-                        <div className="flex items-center justify-around w-full">
+                      <TableCell className="flex-1 text-muted-foreground text-body-sm flex items-center justify-around">
+                        <span className="flex items-center justify-around w-full">
                           {p.endDate ? new Date(p.endDate).toLocaleDateString() : "—"}
-                        </div>
+                        </span>
                       </TableCell>
-                      <TableCell className="text-right flex items-center justify-around">
-                        <div className="flex items-center justify-around w-full">
+                      <TableCell className="flex-1 text-right flex items-center justify-around">
+                        <span className="flex items-center justify-around w-full">
                           <Button
                             variant="ghost"
                             size="sm"
@@ -122,7 +122,7 @@ export function PromotionTable({ promotions, isLoading, onRefresh, onShowToast }
                           >
                             <Eye className="w-4 h-4 mr-1" /> View
                           </Button>
-                        </div>
+                        </span>
                       </TableCell>
                     </TableRow>
                   ))}
