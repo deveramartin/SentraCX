@@ -12,7 +12,7 @@ import {
 import { Message } from "@/types/message";
 import { Ticket, TicketListItem } from "@/types/ticket";
 
-const CRM_BASE = process.env.NEXT_PUBLIC_CRM_API_URL ?? "https://localhost:7001";
+const CRM_BASE = process.env.NEXT_PUBLIC_CRM_API_URL ?? "https://localhost:5005";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const url = `${CRM_BASE}${path}`;

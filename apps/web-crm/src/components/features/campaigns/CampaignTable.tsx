@@ -34,8 +34,8 @@ export function CampaignTable({
     <Card className="bg-card border-border rounded-xl flex flex-col shadow-none">
       <CardHeader className="pb-6 p-lg flex flex-col md:flex-row md:items-center md:justify-between gap-md border-b border-border">
         <CardTitle className="text-title-lg font-bold text-foreground">Campaign Audit Log</CardTitle>
-        <div className="flex items-center gap-md">
-          <div className="flex items-center bg-muted/50 rounded-full px-md py-1 border border-border focus-within:border-primary transition-all w-full max-w-sm">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-md w-full md:w-auto">
+          <div className="flex items-center bg-muted/50 rounded-full px-md py-1 border border-border focus-within:border-primary transition-all w-full sm:w-64">
             <Search className="text-muted-foreground w-4 h-4 mr-sm shrink-0" />
             <Input
               className="bg-transparent border-none shadow-none outline-none focus:outline-none focus-visible:ring-0 text-body-sm w-full h-8 px-0 py-0"
@@ -45,14 +45,14 @@ export function CampaignTable({
             />
           </div>
 
-          <div className="flex items-center gap-xs border border-border rounded-lg p-0.5 bg-muted shrink-0">
+          <div className="flex flex-wrap items-center gap-xs border border-border rounded-lg p-0.5 bg-muted">
             {["All", "Active", "Scheduled", "Completed"].map((status) => (
               <Button
                 key={status}
                 size="sm"
                 variant={statusFilter === status ? "secondary" : "ghost"}
                 onClick={() => onStatusFilterChange(status)}
-                className={`h-7 px-3 text-label-sm font-semibold ${
+                className={`h-7 px-2.5 sm:px-3 text-label-sm font-semibold flex-1 sm:flex-none ${
                   statusFilter === status ? "shadow-sm font-bold" : "text-muted-foreground"
                 }`}
               >

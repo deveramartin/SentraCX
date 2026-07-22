@@ -107,7 +107,7 @@ export function ConversationWindow({
                 Complete
               </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="w-[90vw] max-w-[90vw] sm:max-w-[80vw] md:max-w-[700px] lg:max-w-[900px] max-h-[90vh] overflow-y-auto p-4 sm:p-6 rounded-lg sm:rounded-xl">
               <AlertDialogHeader>
                 <AlertDialogTitle>Mark Conversation as Completed?</AlertDialogTitle>
                 <AlertDialogDescription>
