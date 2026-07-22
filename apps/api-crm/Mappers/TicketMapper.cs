@@ -31,6 +31,7 @@ public static class TicketMapper
             Title = ticket.Title,
             Status = ticket.Status,
             CustomerName = ticket.Customer?.User?.DisplayName ?? string.Empty,
+            UnreadMessageCount = ticket.Messages.Count(m => !m.IsRead),
             CreatedAt = ticket.CreatedAt
         };
     }

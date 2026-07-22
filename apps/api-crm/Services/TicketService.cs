@@ -16,9 +16,9 @@ public class TicketService(ITicketRepository ticketRepo) : ITicketService
     };
 
     public async Task<PaginatedResponseDto<TicketListResponseDto>> GetAllAsync(
-        int page, int pageSize, string? status = null, Guid? customerId = null)
+        int page, int pageSize, string? status = null, Guid? customerId = null, string? assignedToId = null)
     {
-        var (items, totalCount) = await ticketRepo.GetAllAsync(page, pageSize, status, customerId);
+        var (items, totalCount) = await ticketRepo.GetAllAsync(page, pageSize, status, customerId, assignedToId);
 
         return new PaginatedResponseDto<TicketListResponseDto>
         {
@@ -63,6 +63,20 @@ public class TicketService(ITicketRepository ticketRepo) : ITicketService
 
         ticket.Status = "Claimed";
         ticket.AssignedToId = staffUserId;
+        ticket.UpdatedAt = DateTime.UtcNow;
+        await ticketRepo.UpdateAsync(ticket);
+        return true;
+    }
+
+    public async Task<bool> UnclaimAsync(Guid id)
+    {
+        var ticket = await ticketRepo.GetByIdAsync(id);
+        if (ticket is null) return false;
+
+        if (ticket.Status != "Claimed") return false;
+
+        ticket.Status = "Unclaimed";
+        ticket.AssignedToId = null;
         ticket.UpdatedAt = DateTime.UtcNow;
         await ticketRepo.UpdateAsync(ticket);
         return true;

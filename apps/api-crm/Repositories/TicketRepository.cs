@@ -8,11 +8,12 @@ namespace Crm.Api.Repositories;
 public class TicketRepository(AppDbContext context) : ITicketRepository
 {
     public async Task<(List<Ticket> Items, int TotalCount)> GetAllAsync(
-        int page, int pageSize, string? status = null, Guid? customerId = null)
+        int page, int pageSize, string? status = null, Guid? customerId = null, string? assignedToId = null)
     {
         var query = context.Tickets
             .Include(t => t.Customer).ThenInclude(cp => cp.User)
             .Include(t => t.AssignedTo)
+            .Include(t => t.Messages)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(status))
@@ -20,6 +21,14 @@ public class TicketRepository(AppDbContext context) : ITicketRepository
 
         if (customerId.HasValue)
             query = query.Where(t => t.CustomerId == customerId.Value);
+
+        // TODO (auth): When assignedToId is null, all Claimed/Ongoing tickets are returned (dev mode).
+        //              Once auth is re-enabled, assignedToId will always be set from JWT claims.
+        if (!string.IsNullOrWhiteSpace(assignedToId))
+            query = query.Where(t => t.AssignedToId == assignedToId);
+
+        // TODO (perf): At large ticket volumes, replace the Messages include with a subquery or
+        //              a denormalized UnreadMessageCount column to avoid N+1 load.
 
         query = query.OrderByDescending(t => t.CreatedAt);
 
