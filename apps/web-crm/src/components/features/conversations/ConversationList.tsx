@@ -4,64 +4,142 @@ import React from "react";
 import { MessageSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Chat } from "./types";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TicketListItem } from "@/types/ticket";
 
 interface ConversationListProps {
-  chats: Chat[];
-  activeChatId: string;
-  onSelectChat: (chatId: string) => void;
+  tickets: TicketListItem[];
+  activeTicketId: string | null;
+  onSelect: (ticketId: string) => void;
+  isLoading: boolean;
+  error: string | null;
+  activeTab: "all" | "unread" | "read";
+  onTabChange: (tab: "all" | "unread" | "read") => void;
 }
 
-export function ConversationList({ chats, activeChatId, onSelectChat }: ConversationListProps) {
+export function ConversationList({
+  tickets,
+  activeTicketId,
+  onSelect,
+  isLoading,
+  error,
+  activeTab,
+  onTabChange,
+}: ConversationListProps) {
+  const unreadTotal = tickets.reduce((acc, t) => acc + (t.unreadMessageCount > 0 ? 1 : 0), 0);
+
+  const filteredTickets = tickets.filter((t) => {
+    if (activeTab === "unread") return t.unreadMessageCount > 0;
+    if (activeTab === "read") return t.unreadMessageCount === 0;
+    return true;
+  });
+
   return (
-    <div className="w-full md:w-80 border-r border-border flex flex-col h-full bg-card">
-      <div className="p-md border-b border-border flex items-center justify-between">
-        <h2 className="text-title-lg font-bold text-foreground flex items-center gap-sm">
-          <MessageSquare className="w-5 h-5" />
-          Conversations
-        </h2>
-        <Badge className="bg-primary text-primary-foreground border-none shadow-none">
-          {chats.filter((c) => c.unread).length} Unread
-        </Badge>
+    <div className="w-full md:w-80 border-r border-border flex flex-col h-full bg-card shrink-0">
+      <div className="p-md border-b border-border flex flex-col gap-sm">
+        <div className="flex items-center justify-between">
+          <h2 className="text-title-lg font-bold text-foreground flex items-center gap-sm">
+            <MessageSquare className="w-5 h-5" />
+            Conversations
+          </h2>
+          <Badge className="bg-primary text-primary-foreground border-none shadow-none">
+            {unreadTotal} Unread
+          </Badge>
+        </div>
+
+        {/* Tab Filters */}
+        <div className="flex bg-muted p-1 rounded-lg text-label-sm font-medium">
+          {(["all", "unread", "read"] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => onTabChange(tab)}
+              className={`flex-1 py-1 text-center rounded-md capitalize transition-colors ${
+                activeTab === tab
+                  ? "bg-card text-foreground font-bold shadow-xs"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
       </div>
+
       <div className="flex-1 overflow-y-auto divide-y divide-border">
-        {chats.map((chat) => (
-          <div
-            key={chat.id}
-            onClick={() => onSelectChat(chat.id)}
-            className={`p-md flex gap-md cursor-pointer transition-colors ${
-              chat.id === activeChatId
-                ? "bg-muted"
-                : "hover:bg-muted/50"
-            }`}
-          >
-            <Avatar className="h-10 h-10 shrink-0">
-              <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
-                {chat.customerName.split(" ").map((n) => n[0]).join("")}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-baseline mb-1">
-                <h4 className="text-body-sm font-bold text-foreground truncate">
-                  {chat.customerName}
-                </h4>
-                <span className="text-label-sm text-muted-foreground font-mono">
-                  {chat.time}
-                </span>
+        {isLoading ? (
+          <div className="p-md space-y-md">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex items-center gap-md">
+                <Skeleton className="h-10 w-10 rounded-full shrink-0" />
+                <div className="space-y-xs flex-1">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-3 w-36" />
+                </div>
               </div>
-              <p
-                className={`text-label-sm truncate ${
-                  chat.unread ? "text-foreground font-bold" : "text-muted-foreground"
+            ))}
+          </div>
+        ) : error ? (
+          <div className="p-md text-body-sm text-destructive text-center">
+            {error}
+          </div>
+        ) : filteredTickets.length === 0 ? (
+          <div className="p-md text-body-sm text-muted-foreground text-center py-lg">
+            No conversations found.
+          </div>
+        ) : (
+          filteredTickets.map((ticket) => {
+            const hasUnread = ticket.unreadMessageCount > 0;
+            const initials = ticket.customerName
+              .split(" ")
+              .map((n) => n[0])
+              .filter(Boolean)
+              .join("")
+              .toUpperCase() || "C";
+
+            const formattedTime = new Date(ticket.createdAt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+
+            return (
+              <div
+                key={ticket.id}
+                onClick={() => onSelect(ticket.id)}
+                className={`p-md flex gap-md cursor-pointer transition-colors ${
+                  ticket.id === activeTicketId ? "bg-muted" : "hover:bg-muted/50"
                 }`}
               >
-                {chat.lastMessage}
-              </p>
-            </div>
-            {chat.unread && (
-              <div className="w-2.5 h-2.5 rounded-full bg-primary self-center" />
-            )}
-          </div>
-        ))}
+                <Avatar className="h-10 w-10 shrink-0">
+                  <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
+                    {initials}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-baseline mb-1">
+                    <h4 className="text-body-sm font-bold text-foreground truncate">
+                      {ticket.customerName}
+                    </h4>
+                    <span className="text-label-sm text-muted-foreground font-mono">
+                      {formattedTime}
+                    </span>
+                  </div>
+                  <p
+                    className={`text-label-sm truncate ${
+                      hasUnread ? "text-foreground font-bold" : "text-muted-foreground"
+                    }`}
+                  >
+                    {ticket.title}
+                  </p>
+                </div>
+                {hasUnread && (
+                  <Badge className="h-5 px-1.5 min-w-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold self-center flex items-center justify-center">
+                    {ticket.unreadMessageCount}
+                  </Badge>
+                )}
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

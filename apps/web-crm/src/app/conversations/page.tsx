@@ -1,5 +1,10 @@
 import { Conversations } from "@/components/features/conversations/Conversations";
 
-export default function ConversationsPage() {
-  return <Conversations />;
+interface ConversationsPageProps {
+  searchParams: Promise<{ ticketId?: string }>;
+}
+
+export default async function ConversationsPage({ searchParams }: ConversationsPageProps) {
+  const { ticketId } = await searchParams;
+  return <Conversations initialTicketId={ticketId} />;
 }
