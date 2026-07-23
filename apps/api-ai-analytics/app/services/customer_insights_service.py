@@ -93,8 +93,15 @@ class CustomerInsightsService:
         )
 
         # 7. Log features to MongoDB
+        from app.core.config import get_settings
+        settings = get_settings()
         await self._features.save_feature_log(
-            customer_id, features.model_dump()
+            customer_id,
+            features.model_dump(),
+            model_versions={
+                "churn": settings.model_version_churn,
+                "clv": settings.model_version_clv,
+            }
         )
 
         return response

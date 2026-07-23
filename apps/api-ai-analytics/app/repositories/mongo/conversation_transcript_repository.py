@@ -22,7 +22,9 @@ class ConversationTranscriptRepository:
             "predicted_category": analysis_data.get("predicted_category", "general_inquiry"),
             "urgency_score": analysis_data.get("urgency_score", 0.0),
             "reasoning": analysis_data.get("reasoning", ""),
-            "analyzed_at": datetime.now(timezone.utc).isoformat()
+            "analyzed_at": datetime.now(timezone.utc),
+            "model_version_sentiment": analysis_data.get("model_version_sentiment"),
+            "model_version_category": analysis_data.get("model_version_category")
         }
         await self._collection.insert_one(doc)
 

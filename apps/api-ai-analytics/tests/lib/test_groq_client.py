@@ -32,6 +32,28 @@ async def test_analyze_success(groq_client: GroqClient) -> None:
         assert result == expected_response
 
 
+async def test_analyze_redacts_pii(groq_client: GroqClient) -> None:
+    expected_response = {"sentiment": "positive"}
+    
+    class MockMessage:
+        content = json.dumps(expected_response)
+        
+    class MockChoice:
+        message = MockMessage()
+        
+    class MockResponse:
+        choices = [MockChoice()]
+
+    with patch("groq.resources.chat.completions.AsyncCompletions.create", new_callable=AsyncMock) as mock_create:
+        mock_create.return_value = MockResponse()
+        result = await groq_client.analyze("system", "Contact john@doe.com at 555-123-4567")
+        assert result == expected_response
+        
+        called_args = mock_create.call_args[1]
+        called_messages = called_args["messages"]
+        assert called_messages[1]["content"] == "Contact [EMAIL] at [PHONE]"
+
+
 async def test_analyze_rate_limit_retry(groq_client: GroqClient) -> None:
     expected_response = {"sentiment": "positive"}
     

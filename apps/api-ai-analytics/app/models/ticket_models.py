@@ -29,6 +29,8 @@ class ConversationTranscriptDocument(BaseModel):
     urgency_score: float = 0.0
     reasoning: str = ""
     analyzed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    model_version_sentiment: str | None = None
+    model_version_category: str | None = None
 
 
 class TicketDocument(BaseModel):

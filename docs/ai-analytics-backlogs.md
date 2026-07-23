@@ -123,12 +123,12 @@ FastAPI auto-generates the OpenAPI/Swagger spec from route + Pydantic model defi
 
 ## EPIC E: Model Lifecycle & Data Governance (P1)
 
-- [ ] Backend: Model versioning scheme (e.g., semantic version per model, stored with each prediction document for traceability)
-- [ ] Backend: Retraining cadence defined per model (e.g., churn/CLV monthly, sentiment as-needed)
-- [ ] Backend: PII handling policy — churn score, CLV, and segmentation are sensitive; define role-based access, and whether raw PII is sent to any external LLM provider
-- [ ] Backend: If using a third-party LLM API (content suggestions, NL query, summarization) — define redaction/anonymization before sending customer text externally
-- [ ] Backend: MongoDB TTL indexes or scheduled cleanup for data retention policy on analyzed conversation/ticket text
-- [ ] Docs: Document model inputs/outputs per feature for audit purposes
+- [x] Backend: Model versioning scheme (e.g., semantic version per model, stored with each prediction document for traceability)
+- [x] Backend: Retraining cadence defined per model (e.g., churn/CLV monthly, sentiment as-needed)
+- [x] Backend: PII handling policy — churn score, CLV, and segmentation are sensitive; define role-based access, and whether raw PII is sent to any external LLM provider
+- [x] Backend: If using a third-party LLM API (content suggestions, NL query, summarization) — define redaction/anonymization before sending customer text externally
+- [x] Backend: MongoDB TTL indexes or scheduled cleanup for data retention policy on analyzed conversation/ticket text
+- [x] Docs: Document model inputs/outputs per feature for audit purposes
 
 ---
 
