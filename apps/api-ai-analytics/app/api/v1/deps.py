@@ -16,6 +16,10 @@ from app.ml.ticket_analyzer import TicketAnalyzer
 from app.repositories.mongo.conversation_transcript_repository import ConversationTranscriptRepository
 from app.repositories.redis.ticket_sentiment_repository import TicketSentimentRepository
 from app.services.ticket_analysis_service import TicketAnalysisService
+from app.repositories.mongo.config_repository import ConfigRepository
+from app.repositories.redis.config_cache_repository import ConfigCacheRepository
+from app.services.config_service import ConfigService
+
 
 
 def get_customer_insights_service() -> CustomerInsightsService:
@@ -66,3 +70,18 @@ def get_ticket_analysis_service() -> TicketAnalysisService:
         redis_repo=redis_repo,
         mongo_repo=mongo_repo,
     )
+
+
+def get_config_service() -> ConfigService:
+    """Build and return ConfigService with all dependencies."""
+    redis_client = get_redis_client()
+    cache_repo = ConfigCacheRepository(redis_client)
+
+    database = get_database()
+    config_repo = ConfigRepository(database)
+
+    return ConfigService(
+        config_repo=config_repo,
+        cache_repo=cache_repo,
+    )
+

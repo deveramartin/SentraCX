@@ -32,12 +32,28 @@ export function Sidebar() {
   const pathname = usePathname();
   const { open, openMobile, setOpenMobile, toggleSidebar, isMobile } =
     useSidebar();
-  const [activeAccount, setActiveAccount] = useState("admin");
+  const [activeAccount, setActiveAccountState] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("activeAccount") || "admin";
+    }
+    return "admin";
+  });
   const [mounted, setMounted] = useState(false);
 
   React.useEffect(() => {
     setMounted(true);
+    // Initialize in localStorage if not set
+    if (localStorage.getItem("activeAccount") === null) {
+      localStorage.setItem("activeAccount", "admin");
+    }
   }, []);
+
+  const setActiveAccount = (id: string) => {
+    setActiveAccountState(id);
+    localStorage.setItem("activeAccount", id);
+    window.dispatchEvent(new Event("storage"));
+  };
+
 
   const isOpen = isMobile ? openMobile : open;
 
