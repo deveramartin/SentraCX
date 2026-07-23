@@ -22,6 +22,7 @@ async def test_analyze_intent_success(mock_service) -> None:
         sentiment_score=0.8,
         predicted_category="general_inquiry",
         urgency_score=0.2,
+        confidence=0.85,
         reasoning="Good",
         computed_at=datetime.now(timezone.utc),
         cached=False

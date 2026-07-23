@@ -93,3 +93,38 @@ async def test_analyze_ticket_crm_error(service: TicketAnalysisService, redis_re
     
     with pytest.raises(CrmUnavailableError):
         await service.analyze_ticket(TicketAnalysisRequest(ticket_id="tick-1"))
+
+
+async def test_analyze_ticket_low_confidence_overrides(
+    service: TicketAnalysisService, crm_client: AsyncMock, analyzer: AsyncMock, 
+    redis_repo: AsyncMock, mongo_repo: AsyncMock
+) -> None:
+    redis_repo.get_cached_analysis.return_value = None
+    crm_client.get_ticket.return_value = {"id": "tick-1", "title": "Test"}
+    crm_client.get_ticket_messages.return_value = []
+    
+    # Confidence is 0.5 (less than 0.6 default thresholds)
+    analyzer.analyze.return_value = {
+        "sentiment": "negative",
+        "sentiment_score": -0.5,
+        "category": "technical_issue",
+        "urgency_score": 0.8,
+        "confidence": 0.5,
+        "reasoning": "Reason"
+    }
+    
+    req = TicketAnalysisRequest(ticket_id="tick-1")
+    resp = await service.analyze_ticket(req)
+    
+    # Assert values returned to client are overridden
+    assert resp.sentiment == "neutral"
+    assert resp.predicted_category == "Uncategorized"
+    assert resp.confidence == 0.5
+    
+    # Assert mongo_repo receives original predictions
+    mongo_repo.save_analysis.assert_called_once()
+    saved_mongo_data = mongo_repo.save_analysis.call_args[0][1]
+    assert saved_mongo_data["sentiment"] == "negative"
+    assert saved_mongo_data["predicted_category"] == "technical_issue"
+    assert saved_mongo_data["confidence"] == 0.5
+

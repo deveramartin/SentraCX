@@ -8,6 +8,7 @@ using Crm.Api.Interfaces.Services;
 using Crm.Api.Middleware;
 using Crm.Api.Repositories;
 using Crm.Api.Services;
+using Crm.Api.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -80,6 +81,10 @@ builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<ICampaignService, CampaignService>();
 builder.Services.AddScoped<ITemplateService, TemplateService>();
 builder.Services.AddScoped<IPromotionService, PromotionService>();
+
+// AI Analytics Client
+var aiAnalyticsUrl = Environment.GetEnvironmentVariable("AI_ANALYTICS_API_URL") ?? "http://localhost:4005";
+builder.Services.AddAiAnalyticsClient(aiAnalyticsUrl);
 
 // Background Jobs
 builder.Services.AddHostedService<CampaignStatusJob>();

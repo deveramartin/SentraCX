@@ -42,6 +42,10 @@ class Settings(BaseSettings):
     groq_api_key: str = ""
     groq_model_id: str = "llama-3.1-8b-instant"
 
+    # AI / ML Thresholds
+    confidence_threshold_ticket: float = 0.6
+    confidence_threshold_sentiment: float = 0.6
+
     @property
     def is_development(self) -> bool:
         """Check if the application is running in development mode."""

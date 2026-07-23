@@ -2,12 +2,13 @@ using Crm.Api.DTOs.Requests;
 using Crm.Api.DTOs.Responses;
 using Crm.Api.Interfaces.Repositories;
 using Crm.Api.Interfaces.Services;
+using Crm.Api.Interfaces.Clients;
 using Crm.Api.Mappers;
 using Crm.Api.Models;
 
 namespace Crm.Api.Services;
 
-public class TicketService(ITicketRepository ticketRepo) : ITicketService
+public class TicketService(ITicketRepository ticketRepo, IAiAnalyticsClient aiClient) : ITicketService
 {
     private static readonly Dictionary<string, HashSet<string>> ValidTransitions = new()
     {
@@ -51,7 +52,30 @@ public class TicketService(ITicketRepository ticketRepo) : ITicketService
         await ticketRepo.AddAsync(ticket);
 
         var created = await ticketRepo.GetByIdAsync(ticket.Id);
-        return TicketMapper.ToDetailResponse(created!);
+
+        string category = "Uncategorized";
+        string sentiment = "neutral";
+
+        try
+        {
+            // Call AI analytics client to categorize/sentiment analyze ticket
+            var analysis = await aiClient.AnalyzeTicketAsync(created!.Id, includeMessages: false);
+            if (analysis != null)
+            {
+                category = analysis.PredictedCategory;
+                sentiment = analysis.Sentiment;
+            }
+        }
+        catch (Exception)
+        {
+            // Gracefully degrade: use default values without failing the request.
+        }
+
+        var response = TicketMapper.ToDetailResponse(created!);
+        response.Category = category;
+        response.Sentiment = sentiment;
+
+        return response;
     }
 
     public async Task<bool> ClaimAsync(Guid id, string staffUserId)
