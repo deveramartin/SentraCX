@@ -30,6 +30,10 @@ class Settings(BaseSettings):
     crm_api_base_url: str = "http://localhost:5005"
     crm_service_token: str = ""
 
+    # OOS API
+    oos_api_base_url: str = "http://localhost:5007"
+    oos_service_token: str = ""
+
     # Auth
     jwt_secret: str = "dev-secret"
     jwt_issuer: str = "https://localhost:5001/"

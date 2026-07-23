@@ -2,6 +2,7 @@
 
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from datetime import datetime, timezone
+from app.models.ticket_models import ConversationMessage
 
 class ConversationTranscriptRepository:
     """Repository for managing conversation transcripts in MongoDB."""
@@ -24,6 +25,48 @@ class ConversationTranscriptRepository:
             "analyzed_at": datetime.now(timezone.utc).isoformat()
         }
         await self._collection.insert_one(doc)
+
+    async def append_message(self, ticket_id: str, message: ConversationMessage) -> None:
+        """Append a message to the ticket's transcript document."""
+        msg_dict = message.model_dump()
+        sender_label = "Agent" if message.sender_id != "customer" else "Customer"
+        text_append = f"\n{sender_label}: {message.content}"
+
+        await self._collection.update_one(
+            {"crms_ticket_id": ticket_id},
+            {
+                "$push": {"messages": msg_dict},
+                "$set": {"analyzed_at": datetime.now(timezone.utc)},
+                "$setOnInsert": {
+                    "extracted_entities": [],
+                    "auto_summary": "",
+                    "sentiment": "neutral",
+                    "sentiment_score": 0.0,
+                    "predicted_category": "general_inquiry",
+                    "urgency_score": 0.0,
+                    "reasoning": ""
+                }
+            },
+            upsert=True
+        )
+
+        # Also append to the raw full transcript text string using aggregation pipeline update
+        await self._collection.update_one(
+            {"crms_ticket_id": ticket_id},
+            [
+                {
+                    "$set": {
+                        "full_transcript_text": {
+                            "$concat": [
+                                {"$ifNull": ["$full_transcript_text", ""]},
+                                text_append
+                            ]
+                        }
+                    }
+                }
+            ]
+        )
+
 
     async def get_latest_analysis(self, ticket_id: str) -> dict | None:
         """Get the most recent analysis for a ticket."""

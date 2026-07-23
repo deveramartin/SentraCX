@@ -9,15 +9,22 @@ from scalar_fastapi import get_scalar_api_reference
 from app.api.v1.routes.customers import router as customers_router
 from app.api.v1.routes.tickets import router as tickets_router
 from app.core.config import get_settings
-from app.db.mongo import close_mongo, connect_mongo
-from app.db.redis import close_redis, connect_redis
+from app.db.mongo import close_mongo, connect_mongo, get_database
+from app.db.redis import close_redis, connect_redis, get_redis_client
+from app.core.scheduler import start_scheduler, stop_scheduler
+from app.repositories.mongo.ticket_repository import TicketRepository
+from app.repositories.mongo.conversation_transcript_repository import ConversationTranscriptRepository
+from app.services.ticket_ingestion_service import TicketIngestionService
 
 logger = logging.getLogger(__name__)
+
+_ticket_ingestion_service: TicketIngestionService | None = None
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Manage application startup and shutdown lifecycle."""
+    global _ticket_ingestion_service
     settings = get_settings()
 
     # Startup
@@ -29,14 +36,37 @@ async def lifespan(app: FastAPI):
     await connect_redis(settings.redis_url)
     logger.info("Redis connected")
 
+    # Start APScheduler
+    start_scheduler()
+
+    # Start Real-Time Ticket/Message Ingestion
+    redis_client = get_redis_client()
+    db = get_database()
+    ticket_repo = TicketRepository(db)
+    transcript_repo = ConversationTranscriptRepository(db)
+
+    _ticket_ingestion_service = TicketIngestionService(
+        redis_client=redis_client,
+        ticket_repo=ticket_repo,
+        transcript_repo=transcript_repo
+    )
+    _ticket_ingestion_service.start()
+
     yield
 
     # Shutdown
+    if _ticket_ingestion_service:
+        await _ticket_ingestion_service.stop()
+        _ticket_ingestion_service = None
+
+    stop_scheduler()
+
     logger.info("Closing Redis connection")
     await close_redis()
     logger.info("Closing MongoDB connection")
     await close_mongo()
     logger.info("Shutdown complete")
+
 
 
 app = FastAPI(
