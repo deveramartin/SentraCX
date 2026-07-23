@@ -16,6 +16,8 @@ export interface Ticket extends TicketListItem {
   customerId: string;
   assignedToId?: string | null;
   updatedAt: string;
+  category?: string;
+  sentiment?: string;
 }
 
 export interface CreateTicketInput {

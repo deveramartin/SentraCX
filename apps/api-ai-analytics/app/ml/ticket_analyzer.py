@@ -22,6 +22,7 @@ class TicketAnalyzer:
             "'sentiment_score' (float between -1.0 and 1.0), "
             f"'category' (must be one of: {', '.join(self._categories)}), "
             "'urgency_score' (float between 0.0 and 1.0), "
+            "'confidence' (float between 0.0 and 1.0, reflecting your confidence in these classifications), "
             "'reasoning' (a brief explanation of your analysis)."
         )
 
@@ -38,6 +39,10 @@ class TicketAnalyzer:
                 result["sentiment"] = "neutral"
             if result.get("category") not in self._categories:
                 result["category"] = "general_inquiry"
+            try:
+                result["confidence"] = max(0.0, min(1.0, float(result.get("confidence", 0.8))))
+            except (ValueError, TypeError):
+                result["confidence"] = 0.8
             return result
         except GroqClientError as e:
             logger.warning("Groq analysis failed, using fallback: %s", e)
@@ -84,10 +89,16 @@ class TicketAnalyzer:
         elif sentiment == "negative":
             urgency_score = 0.7
             
+        # Confidence heuristics
+        cat_confidence = 0.75 if category != "general_inquiry" else 0.40
+        sent_confidence = 0.70 if sentiment != "neutral" else 0.50
+        confidence = round((cat_confidence + sent_confidence) / 2.0, 2)
+            
         return {
             "sentiment": sentiment,
             "sentiment_score": round(sentiment_score, 2),
             "category": category,
             "urgency_score": round(urgency_score, 2),
+            "confidence": confidence,
             "reasoning": "Fallback heuristic analysis."
         }

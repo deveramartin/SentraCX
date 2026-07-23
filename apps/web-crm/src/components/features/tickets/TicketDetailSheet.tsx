@@ -14,6 +14,7 @@ import { useTicket } from "@/hooks/useTicket";
 import { crmClient } from "@/lib/api/crm-client";
 import { MessageSquare } from "lucide-react";
 import { TicketStatusBadge } from "./TicketStatusBadge";
+import { AiBadge } from "@/components/ui/ai-badge";
 
 interface TicketDetailSheetProps {
   ticketId: string | null;
@@ -78,6 +79,24 @@ export function TicketDetailSheet({ ticketId, staffUserId = "user-001", onClose,
             <div className="flex items-center justify-between border-b border-border pb-2">
               <span className="text-muted-foreground font-medium">Status</span>
               <TicketStatusBadge status={ticket.status} />
+            </div>
+
+            <div className="flex items-center justify-between border-b border-border pb-2">
+              <span className="text-muted-foreground font-medium">Category</span>
+              {ticket.category && ticket.category !== "Uncategorized" ? (
+                <AiBadge>{ticket.category}</AiBadge>
+              ) : (
+                <span className="text-foreground">{ticket.category ?? "Uncategorized"}</span>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between border-b border-border pb-2">
+              <span className="text-muted-foreground font-medium">Sentiment</span>
+              {ticket.sentiment && ticket.sentiment !== "neutral" ? (
+                <AiBadge>{ticket.sentiment}</AiBadge>
+              ) : (
+                <span className="text-foreground">{ticket.sentiment ?? "neutral"}</span>
+              )}
             </div>
 
             <div className="space-y-1">

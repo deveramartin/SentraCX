@@ -21,6 +21,10 @@ const badgeVariants = cva(
           "border-transparent bg-badge-warning text-badge-warning-foreground",
         info:
           "border-transparent bg-badge-info text-badge-info-foreground",
+        purple:
+          "border-transparent bg-badge-purple text-badge-purple-foreground",
+        indigo:
+          "border-transparent bg-badge-indigo text-badge-indigo-foreground",
         notification:
           "border-transparent bg-badge-notification text-badge-notification-foreground shadow",
       },

@@ -99,13 +99,13 @@ FastAPI auto-generates the OpenAPI/Swagger spec from route + Pydantic model defi
 
 ## EPIC C: Confidence, Fallback & Degradation (P0)
 
-- [ ] Backend: Every scoring/classification response includes a `confidence` value (0–1)
-- [ ] Backend: Define per-feature confidence threshold below which output is withheld or marked "Unclassified"/"Uncategorized"
-- [ ] Backend: Ticket auto-categorization falls back to "Uncategorized" + manual tagging when confidence is low
-- [ ] Backend: Sentiment falls back to "Neutral/Unclassified" (not silently guessing) when confidence is low
-- [ ] Backend: Define behavior when `api-ai-analytics` is down/unreachable — `api-crm`/`web-crm` (both .NET/JS clients) must degrade gracefully (e.g., ticket creation still succeeds without AI tagging)
-- [ ] Backend: Circuit breaker + timeout policy on all `api-ai-analytics` calls made by `api-crm` (e.g., Polly in .NET for the caller side), backed by Redis-stored breaker state on the `api-ai-analytics` side for coordinated status
-- [ ] Frontend: UI clearly distinguishes AI-suggested values from confirmed/manual values, and shows an "AI unavailable" state instead of blank/broken UI
+- [x] Backend: Every scoring/classification response includes a `confidence` value (0–1)
+- [x] Backend: Define per-feature confidence threshold below which output is withheld or marked "Unclassified"/"Uncategorized"
+- [x] Backend: Ticket auto-categorization falls back to "Uncategorized" + manual tagging when confidence is low
+- [x] Backend: Sentiment falls back to "Neutral/Unclassified" (not silently guessing) when confidence is low
+- [x] Backend: Define behavior when `api-ai-analytics` is down/unreachable — `api-crm`/`web-crm` (both .NET/JS clients) must degrade gracefully (e.g., ticket creation still succeeds without AI tagging)
+- [x] Backend: Circuit breaker + timeout policy on all `api-ai-analytics` calls made by `api-crm` (e.g., Polly in .NET for the caller side), backed by Redis-stored breaker state on the `api-ai-analytics` side for coordinated status
+- [x] Frontend: UI clearly distinguishes AI-suggested values from confirmed/manual values, and shows an "AI unavailable" state instead of blank/broken UI
 
 ---
 

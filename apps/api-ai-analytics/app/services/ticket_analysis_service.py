@@ -24,12 +24,27 @@ class TicketAnalysisService:
         crm_client: CrmClient,
         analyzer: TicketAnalyzer,
         redis_repo: TicketSentimentRepository,
-        mongo_repo: ConversationTranscriptRepository
+        mongo_repo: ConversationTranscriptRepository,
+        settings = None
     ) -> None:
         self._crm_client = crm_client
         self._analyzer = analyzer
         self._redis_repo = redis_repo
         self._mongo_repo = mongo_repo
+        from app.core.config import get_settings
+        self._settings = settings or get_settings()
+
+    def _apply_thresholds(self, sentiment: str, category: str, confidence: float) -> tuple[str, str]:
+        """Apply confidence thresholds to sentiment and category."""
+        final_sentiment = sentiment
+        final_category = category
+
+        if confidence < self._settings.confidence_threshold_sentiment:
+            final_sentiment = "neutral"
+        if confidence < self._settings.confidence_threshold_ticket:
+            final_category = "Uncategorized"
+
+        return final_sentiment, final_category
 
     async def analyze_ticket(self, request: TicketAnalysisRequest) -> TicketAnalysisResponse:
         """Run analysis on a ticket, using cache if available."""
@@ -41,12 +56,17 @@ class TicketAnalysisService:
         # 1. Check Redis cache
         cached = await self._redis_repo.get_cached_analysis(ticket_id)
         if cached:
+            confidence = cached.get("confidence", 1.0)
+            final_sentiment, final_category = self._apply_thresholds(
+                cached["sentiment"], cached["predicted_category"], confidence
+            )
             return TicketAnalysisResponse(
                 ticket_id=ticket_id,
-                sentiment=cached["sentiment"],
+                sentiment=final_sentiment,
                 sentiment_score=cached["sentiment_score"],
-                predicted_category=cached["predicted_category"],
+                predicted_category=final_category,
                 urgency_score=cached["urgency_score"],
+                confidence=confidence,
                 reasoning=cached.get("reasoning", ""),
                 computed_at=datetime.fromisoformat(cached["analyzed_at"]),
                 cached=True
@@ -87,6 +107,7 @@ class TicketAnalysisService:
             "sentiment_score": analysis["sentiment_score"],
             "predicted_category": analysis["category"],
             "urgency_score": analysis["urgency_score"],
+            "confidence": analysis.get("confidence", 1.0),
             "reasoning": analysis.get("reasoning", ""),
             "analyzed_at": analyzed_at.isoformat(),
         }
@@ -106,17 +127,23 @@ class TicketAnalysisService:
             "sentiment_score": analysis["sentiment_score"],
             "predicted_category": analysis["category"],
             "urgency_score": analysis["urgency_score"],
+            "confidence": analysis.get("confidence", 1.0),
             "reasoning": analysis.get("reasoning", "")
         }
         await self._mongo_repo.save_analysis(ticket_id, mongo_data)
 
-        # 9. Return response
+        # 9. Return response with thresholds applied
+        confidence = analysis.get("confidence", 1.0)
+        final_sentiment, final_category = self._apply_thresholds(
+            analysis["sentiment"], analysis["category"], confidence
+        )
         return TicketAnalysisResponse(
             ticket_id=ticket_id,
-            sentiment=analysis["sentiment"],
+            sentiment=final_sentiment,
             sentiment_score=analysis["sentiment_score"],
-            predicted_category=analysis["category"],
+            predicted_category=final_category,
             urgency_score=analysis["urgency_score"],
+            confidence=confidence,
             reasoning=analysis.get("reasoning", ""),
             computed_at=analyzed_at,
             cached=False
