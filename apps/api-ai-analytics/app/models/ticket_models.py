@@ -1,7 +1,7 @@
 """Internal data models for ticket and conversation MongoDB collections."""
 
-from datetime import datetime
-from pydantic import BaseModel, Field
+from datetime import datetime, timezone
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class ConversationMessage(BaseModel):
@@ -16,6 +16,8 @@ class ConversationMessage(BaseModel):
 class ConversationTranscriptDocument(BaseModel):
     """MongoDB document schema for ConversationTranscripts collection."""
 
+    model_config = ConfigDict(populate_by_name=True)
+
     ticket_id: str = Field(alias="crms_ticket_id")
     messages: list[ConversationMessage] = Field(default_factory=list)
     full_transcript_text: str = ""
@@ -26,14 +28,13 @@ class ConversationTranscriptDocument(BaseModel):
     predicted_category: str = "general_inquiry"
     urgency_score: float = 0.0
     reasoning: str = ""
-    analyzed_at: datetime = Field(default_factory=datetime.utcnow)
-
-    class Config:
-        populate_by_name = True
+    analyzed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class TicketDocument(BaseModel):
     """MongoDB document schema for tickets collection (denormalized)."""
+
+    model_config = ConfigDict(populate_by_name=True)
 
     ticket_id: str = Field(alias="_id")
     customer_id: str
@@ -43,7 +44,5 @@ class TicketDocument(BaseModel):
     description: str
     created_at: datetime
     updated_at: datetime
-    synced_at: datetime = Field(default_factory=datetime.utcnow)
+    synced_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-    class Config:
-        populate_by_name = True

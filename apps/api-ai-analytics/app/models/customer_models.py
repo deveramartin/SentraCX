@@ -1,7 +1,7 @@
 """Internal data models for customer-related MongoDB collections."""
 
-from datetime import datetime
-from pydantic import BaseModel, Field
+from datetime import datetime, timezone
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class OrderLineItem(BaseModel):
@@ -16,6 +16,8 @@ class OrderLineItem(BaseModel):
 class CustomerOrderDocument(BaseModel):
     """MongoDB document schema for orders collection (denormalized)."""
 
+    model_config = ConfigDict(populate_by_name=True)
+
     order_id: str = Field(alias="_id")
     customer_id: str
     order_number: str
@@ -24,10 +26,8 @@ class CustomerOrderDocument(BaseModel):
     status: str
     line_items: list[OrderLineItem] = Field(default_factory=list)
     cancellation_flag: bool = False
-    synced_at: datetime = Field(default_factory=datetime.utcnow)
+    synced_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-    class Config:
-        populate_by_name = True
 
 
 class CustomerFeatureLogsDocument(BaseModel):
@@ -39,4 +39,4 @@ class CustomerFeatureLogsDocument(BaseModel):
     last_interaction_date: datetime | None = None
     derived_segments: list[str] = Field(default_factory=list)
     behavioral_flags: list[str] = Field(default_factory=list)
-    recorded_at: datetime = Field(default_factory=datetime.utcnow)
+    recorded_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
