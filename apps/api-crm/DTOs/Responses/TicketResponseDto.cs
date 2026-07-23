@@ -11,6 +11,8 @@ public class TicketResponseDto
     public string CustomerName { get; set; } = string.Empty;
     public string? AssignedToId { get; set; }
     public string? AssignedToName { get; set; }
+    public string Category { get; set; } = "Uncategorized";
+    public string Sentiment { get; set; } = "neutral";
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }

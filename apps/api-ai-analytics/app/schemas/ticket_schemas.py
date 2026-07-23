@@ -18,6 +18,7 @@ class TicketAnalysisResponse(BaseModel):
     sentiment_score: float = Field(ge=-1.0, le=1.0)
     predicted_category: str
     urgency_score: float = Field(ge=0.0, le=1.0)
+    confidence: float = Field(ge=0.0, le=1.0)
     reasoning: str
     computed_at: datetime
     cached: bool

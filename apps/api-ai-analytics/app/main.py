@@ -11,6 +11,7 @@ from app.api.v1.routes.tickets import router as tickets_router
 from app.api.v1.routes.conversations import router as conversations_router
 from app.api.v1.routes.dashboard import router as dashboard_router
 from app.api.v1.routes.config import router as config_router
+from app.api.v1.routes.health import router as health_router
 from app.core.config import get_settings
 from app.db.mongo import close_mongo, connect_mongo, get_database
 from app.db.redis import close_redis, connect_redis, get_redis_client
@@ -98,6 +99,7 @@ app.include_router(tickets_router, prefix="/api/v1")
 app.include_router(conversations_router, prefix="/api/v1")
 app.include_router(dashboard_router, prefix="/api/v1")
 app.include_router(config_router, prefix="/api/v1")
+app.include_router(health_router, prefix="/api/v1")
 
 
 @app.get("/docs", include_in_schema=False)
