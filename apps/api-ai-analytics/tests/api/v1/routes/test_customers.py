@@ -162,6 +162,54 @@ class TestGetCustomerInsights:
         assert response.json()["cached"] is True
 
 
+class TestCustomerSubInsights:
+    """Tests for individual customer insight contracts."""
+
+    async def test_get_customer_segment(self, client: AsyncClient):
+        response = await client.get("/api/v1/customers/cust-001/segment")
+        assert response.status_code == 200
+        data = response.json()
+        assert "segment" in data
+        assert "confidence" in data
+        assert "computed_at" in data
+
+    async def test_get_customer_churn_score(self, client: AsyncClient):
+        response = await client.get("/api/v1/customers/cust-001/churn-score")
+        assert response.status_code == 200
+        data = response.json()
+        assert "score" in data
+        assert "risk_level" in data
+        assert isinstance(data["contributing_factors"], list)
+        assert "computed_at" in data
+
+    async def test_get_customer_clv(self, client: AsyncClient):
+        response = await client.get("/api/v1/customers/cust-001/clv")
+        assert response.status_code == 200
+        data = response.json()
+        assert "predicted_clv" in data
+        assert "currency" in data
+        assert "computed_at" in data
+
+    async def test_get_customer_next_action(self, client: AsyncClient):
+        response = await client.get("/api/v1/customers/cust-001/next-action")
+        assert response.status_code == 200
+        data = response.json()
+        assert "action" in data
+        assert "reason" in data
+        assert "confidence" in data
+        assert "computed_at" in data
+
+    async def test_submit_next_action_feedback(self, client: AsyncClient):
+        response = await client.post(
+            "/api/v1/customers/cust-001/next-action/feedback",
+            json={"feedback": "accept"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "success"
+        assert "logged" in data["message"]
+
+
 class TestHealthEndpoint:
     """Tests for GET /health."""
 
@@ -171,3 +219,4 @@ class TestHealthEndpoint:
 
         assert response.status_code == 200
         assert response.json() == {"status": "healthy"}
+
