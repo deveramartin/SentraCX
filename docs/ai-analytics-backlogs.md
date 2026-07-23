@@ -111,13 +111,13 @@ FastAPI auto-generates the OpenAPI/Swagger spec from route + Pydantic model defi
 
 ## EPIC D: Admin Configuration (P1)
 
-- [ ] Backend: `GET/PUT /api/ai/config/churn-threshold`
-- [ ] Backend: `GET/PUT /api/ai/config/priority-weights`
-- [ ] Backend: `GET/PUT /api/ai/config/anomaly-sensitivity`
-- [ ] Backend: `GET/PUT /api/ai/config/confidence-thresholds`
-- [ ] Backend: Config stored in MongoDB `config` collection, hot-read copy cached in Redis for low-latency access during scoring
-- [ ] Backend: Config changes audit-logged (who changed what, when)
-- [ ] Frontend (`web-crm`): Admin settings page — thresholds/weights, restricted to manager/admin roles
+- [x] Backend: `GET/PUT /api/ai/config/churn-threshold`
+- [x] Backend: `GET/PUT /api/ai/config/priority-weights`
+- [x] Backend: `GET/PUT /api/ai/config/anomaly-sensitivity`
+- [x] Backend: `GET/PUT /api/ai/config/confidence-thresholds`
+- [x] Backend: Config stored in MongoDB `config` collection, hot-read copy cached in Redis for low-latency access during scoring
+- [x] Backend: Config changes audit-logged (who changed what, when)
+- [x] Frontend (`web-crm`): Admin settings page — thresholds/weights, restricted to manager/admin roles
 
 ---
 
