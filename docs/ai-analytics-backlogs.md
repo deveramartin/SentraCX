@@ -63,35 +63,35 @@ FastAPI auto-generates the OpenAPI/Swagger spec from route + Pydantic model defi
 
 **B.1 Customer Profile endpoints**
 
-- [ ] `GET /api/ai/customers/{customer_id}/segment` → `{ segment, computed_at, confidence }`
-- [ ] `GET /api/ai/customers/{customer_id}/churn-score` → `{ score, risk_level, contributing_factors[], computed_at }`
-- [ ] `GET /api/ai/customers/{customer_id}/clv` → `{ predicted_clv, currency, computed_at }`
-- [ ] `GET /api/ai/customers/{customer_id}/next-action` → `{ action, reason, confidence, computed_at }`
-- [ ] `POST /api/ai/customers/{customer_id}/next-action/feedback` → log accept/dismiss/complete for model tuning
+- [x] `GET /api/ai/customers/{customer_id}/segment` → `{ segment, computed_at, confidence }`
+- [x] `GET /api/ai/customers/{customer_id}/churn-score` → `{ score, risk_level, contributing_factors[], computed_at }`
+- [x] `GET /api/ai/customers/{customer_id}/clv` → `{ predicted_clv, currency, computed_at }`
+- [x] `GET /api/ai/customers/{customer_id}/next-action` → `{ action, reason, confidence, computed_at }`
+- [x] `POST /api/ai/customers/{customer_id}/next-action/feedback` → log accept/dismiss/complete for model tuning
 
 **B.2 Ticket endpoints**
 
-- [ ] `POST /api/ai/tickets/analyze` → input: ticket text/id; output: `{ sentiment, category, priority_score, confidence }` (called synchronously by `api-crm` on ticket creation)
-- [ ] `GET /api/ai/tickets/{ticket_id}/resolution-estimate` → `{ estimated_hours, confidence }`
-- [ ] `GET /api/ai/tickets/volume-forecast?range=` → `{ forecast_series[], threshold, alert_triggered }`
+- [x] `POST /api/ai/tickets/analyze` → input: ticket text/id; output: `{ sentiment, category, priority_score, confidence }` (called synchronously by `api-crm` on ticket creation)
+- [x] `GET /api/ai/tickets/{ticket_id}/resolution-estimate` → `{ estimated_hours, confidence }`
+- [x] `GET /api/ai/tickets/volume-forecast?range=` → `{ forecast_series[], threshold, alert_triggered }`
 
 **B.3 Conversation endpoints**
 
-- [ ] `POST /api/ai/conversations/{id}/analyze-message` → real-time sentiment + escalation flag (called per message by `api-crm`'s SignalR hub)
-- [ ] `GET /api/ai/conversations/{id}/summary` → on-demand + Redis-cached summary, regenerate flag
-- [ ] `POST /api/ai/conversations/{id}/suggest-replies` → suggestion list
-- [ ] `POST /api/ai/conversations/{id}/detect-intent` → intent label + confidence
-- [ ] `GET /api/ai/conversations/{id}/entities` → extracted entities, 🔗 order numbers cross-referenced to `api-oos`
+- [x] `POST /api/ai/conversations/{id}/analyze-message` → real-time sentiment + escalation flag (called per message by `api-crm`'s SignalR hub)
+- [x] `GET /api/ai/conversations/{id}/summary` → on-demand + Redis-cached summary, regenerate flag
+- [x] `POST /api/ai/conversations/{id}/suggest-replies` → suggestion list
+- [x] `POST /api/ai/conversations/{id}/detect-intent` → intent label + confidence
+- [x] `GET /api/ai/conversations/{id}/entities` → extracted entities, 🔗 order numbers cross-referenced to `api-oos`
 
 **B.4 Dashboard/aggregate endpoints**
 
-- [ ] `GET /api/ai/dashboard/summary?from=&to=` → combined churn/sentiment/campaign/ticket metrics (MongoDB aggregation pipeline)
-- [ ] `GET /api/ai/anomalies?from=&to=&status=` → anomaly list with severity
-- [ ] `POST /api/ai/query` → natural-language query → structured result
+- [x] `GET /api/ai/dashboard/summary?from=&to=` → combined churn/sentiment/campaign/ticket metrics (MongoDB aggregation pipeline)
+- [x] `GET /api/ai/anomalies?from=&to=&status=` → anomaly list with severity
+- [x] `POST /api/ai/query` → natural-language query → structured result
 
 **B.5 Contract documentation**
 
-- [ ] Backend: Publish FastAPI's auto-generated OpenAPI spec at a stable path (`/openapi.json`)
+- [x] Backend: Publish FastAPI's auto-generated OpenAPI spec at a stable path (`/openapi.json`)
 - [ ] Backend: 🔗 Generate shared TypeScript types for `web-crm` from the FastAPI OpenAPI spec (same tooling as `br-online-shop`'s `openapi-typescript` approach)
 - [ ] Backend: Version the API (e.g., `/api/ai/v1/...`) so `api-crm`/`web-crm` aren't broken by model iteration
 
