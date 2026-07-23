@@ -29,6 +29,9 @@ class GroqClient:
         Returns parsed dict from JSON response.
         Raises GroqClientError if all retries fail.
         """
+        from app.helpers.anonymizer import redact_pii
+        sanitized_user_prompt = redact_pii(user_prompt)
+
         client = AsyncGroq(api_key=self._api_key, timeout=self._timeout)
 
         for attempt in range(self._max_retries):
@@ -37,7 +40,7 @@ class GroqClient:
                     model=self._model_id,
                     messages=[
                         {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": user_prompt},
+                        {"role": "user", "content": sanitized_user_prompt},
                     ],
                     response_format={"type": "json_object"},
                     temperature=0.1,

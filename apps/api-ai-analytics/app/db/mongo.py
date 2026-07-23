@@ -32,3 +32,26 @@ def get_database() -> AsyncIOMotorDatabase:
     if _database is None:
         raise RuntimeError("MongoDB not initialized. Call connect_mongo() first.")
     return _database
+
+
+async def setup_indexes() -> None:
+    """Setup MongoDB indexes, including TTL indexes for data retention."""
+    if _database is None:
+        raise RuntimeError("MongoDB not initialized. Call connect_mongo() first.")
+
+    from app.core.config import get_settings
+    settings = get_settings()
+    retention_seconds = settings.data_retention_days * 24 * 60 * 60
+
+    # TTL index on ConversationTranscripts (analyzed_at field)
+    await _database["ConversationTranscripts"].create_index(
+        "analyzed_at",
+        expireAfterSeconds=retention_seconds
+    )
+
+    # TTL index on customer_feature_logs (recorded_at field)
+    await _database["customer_feature_logs"].create_index(
+        "recorded_at",
+        expireAfterSeconds=retention_seconds
+    )
+

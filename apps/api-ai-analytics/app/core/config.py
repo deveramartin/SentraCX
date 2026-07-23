@@ -46,6 +46,15 @@ class Settings(BaseSettings):
     confidence_threshold_ticket: float = 0.6
     confidence_threshold_sentiment: float = 0.6
 
+    # Model Versions
+    model_version_churn: str = "1.0.0"
+    model_version_clv: str = "1.0.0"
+    model_version_sentiment: str = "1.0.0"
+    model_version_category: str = "1.0.0"
+
+    # Data Governance
+    data_retention_days: int = 90
+
     @property
     def is_development(self) -> bool:
         """Check if the application is running in development mode."""

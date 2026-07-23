@@ -13,7 +13,7 @@ from app.api.v1.routes.dashboard import router as dashboard_router
 from app.api.v1.routes.config import router as config_router
 from app.api.v1.routes.health import router as health_router
 from app.core.config import get_settings
-from app.db.mongo import close_mongo, connect_mongo, get_database
+from app.db.mongo import close_mongo, connect_mongo, get_database, setup_indexes
 from app.db.redis import close_redis, connect_redis, get_redis_client
 from app.core.scheduler import start_scheduler, stop_scheduler
 from app.repositories.mongo.ticket_repository import TicketRepository
@@ -35,6 +35,11 @@ async def lifespan(app: FastAPI):
     logger.info("Connecting to MongoDB at %s", settings.mongo_uri)
     await connect_mongo(settings.mongo_uri, settings.mongo_database)
     logger.info("MongoDB connected")
+    
+    # Initialize TTL Indexes
+    logger.info("Setting up MongoDB TTL indexes")
+    await setup_indexes()
+    logger.info("MongoDB TTL indexes setup complete")
 
     logger.info("Connecting to Redis at %s", settings.redis_url)
     await connect_redis(settings.redis_url)

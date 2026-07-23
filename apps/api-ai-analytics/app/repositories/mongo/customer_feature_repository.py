@@ -14,7 +14,7 @@ class CustomerFeatureRepository:
         self._collection = database[_COLLECTION]
 
     async def save_feature_log(
-        self, customer_id: str, features: dict
+        self, customer_id: str, features: dict, model_versions: dict | None = None
     ) -> str:
         """Save a feature snapshot for a customer.
 
@@ -24,6 +24,7 @@ class CustomerFeatureRepository:
             "customer_id": customer_id,
             "features": features,
             "recorded_at": datetime.now(timezone.utc),
+            "model_versions": model_versions,
         }
         result = await self._collection.insert_one(document)
         return str(result.inserted_id)

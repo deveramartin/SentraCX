@@ -121,6 +121,8 @@ class TicketAnalysisService:
         if messages:
             transcript_text += "Messages:\n" + "\n".join(f"- {msg}" for msg in messages)
             
+        from app.core.config import get_settings
+        settings = get_settings()
         mongo_data = {
             "full_transcript_text": transcript_text,
             "sentiment": analysis["sentiment"],
@@ -128,7 +130,9 @@ class TicketAnalysisService:
             "predicted_category": analysis["category"],
             "urgency_score": analysis["urgency_score"],
             "confidence": analysis.get("confidence", 1.0),
-            "reasoning": analysis.get("reasoning", "")
+            "reasoning": analysis.get("reasoning", ""),
+            "model_version_sentiment": settings.model_version_sentiment,
+            "model_version_category": settings.model_version_category,
         }
         await self._mongo_repo.save_analysis(ticket_id, mongo_data)
 

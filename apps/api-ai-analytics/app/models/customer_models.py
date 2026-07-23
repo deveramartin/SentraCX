@@ -40,3 +40,4 @@ class CustomerFeatureLogsDocument(BaseModel):
     derived_segments: list[str] = Field(default_factory=list)
     behavioral_flags: list[str] = Field(default_factory=list)
     recorded_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    model_versions: dict[str, str] | None = None
